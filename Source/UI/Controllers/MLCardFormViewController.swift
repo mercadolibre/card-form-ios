@@ -356,10 +356,8 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             getCardData(binNumber: currentBin, showProggressAndSnackBar: true)
             return
         }
-        if from.property.fieldId() == "security_code" {
-            let expirationField = viewModel.cardFormFields?.flatMap{$0}.first(where: { $0.property.fieldId() == "expiration" })
-            guard let expField = expirationField else { return }
-            guard viewModel.validateField(cardFormField: expField) else { return }
+        if viewModel.isSecurityCodeFieldAndIsMissingExpiration(cardFormField: from) {
+            return
         }
 
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)

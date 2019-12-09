@@ -188,9 +188,14 @@ final class MLCardFormViewModel {
         return (false, nil)
     }
 
-    @discardableResult
-    func validateField(cardFormField: MLCardFormField) -> Bool {
-        return cardFormField.isValid()
+    func isSecurityCodeFieldAndIsMissingExpiration(cardFormField: MLCardFormField) -> Bool {
+        guard let fieldId = MLCardFormFields(rawValue: cardFormField.property.fieldId()) else { return false }
+        if fieldId == MLCardFormFields.securityCode,
+            let expirationField = getCardFormFieldWithID(MLCardFormFields.expiration.rawValue),
+            expirationField.isValid() == false {
+            return true
+        }
+        return false
     }
     
     func isLastField(cardFormField: MLCardFormField) -> Bool {
