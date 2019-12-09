@@ -378,7 +378,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
     func userDidSelectIssuer(issuer: MLCardFormIssuer, controller: UIViewController) {
         viewModel.setIssuer(issuer: issuer)
         if let imageURL = issuer.imageUrl {
-            viewModel.updateCardUI(imageURL: imageURL)
+            viewModel.updateCardIssuerImage(imageURL: imageURL)
         }
         dismiss(animated: true) { [weak self] in
             self?.addCard()

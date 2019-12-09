@@ -23,7 +23,7 @@ struct MLCardFormCardUI: Codable {
 
 // MARK: MLCardFormCardUI Factory
 extension MLCardFormCardUI {
-    static func createCardUIForIssuerImage(_ currentModel: MLCardFormCardUI, newIssuerImageUrl: String?) -> MLCardFormCardUI {
-        return MLCardFormCardUI(cardNumberLength: currentModel.cardNumberLength, cardPattern: currentModel.cardPattern, cardColor: currentModel.cardColor, cardFontColor: currentModel.cardFontColor, cardFontType: currentModel.cardFontType, securityCodeLocation: currentModel.securityCodeLocation, securityCodeLength: currentModel.securityCodeLength, issuerImageUrl: newIssuerImageUrl, paymentMethodImageUrl: currentModel.paymentMethodImageUrl, issuerImage: newIssuerImageUrl, paymentMethodImage: currentModel.paymentMethodImage)
+    static func copyCardUIWithIssuerImage(_ cardFormCardUI: MLCardFormCardUI, issuerImageUrl: String?) -> MLCardFormCardUI {
+        return MLCardFormCardUI(cardNumberLength: cardFormCardUI.cardNumberLength, cardPattern: cardFormCardUI.cardPattern, cardColor: cardFormCardUI.cardColor, cardFontColor: cardFormCardUI.cardFontColor, cardFontType: cardFormCardUI.cardFontType, securityCodeLocation: cardFormCardUI.securityCodeLocation, securityCodeLength: cardFormCardUI.securityCodeLength, issuerImageUrl: issuerImageUrl, paymentMethodImageUrl: cardFormCardUI.paymentMethodImageUrl, issuerImage: issuerImageUrl, paymentMethodImage: cardFormCardUI.paymentMethodImage)
     }
 }

@@ -11,12 +11,12 @@ import MLUI
 
 final class MLCardFormIssuersViewController: UIViewController {
 
-    private let viewModel: MLCardFormViewModel
+    private let issuersData: [MLCardFormIssuer]?
     private let issuersTableView = UITableView()
     weak var delegate: IssuerSelectedProtocol?
 
     public init(viewModel: MLCardFormViewModel) {
-        self.viewModel = viewModel
+        issuersData = viewModel.getIssuers()
         super.init(nibName: nil, bundle: nil)
         setupIssuersTableView()
         setupShadowViews()
@@ -89,7 +89,7 @@ private extension MLCardFormIssuersViewController {
 // MARK: TableView delegates
 extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 1 : viewModel.getIssuers()?.count ?? 0
+        return section == 0 ? 1 : issuersData?.count ?? 0
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -103,9 +103,9 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
                 return topCell
             }
         } else {
-            if let rowCell = issuersTableView.dequeueReusableCell(withIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier, for: indexPath) as? MLCardFormIssuerTableViewCell {
-                let currentIssuer = viewModel.getIssuers()?[indexPath.row]
-                rowCell.setupCell(with: currentIssuer?.imageUrl)
+            if let rowCell = issuersTableView.dequeueReusableCell(withIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier, for: indexPath) as? MLCardFormIssuerTableViewCell,
+                let currentIssuer = issuersData?[indexPath.row] {
+                rowCell.setupCell(with: currentIssuer.imageUrl)
                 return rowCell
             }
         }
@@ -117,10 +117,9 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section != 0 {
-            if let issuer = viewModel.getIssuers()?[indexPath.row] {
-                delegate?.userDidSelectIssuer(issuer: issuer, controller: self)
-            }
+        if indexPath.section != 0,
+            let currentIssuer = issuersData?[indexPath.row] {
+            delegate?.userDidSelectIssuer(issuer: currentIssuer, controller: self)
         }
     }
 }
