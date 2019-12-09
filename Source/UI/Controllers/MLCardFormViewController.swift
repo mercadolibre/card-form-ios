@@ -356,6 +356,10 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             getCardData(binNumber: currentBin, showProggressAndSnackBar: true)
             return
         }
+        if viewModel.isSecurityCodeFieldAndIsMissingExpiration(cardFormField: from) {
+            return
+        }
+
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
         if viewModel.isLastField(cardFormField: from) {
             // TODO: Dar de alta la tarjeta
