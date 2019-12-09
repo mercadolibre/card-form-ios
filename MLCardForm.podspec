@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://www.mercadolibre.com"
   s.license          = { :type => "MIT", :file => "LICENSE" }
   s.author           = "PX Team - Juan Sanzone - Eric Ertl - Esteban Boffa"
-  s.source           = { :git => "https://github.com/mercadolibre/fury_card-form-ios", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/mercadolibre/card-form-ios", :tag => s.version.to_s }
   s.swift_version    = '5.0'
   s.platform         = :ios, '10.0'
   s.requires_arc     = true
