@@ -78,46 +78,16 @@ We provide `MLCardFormTrackerDelegate` protocol to notify each tracking event. Y
 }
 ```
 
-### 🎨 CardUI protocol
-Using `CardUI` protocol to customize: position of security code, card background, font color, place holders, etc.
-
-```swift
-@objc public protocol CardUI {
-    var cardPattern: [Int] { get }
-    var placeholderName: String { get }
-    var placeholderExpiration: String { get }
-    var cardFontColor: UIColor { get }
-    var cardBackgroundColor: UIColor { get }
-    var securityCodeLocation: MLCardSecurityCodeLocation { get }
-    var defaultUI: Bool { get }
-    var securityCodePattern: Int { get }
-
-    @objc optional func set(bank: UIImageView)
-    @objc optional func set(logo: UIImageView)
-    @objc optional var fontType: String { get }
-    @objc optional var bankImage: UIImage? { get }
-    @objc optional var cardLogoImage: UIImage? { get }
-    @objc optional var ownOverlayImage: UIImage? { get }
-}
-```
-
 ### 😉 Next steps
-* [x] Bitrise for releases
-* [x] Codebeat integration
-* [x] Shine card effect with MotionEffect 🔥🔥
+* [ ] Bitrise for releases
 * [ ] SwiftLint
 * [ ] Migration to Swift 5
-* [ ] Native support to display card in disabled mode (card disabled)
-* [ ] Version 2.0 SwiftUI compatible 😈
 
 
 ### 🔮 Project Example
-This project include an example project using `MLCardForm` and another target with `xCTests` test cases.
-Enter to path: `meli-card-drawer-ios/Example_MeliCardDrawer` and run pod install command. After that, you can open `Example_MeliCardDrawer.xcworkspace`
+This project include an example project using `MLCardForm`.
+Enter to path: `card-form-ios/Example` and run pod install command. After that, you can open `Example_CardForm.xcworkspace`
 
-
-### 🕵️‍♂️ Test cases
-![TestCases](https://i.ibb.co/3c0h1wF/Tests.png)
 
 ### 📋 Supported OS & SDK Versions
 * iOS 9.0+
@@ -130,6 +100,8 @@ This is an open source project, so feel free to contribute. How? -> Fork this pr
 
 ## 👨🏻‍💻 Author
 Juan Sanzone / @juansanzone
+Esteban Boffa
+Eric Ertl
 
 ## 👮🏻 License
 
