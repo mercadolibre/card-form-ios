@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MLCardForm" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="Qel-pw-1oX">
+                                <rect key="frame" x="0.0" y="324.5" width="414" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="zY7-8X-osk"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_global" translatesAutoresizingMaskIntoConstraints="NO" id="B8S-oC-mB7">
+                                <rect key="frame" x="95.5" y="375.5" width="223" height="155"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="155" id="Fzl-So-5gi"/>
+                                    <constraint firstAttribute="width" constant="223" id="QiQ-db-atH"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="155" id="dyF-Ti-M9m"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="223" id="rR6-2a-fEt"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright (c) 2019 MercadoLibre. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="HfG-3V-nXf">
+                                <rect key="frame" x="0.0" y="792" width="414.5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="v5x-4B-fbz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="HfG-3V-nXf" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="0.5" id="94u-al-iKH"/>
+                            <constraint firstItem="HfG-3V-nXf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Bi7-8i-R6X"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Qel-pw-1oX" secondAttribute="trailing" id="FZJ-O7-7Qd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="HfG-3V-nXf" secondAttribute="bottom" constant="49" id="NPg-QX-sZ8"/>
+                            <constraint firstItem="B8S-oC-mB7" firstAttribute="top" secondItem="Qel-pw-1oX" secondAttribute="bottom" constant="8" id="aBd-Or-Mvz"/>
+                            <constraint firstItem="Qel-pw-1oX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dg6-km-jaF"/>
+                            <constraint firstItem="B8S-oC-mB7" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="hJu-Ji-qjR"/>
+                            <constraint firstItem="B8S-oC-mB7" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="sta-sz-v8N"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="logo_global" width="223" height="155"/>
+    </resources>
+</document>

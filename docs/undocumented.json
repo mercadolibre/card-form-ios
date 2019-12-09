@@ -1,0 +1,215 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Setup/MLCardFormBuilder.swift",
+      "line": 49,
+      "symbol": "MLCardFormBuilder.setSiteId(siteId:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Setup/MLCardFormBuilder.swift",
+      "line": 49,
+      "symbol": "MLCardFormBuilder.setSiteId(siteId:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Setup/MLCardFormBuilder.swift",
+      "line": 55,
+      "symbol": "MLCardFormBuilder.setLanguage(language:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Setup/MLCardFormBuilder.swift",
+      "line": 55,
+      "symbol": "MLCardFormBuilder.setLanguage(language:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Setup/MLCardFormBuilder.swift",
+      "line": 61,
+      "symbol": "MLCardFormBuilder.setExcludedPaymentTypes(excludedPaymentTypes:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Setup/MLCardFormBuilder.swift",
+      "line": 61,
+      "symbol": "MLCardFormBuilder.setExcludedPaymentTypes(excludedPaymentTypes:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Tracking/MLCardFormTrackerConfiguration.swift",
+      "line": 11,
+      "symbol": "MLCardFormTrackerConfiguration",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Tracking/MLCardFormTrackerConfiguration.swift",
+      "line": 11,
+      "symbol": "MLCardFormTrackerConfiguration",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Tracking/MLCardFormTrackerConfiguration.swift",
+      "line": 17,
+      "symbol": "MLCardFormTrackerConfiguration.init(delegate:flowName:flowDetails:sessionId:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/Core/Tracking/MLCardFormTrackerConfiguration.swift",
+      "line": 17,
+      "symbol": "MLCardFormTrackerConfiguration.init(delegate:flowName:flowDetails:sessionId:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 12,
+      "symbol": "MLCardFormViewController",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 12,
+      "symbol": "MLCardFormViewController",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 32,
+      "symbol": "MLCardFormViewController.viewDidAppear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 32,
+      "symbol": "MLCardFormViewController.viewDidAppear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 44,
+      "symbol": "MLCardFormViewController.viewWillAppear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 44,
+      "symbol": "MLCardFormViewController.viewWillAppear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 49,
+      "symbol": "MLCardFormViewController.viewWillDisappear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 49,
+      "symbol": "MLCardFormViewController.viewWillDisappear(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 56,
+      "symbol": "MLCardFormViewController",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 56,
+      "symbol": "MLCardFormViewController",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 57,
+      "symbol": "MLCardFormViewController.setupWithBuilder(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 57,
+      "symbol": "MLCardFormViewController.setupWithBuilder(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 194,
+      "symbol": "MLCardFormViewController",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 194,
+      "symbol": "MLCardFormViewController",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 195,
+      "symbol": "MLCardFormViewController.collectionView(_:layout:sizeForItemAt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 195,
+      "symbol": "MLCardFormViewController.collectionView(_:layout:sizeForItemAt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 199,
+      "symbol": "MLCardFormViewController.collectionView(_:numberOfItemsInSection:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 199,
+      "symbol": "MLCardFormViewController.collectionView(_:numberOfItemsInSection:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 203,
+      "symbol": "MLCardFormViewController.collectionView(_:cellForItemAt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/eertl/Code/fury_card-form-ios/Source/UI/Controllers/MLCardFormViewController.swift",
+      "line": 203,
+      "symbol": "MLCardFormViewController.collectionView(_:cellForItemAt:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/eertl/Code/fury_card-form-ios"
+}

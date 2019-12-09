@@ -1,0 +1,35 @@
+/* 
+  Localizable.strings
+  Pods
+
+  Created by Juan sebastian Sanzone on 12/3/19.
+  
+*/
+
+"Número de tarjeta" = "Card number";
+
+"Completa este campo" = "Complete this field";
+
+"Anterior" = "Back";
+
+"Siguiente" = "Next";
+
+"Nombre del titular" = "Name";
+
+"Número de tarjeta inválido" = "Invalid card number";
+
+"Nueva tarjeta" = "New card";
+
+"Nueva tarjeta de crédito" = "New credit card";
+
+"Nueva tarjeta de débito" = "New debit card";
+
+"Nombre y apellido" = "Name and surname";
+
+"Error no internet" = "No internet";
+
+"¿Quién emitió tu tarjeta?" = "Choose card issuer";
+
+"Algo salió mal." = "Something went wrong.";
+
+"Reintentar" = "Retry";

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="kbV-03-9ge">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--MLCardForm-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Example_CardForm" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CqS-II-Fb8">
+                                <rect key="frame" x="20" y="457" width="374" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="avo-pr-wZV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Nueva tarjeta"/>
+                                <connections>
+                                    <action selector="nuevaTarjetaTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lNo-Uk-CvZ"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_global" translatesAutoresizingMaskIntoConstraints="NO" id="6Ze-YW-xcx">
+                                <rect key="frame" x="95.5" y="206" width="223" height="155"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="223" id="Lwz-HJ-cXV"/>
+                                    <constraint firstAttribute="height" constant="155" id="Vub-KI-qM9"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Ze-YW-xcx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="118" id="AR4-Rs-FoH"/>
+                            <constraint firstItem="CqS-II-Fb8" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="TdK-jd-kuS"/>
+                            <constraint firstItem="6Ze-YW-xcx" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="gt3-fs-hqd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CqS-II-Fb8" secondAttribute="trailing" constant="20" id="yfb-KR-vBA"/>
+                            <constraint firstItem="CqS-II-Fb8" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="zf4-Bo-wxk"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="MLCardForm" id="9Uo-ZP-V9C"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="960.86956521739137" y="52.901785714285715"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="x58-fX-MuZ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kbV-03-9ge" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wG8-a6-3rE">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="Vc8-9t-ScN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LH0-Eh-Jrb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="50.724637681159422" y="52.901785714285715"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="logo_global" width="223" height="155"/>
+    </resources>
+</document>
