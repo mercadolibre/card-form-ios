@@ -187,6 +187,11 @@ final class MLCardFormViewModel {
         
         return (false, nil)
     }
+
+    @discardableResult
+    func validateField(cardFormField: MLCardFormField) -> Bool {
+        return cardFormField.isValid()
+    }
     
     func isLastField(cardFormField: MLCardFormField) -> Bool {
         var isLastField = false
