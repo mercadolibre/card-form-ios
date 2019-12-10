@@ -236,13 +236,12 @@ final class MLCardFormViewModel {
         return UIScreen.main.bounds.height <= 568
     }
 
-    func updateCardUI(imageURL: String) {
-        if let cardUI = binData?.cardUI {
-            let cardUI = MLCardFormCardUI.createCardUIForIssuerImage(cardUI, newIssuerImageUrl: imageURL)
-            if let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler  {
-                cardHandlerToUpdate.update(cardUI: cardUI)
-                viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
-            }
+    func updateCardIssuerImage(imageURL: String) {
+        if let cardUI = binData?.cardUI,
+            let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler {
+            let cardUI = MLCardFormCardUI.copyCardUIWithIssuerImage(cardUI, issuerImageUrl: imageURL)
+            cardHandlerToUpdate.update(cardUI: cardUI)
+            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
         }
     }
 }
@@ -250,7 +249,7 @@ final class MLCardFormViewModel {
 // MARK: IssuersScreen
 extension MLCardFormViewModel {
     func getIssuers() -> [MLCardFormIssuer]? {
-        return binData?.issuers
+        return binData?.filteredIssuers
     }
 
     func shouldShowIssuersScreen() -> Bool {
@@ -264,7 +263,7 @@ extension MLCardFormViewModel {
     func setIssuer(issuer: MLCardFormIssuer) {
         issuerWasSelected = true
         if let data = binData {
-            binData = MLCardFormBinData.cardFormBinDataWithFilteredIssuers(data, issuer: issuer)
+            binData = MLCardFormBinData.copyCardFormBinDataWithIssuer(data, issuer: issuer)
         }
     }
     
@@ -279,14 +278,9 @@ extension MLCardFormViewModel {
         binService.getCardData(binNumber: binNumber, completion: { [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let response):
+            case .success(let cardFormBinData):
                 self.lastFetchedBinNumber = binNumber
-                // Filter issuers when imageUrl is nil or empty
-                if response.issuers.count > 1 {
-                    self.binData = MLCardFormBinData.cardFormBinDataWithFilteredIssuers(response)
-                } else {
-                    self.binData = response
-                }
+                self.binData = cardFormBinData
                 self.updateHandlers()
                 completion?(.success(binNumber))
             case .failure(let error):
@@ -356,15 +350,6 @@ private extension MLCardFormViewModel {
             return nil
         }
         return MLCardFormIdentification(type: type, number: number)
-    }
-
-    func filterIssuers(_ issuers: [MLCardFormIssuer]) -> [MLCardFormIssuer] {
-        return issuers.filter{
-            if let imageURL = $0.imageUrl {
-                return !imageURL.isEmpty
-            }
-            return false
-        }
     }
 }
 

@@ -17,6 +17,16 @@ struct MLCardFormBinData: Codable {
     let issuers: [MLCardFormIssuer]
     let fieldsSetting: [MLCardFormFieldSetting]
     let identificationTypes: [MLCardFormIdentificationType]
+    
+    // Filter issuers when imageUrl is nil or empty
+    var filteredIssuers: [MLCardFormIssuer] {
+        return issuers.filter{
+            if let imageURL = $0.imageUrl {
+                return !imageURL.isEmpty
+            }
+            return false
+        }
+    }
 
     // convertFromSnakeCase strategy converts cardUI to cardUi
     // https://developer.apple.com/documentation/foundation/jsondecoder/keydecodingstrategy/convertfromsnakecase
@@ -35,22 +45,7 @@ struct MLCardFormBinData: Codable {
 
 // MARK: MLCardFormBinData Factory
 extension MLCardFormBinData {
-    static func cardFormBinDataWithFilteredIssuers(_ cardFormBinData: MLCardFormBinData, issuer: MLCardFormIssuer? = nil) -> MLCardFormBinData {
-        var issuers: [MLCardFormIssuer]
-        if let issuer = issuer {
-            issuers = [issuer]
-        } else {
-            issuers = filterIssuersWithNoImage(cardFormBinData.issuers)
-        }
-        return MLCardFormBinData(escEnabled: cardFormBinData.escEnabled, enabled: cardFormBinData.enabled, errorMessage: cardFormBinData.errorMessage, paymentMethod: cardFormBinData.paymentMethod, cardUI: cardFormBinData.cardUI, additionalSteps: cardFormBinData.additionalSteps, issuers: issuers, fieldsSetting: cardFormBinData.fieldsSetting, identificationTypes: cardFormBinData.identificationTypes)
-    }
-    
-    private static func filterIssuersWithNoImage(_ issuers: [MLCardFormIssuer]) -> [MLCardFormIssuer] {
-        return issuers.filter{
-            if let imageURL = $0.imageUrl {
-                return !imageURL.isEmpty
-            }
-            return false
-        }
+    static func copyCardFormBinDataWithIssuer(_ cardFormBinData: MLCardFormBinData, issuer: MLCardFormIssuer) -> MLCardFormBinData {
+        return MLCardFormBinData(escEnabled: cardFormBinData.escEnabled, enabled: cardFormBinData.enabled, errorMessage: cardFormBinData.errorMessage, paymentMethod: cardFormBinData.paymentMethod, cardUI: cardFormBinData.cardUI, additionalSteps: cardFormBinData.additionalSteps, issuers: [issuer], fieldsSetting: cardFormBinData.fieldsSetting, identificationTypes: cardFormBinData.identificationTypes)
     }
 }
