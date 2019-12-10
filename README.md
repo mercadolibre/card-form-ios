@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://img.shields.io/badge/Swift-4.2-orange.svg" />
+    <img src="https://img.shields.io/badge/Swift-5.0-orange.svg" />
     <a href="https://cocoapods.org/pods/">
         <img src="https://img.shields.io/cocoapods/v/MLCardForm.svg" alt="CocoaPods" />
     </a>
