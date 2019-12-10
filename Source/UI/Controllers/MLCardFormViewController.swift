@@ -9,7 +9,7 @@ import UIKit
 import MLCardDrawer
 import MLUI
 
-open class MLCardFormViewController: UIViewController {
+open class MLCardFormViewController: MLCardFormBaseViewController {
     // MARK: Outlets.
     @IBOutlet weak var cardContainerView: UIView!
     @IBOutlet weak var progressBarView: UIProgressView!
@@ -259,6 +259,7 @@ extension MLCardFormViewController {
     }
 }
 
+// MARK: UICollectionView methods.
 extension MLCardFormViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.size.width - cardFieldCellInset * 2, height: collectionView.frame.size.height)
@@ -277,6 +278,7 @@ extension MLCardFormViewController: UICollectionViewDelegateFlowLayout, UICollec
     }
 }
 
+// MARK: MLCardFormFieldNotifierProtocol
 extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     func didChangeValue(newValue: String?, from: MLCardFormField) {
         guard let newValue = newValue else { return }
@@ -397,6 +399,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
     }
 }
 
+// MARK: MLCardFormViewModelProtocol
 extension MLCardFormViewController: MLCardFormViewModelProtocol {
     
     func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]) {
