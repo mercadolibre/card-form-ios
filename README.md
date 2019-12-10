@@ -18,16 +18,6 @@ Edit your `Podfile` and specify the dependency:
 pod 'MLCardForm'
 ```
 
-#### Using [Swift Package Manager](https://github.com/apple/swift-package-manager)
-
-Add `MLCardForm` as a dependency. Adding the following line in `dependencies`value of your `Package.swift`.
-
-```swift
-  dependencies: [
-    .package(url: "https://github.com/mercadolibre/card-form-ios.git", from: "1.0")
-  ]
-```
-
 ## 🌟 Features
 - [x] Easy to integrate
 - [x] PCI compliance (We do not save anything)
@@ -39,7 +29,12 @@ Add `MLCardForm` as a dependency. Adding the following line in `dependencies`val
 import MLCardForm
 ```
 
-### 2 - Implement `MLCardFormLifeCycleDelegate` to get notified about MLCardForm events.
+### 2 - Create an instance of MLCardFormBuilder with your `PublicKey` or `PrivateKey` and your `siteId
+```swift
+let builder = MLCardFormBuilder(publicKey: yourPublicKey, siteId: yourSiteId, lifeCycleDelegate: self)
+```
+
+### 3 - Implement `MLCardFormLifeCycleDelegate` to get notified about MLCardForm events.
 ```swift
 extension YourViewController: MLCardFormLifeCycleDelegate {
     func didAddCard(cardID: String) {
@@ -52,23 +47,17 @@ extension YourViewController: MLCardFormLifeCycleDelegate {
 }
 ```
 
-### 3 - Create an instance of MLCardFormBuilder with your `PublicKey` or `PrivateKey` and your `siteId
-```swift
-let builder = MLCardFormBuilder(publicKey: yourPublicKey, siteId: yourSiteId, lifeCycleDelegate: self)
-```
-
-### 3 - Use the builder as parameter to get an instance of MLCardFormViewController.
+### 4 - Use the builder as parameter to get an instance of MLCardFormViewController.
 ```swift
 let cardFormVC = MLCardForm(builder: builder).setupController()
 ```
 
-### 4 - Push the instance of MLCardFormViewController to your stack.
+### 5 - Push the instance of MLCardFormViewController to your stack.
 ```swift
 navigationController?.pushViewController(cardFormVC, animated: true)
 ```
 
 ## 💡 Advanced features
-
 ### 📈 Tracking
 We provide `MLCardFormTrackerDelegate` protocol to notify each tracking event. You can subscribe to this protocol using MLCardFormBuilder
 ```swift
@@ -79,9 +68,9 @@ We provide `MLCardFormTrackerDelegate` protocol to notify each tracking event. Y
 ```
 
 ### 😉 Next steps
-* [ ] Bitrise for releases
+* [ ] Bitrise integration
+* [ ] UI XCtest
 * [ ] SwiftLint
-* [ ] Migration to Swift 5
 
 
 ### 🔮 Project Example
@@ -90,18 +79,18 @@ Enter to path: `card-form-ios/Example` and run pod install command. After that, 
 
 
 ### 📋 Supported OS & SDK Versions
-* iOS 9.0+
-* Swift 4.2
-* xCode 9.2+
+* iOS 10.0+
+* Swift 5
+* xCode 10+
 * @Objc full compatibility
 
 ## ❤️ Feedback
 This is an open source project, so feel free to contribute. How? -> Fork this project and propose your own fixes, suggestions and open a pull request with the changes.
 
-## 👨🏻‍💻 Author
-Juan Sanzone / @juansanzone
-Esteban Boffa
-Eric Ertl
+## 👨🏻‍💻 Authors
+* Esteban Boffa
+* Eric Ertl
+* Juan Sanzone
 
 ## 👮🏻 License
 
