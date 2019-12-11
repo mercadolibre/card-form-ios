@@ -15,7 +15,6 @@ final class MLCardFormIssuerTableViewCell: UITableViewCell {
     private let issuerImageHeight: CGFloat = 35
     private let deltaWidthRatio: CGFloat = 3.5
     private var radioButton = UIView()
-    private weak var innerCircle: UIView?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,7 +30,7 @@ final class MLCardFormIssuerTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         clearImage()
-        innerCircle?.removeFromSuperview()
+        radioButton.subviews.first?.alpha = 0
     }
 }
 
@@ -66,6 +65,19 @@ private extension MLCardFormIssuerTableViewCell {
         button.backgroundColor = .white
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 2
+
+        let innerCircle = UIView()
+        innerCircle.translatesAutoresizingMaskIntoConstraints = false
+        button.addSubview(innerCircle)
+        NSLayoutConstraint.activate([
+            innerCircle.topAnchor.constraint(equalTo: button.topAnchor, constant: 4),
+            innerCircle.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 4),
+            innerCircle.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -4),
+            innerCircle.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: -4)
+        ])
+        innerCircle.layer.cornerRadius = 4
+        innerCircle.backgroundColor = MLStyleSheetManager.styleSheet.secondaryColor
+        innerCircle.alpha = 0
         return button
     }
 
@@ -90,20 +102,16 @@ private extension MLCardFormIssuerTableViewCell {
 extension MLCardFormIssuerTableViewCell {
     func setupRadioButton(radioButtonOn: Bool) {
         if radioButtonOn {
-            radioButton.layer.borderColor = MLStyleSheetManager.styleSheet.secondaryColor.cgColor
-            let circle = UIView(frame: radioButton.frame)
-            circle.layer.cornerRadius = 8
-            innerCircle = circle
-            addSubview(circle)
-            UIView.animate(withDuration: 0.2, animations: {
-                circle.frame = CGRect(x: self.radioButton.frame.origin.x + 4, y: self.radioButton.frame.origin.y + 4, width: 8, height: 8)
-                circle.backgroundColor = MLStyleSheetManager.styleSheet.secondaryColor
-                circle.layer.cornerRadius = 4
+            let minCircle = radioButton.subviews.first
+            guard let minorCircle = minCircle else { return }
+            minorCircle.alpha = 1
+            UIView.animate(withDuration: 2.5, animations: {
+                self.radioButton.layer.borderColor = MLStyleSheetManager.styleSheet.secondaryColor.cgColor
+                minorCircle.alpha = 1
             })
         } else {
-            innerCircle?.removeFromSuperview()
+            radioButton.subviews.first?.alpha = 0
             radioButton.layer.borderColor = UIColor.gray.cgColor
         }
     }
 }
-
