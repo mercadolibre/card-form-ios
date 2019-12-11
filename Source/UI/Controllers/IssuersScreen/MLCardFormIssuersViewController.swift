@@ -15,6 +15,9 @@ final class MLCardFormIssuersViewController: UIViewController {
     private let issuersTableView = UITableView()
     weak var delegate: IssuerSelectedProtocol?
     private var selectedIssuer: MLCardFormIssuer?
+    private let confirmButtonHeight: CGFloat = 48
+    private let shadowViewHeight: CGFloat = 40
+    private let bottomViewHeight: CGFloat = 96
 
     public init(viewModel: MLCardFormViewModel) {
         issuersData = viewModel.getIssuers()
@@ -45,8 +48,27 @@ private extension MLCardFormIssuersViewController {
              bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
              bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
              bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-             bottomView.heightAnchor.constraint(equalToConstant: 96)
+             bottomView.heightAnchor.constraint(equalToConstant: bottomViewHeight)
         ])
+
+        let confirmButton = UIButton()
+        confirmButton.translatesAutoresizingMaskIntoConstraints = false
+        confirmButton.backgroundColor = UI.Colors.confirmButtonColor
+        confirmButton.setTitle("Confirm", for: .normal)
+        confirmButton.titleLabel?.font = UIFont.ml_semiboldSystemFont(ofSize: UI.FontSize.XM_FONT)
+        confirmButton.setTitleColor(UI.Colors.confirmButtonTitleColor, for: .normal)
+        confirmButton.titleLabel?.textAlignment = .center
+        confirmButton.layer.cornerRadius = 6
+        view.addSubview(confirmButton)
+        NSLayoutConstraint.activate([
+            confirmButton.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
+            confirmButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: UI.Margin.L_MARGIN),
+            confirmButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -UI.Margin.L_MARGIN),
+            confirmButton.heightAnchor.constraint(equalToConstant: confirmButtonHeight)
+        ])
+        confirmButton.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        confirmButton.addGestureRecognizer(tapGesture)
         return bottomView
     }
 
@@ -85,7 +107,7 @@ private extension MLCardFormIssuersViewController {
             topShadowView.topAnchor.constraint(equalTo: view.topAnchor, constant: -1),
             topShadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topShadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topShadowView.heightAnchor.constraint(equalToConstant: 40)
+            topShadowView.heightAnchor.constraint(equalToConstant: shadowViewHeight)
         ])
         let bottomShadowView = UIImageView(image: UIImage(named: "gradient_bottom", in: Bundle(for: MLCardFormIssuersViewController.self), compatibleWith: nil))
         bottomShadowView.translatesAutoresizingMaskIntoConstraints = false
@@ -94,12 +116,18 @@ private extension MLCardFormIssuersViewController {
             bottomShadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomShadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bottomShadowView.bottomAnchor.constraint(equalTo: bottomView.topAnchor),
-            bottomShadowView.heightAnchor.constraint(equalToConstant: 40)
+            bottomShadowView.heightAnchor.constraint(equalToConstant: shadowViewHeight)
         ])
     }
 
     @objc func close() {
         delegate?.userDidCancel(controller: self)
+    }
+
+    @objc func didTap() {
+        if let selectedIssuer = selectedIssuer {
+            delegate?.userDidSelectIssuer(issuer: selectedIssuer, controller: self)
+        }
     }
 }
 
@@ -141,7 +169,6 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
                 issuersCell.setupRadioButton(radioButtonOn: true)
                 selectedIssuer = currentIssuer
             }
-            //            delegate?.userDidSelectIssuer(issuer: currentIssuer, controller: self)
         }
     }
 }
