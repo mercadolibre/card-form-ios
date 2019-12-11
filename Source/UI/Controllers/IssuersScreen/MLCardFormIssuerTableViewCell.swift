@@ -14,13 +14,16 @@ final class MLCardFormIssuerTableViewCell: UITableViewCell {
     private let issuerImageView = UIImageView()
     private let issuerImageHeight: CGFloat = 35
     private let deltaWidthRatio: CGFloat = 3.5
-    private var radioButton = UIView()
+    private weak var radioButton: UIView?
+    private let radioButtonSize: CGFloat = 16
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCellStyle()
-        self.radioButton = setupRadioButton()
-        setupIssuerImage(rightOf: radioButton)
+        radioButton = setupRadioButton()
+        if let radioButton = radioButton {
+            setupIssuerImage(rightOf: radioButton)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,8 +32,8 @@ final class MLCardFormIssuerTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        setupRadioButton(radioButtonOn: false)
         clearImage()
-        radioButton.subviews.first?.alpha = 0
     }
 }
 
@@ -52,33 +55,33 @@ private extension MLCardFormIssuerTableViewCell {
     }
 
     func setupRadioButton() -> UIView {
-        let button = UIView()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isUserInteractionEnabled = false
-        contentView.addSubview(button)
+        let radioButton = UIView()
+        radioButton.translatesAutoresizingMaskIntoConstraints = false
+        radioButton.isUserInteractionEnabled = false
+        contentView.addSubview(radioButton)
         NSLayoutConstraint.activate([
-            button.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            button.heightAnchor.constraint(equalToConstant: 16),
-            button.widthAnchor.constraint(equalToConstant: 16)
+            radioButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            radioButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UI.Margin.M_MARGIN),
+            radioButton.heightAnchor.constraint(equalToConstant: radioButtonSize),
+            radioButton.widthAnchor.constraint(equalToConstant: radioButtonSize)
         ])
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 8
-        button.layer.borderWidth = 2
+        radioButton.backgroundColor = .white
+        radioButton.layer.cornerRadius = radioButtonSize/2
+        radioButton.layer.borderWidth = 2
 
         let innerCircle = UIView()
         innerCircle.translatesAutoresizingMaskIntoConstraints = false
-        button.addSubview(innerCircle)
+        radioButton.addSubview(innerCircle)
         NSLayoutConstraint.activate([
-            innerCircle.topAnchor.constraint(equalTo: button.topAnchor, constant: 4),
-            innerCircle.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 4),
-            innerCircle.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -4),
-            innerCircle.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: -4)
+            innerCircle.topAnchor.constraint(equalTo: radioButton.topAnchor, constant: UI.Margin.S_MARGIN),
+            innerCircle.leadingAnchor.constraint(equalTo: radioButton.leadingAnchor, constant: UI.Margin.S_MARGIN),
+            innerCircle.trailingAnchor.constraint(equalTo: radioButton.trailingAnchor, constant: -UI.Margin.S_MARGIN),
+            innerCircle.bottomAnchor.constraint(equalTo: radioButton.bottomAnchor, constant: -UI.Margin.S_MARGIN)
         ])
-        innerCircle.layer.cornerRadius = 4
+        innerCircle.layer.cornerRadius = radioButtonSize/4
         innerCircle.backgroundColor = MLStyleSheetManager.styleSheet.secondaryColor
         innerCircle.alpha = 0
-        return button
+        return radioButton
     }
 
     func setupIssuerImage(rightOf radioButton: UIView) {
@@ -88,7 +91,7 @@ private extension MLCardFormIssuerTableViewCell {
         NSLayoutConstraint.activate([
             issuerImageView.widthAnchor.constraint(equalToConstant: contentView.frame.width / deltaWidthRatio),
             issuerImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            issuerImageView.leftAnchor.constraint(equalTo: radioButton.rightAnchor, constant: UI.Margin.S_MARGIN),
+            issuerImageView.leftAnchor.constraint(equalTo: radioButton.rightAnchor, constant: UI.Margin.M_MARGIN),
             issuerImageView.heightAnchor.constraint(equalToConstant: issuerImageHeight)
         ])
     }
@@ -102,16 +105,17 @@ private extension MLCardFormIssuerTableViewCell {
 extension MLCardFormIssuerTableViewCell {
     func setupRadioButton(radioButtonOn: Bool) {
         if radioButtonOn {
-            let minCircle = radioButton.subviews.first
+            let minCircle = radioButton?.subviews.first
             guard let minorCircle = minCircle else { return }
             minorCircle.alpha = 1
-            UIView.animate(withDuration: 2.5, animations: {
-                self.radioButton.layer.borderColor = MLStyleSheetManager.styleSheet.secondaryColor.cgColor
+            UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: { [weak self] in
+                guard let self = self else { return }
+                self.radioButton?.layer.borderColor = MLStyleSheetManager.styleSheet.secondaryColor.cgColor
                 minorCircle.alpha = 1
             })
         } else {
-            radioButton.subviews.first?.alpha = 0
-            radioButton.layer.borderColor = UIColor.gray.cgColor
+            radioButton?.subviews.first?.alpha = 0
+            radioButton?.layer.borderColor = UIColor.gray.cgColor
         }
     }
 }

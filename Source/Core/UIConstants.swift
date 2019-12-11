@@ -10,7 +10,8 @@ import Foundation
 struct UI {
 
     struct Margin {
-        static let S_MARGIN: CGFloat = 16
+        static let S_MARGIN: CGFloat = 4
+        static let M_MARGIN: CGFloat = 16
     }
 
     struct FontSize {
