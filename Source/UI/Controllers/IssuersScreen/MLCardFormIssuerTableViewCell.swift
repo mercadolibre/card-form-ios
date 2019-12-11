@@ -105,17 +105,17 @@ private extension MLCardFormIssuerTableViewCell {
 extension MLCardFormIssuerTableViewCell {
     func setupRadioButton(radioButtonOn: Bool) {
         if radioButtonOn {
-            let minCircle = radioButton?.subviews.first
-            guard let minorCircle = minCircle else { return }
-            minorCircle.alpha = 1
+            let circle = radioButton?.subviews.first
+            guard let innerCircle = circle else { return }
+            innerCircle.alpha = 1
             UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: { [weak self] in
                 guard let self = self else { return }
                 self.radioButton?.layer.borderColor = MLStyleSheetManager.styleSheet.secondaryColor.cgColor
-                minorCircle.alpha = 1
+                innerCircle.alpha = 1
             })
         } else {
             radioButton?.subviews.first?.alpha = 0
-            radioButton?.layer.borderColor = UIColor.gray.cgColor
+            radioButton?.layer.borderColor = UI.Colors.confirmButtonColor.cgColor
         }
     }
 }
