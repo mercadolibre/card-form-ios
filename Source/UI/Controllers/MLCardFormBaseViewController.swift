@@ -12,19 +12,19 @@ open class MLCardFormBaseViewController: UIViewController {
     private var fontName: String = ".SFUIDisplay-Regular"
     private var fontLightName: String = ".SFUIDisplay-Light"
     private var fontSemiBoldName: String = ".SFUIDisplay-SemiBold"
-    
+
     var navBarTextColor = MLStyleSheetManager.styleSheet.blackColor
     var navBarBackgroundColor = MLStyleSheetManager.styleSheet.primaryColor
-    
+
     override open var preferredStatusBarStyle : UIStatusBarStyle {
         return .lightContent
     }
-    
+
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.loadStyles()
     }
-    
+
     private func loadStyles() {
         if let navigationController = navigationController {
             // Navigation bar colors
@@ -34,21 +34,21 @@ open class MLCardFormBaseViewController: UIViewController {
             navigationController.navigationBar.titleTextAttributes = titleTextAttributes
             navigationController.navigationBar.tintColor = navBarBackgroundColor
             navigationController.navigationBar.barTintColor = navBarBackgroundColor
-            navigationController.navigationBar.isTranslucent = false
+//            navigationController.navigationBar.isTranslucent = false
             navigationController.view.backgroundColor = navBarBackgroundColor
             // Navigation back button
             setupBackButton()
         }
     }
-    
+
     override open var shouldAutorotate: Bool {
         return false
     }
-    
+
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }
-    
+
     private func setupBackButton() {
         let backButton = UIBarButtonItem()
         let back = UIImage(named: "back", in: Bundle(for: type(of: self)), compatibleWith: nil)
@@ -60,11 +60,11 @@ open class MLCardFormBaseViewController: UIViewController {
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = backButton
     }
-    
+
     @objc private func pop() {
         navigationController?.popViewController(animated: true)
     }
-    
+
     private func getFontWithSize(font: String, size: CGFloat, weight: UIFont.Weight? = nil) -> UIFont {
         let fontNameToIgnore: String = "Times New Roman"
         let fallBackFontName: String = "Helvetica"
@@ -77,7 +77,7 @@ open class MLCardFormBaseViewController: UIViewController {
         }
         return getFallbackFont(size)
     }
-    
+
     private func getFallbackFont(_ size: CGFloat, weight: UIFont.Weight?=nil) -> UIFont {
         if let targetWeight = weight {
             return UIFont.systemFont(ofSize: size, weight: targetWeight)
