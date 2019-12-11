@@ -69,8 +69,7 @@ private extension MLCardFormIssuerTableViewCell {
         radioButton.layer.cornerRadius = radioButtonSize/2
         radioButton.layer.borderWidth = 2
 
-        let innerCircle = UIView()
-        innerCircle.translatesAutoresizingMaskIntoConstraints = false
+        let innerCircle = buildRadioButtonInnerCircle()
         radioButton.addSubview(innerCircle)
         NSLayoutConstraint.activate([
             innerCircle.topAnchor.constraint(equalTo: radioButton.topAnchor, constant: UI.Margin.S_MARGIN),
@@ -78,10 +77,16 @@ private extension MLCardFormIssuerTableViewCell {
             innerCircle.trailingAnchor.constraint(equalTo: radioButton.trailingAnchor, constant: -UI.Margin.S_MARGIN),
             innerCircle.bottomAnchor.constraint(equalTo: radioButton.bottomAnchor, constant: -UI.Margin.S_MARGIN)
         ])
+        return radioButton
+    }
+
+    func buildRadioButtonInnerCircle() -> UIView {
+        let innerCircle = UIView()
+        innerCircle.translatesAutoresizingMaskIntoConstraints = false
         innerCircle.layer.cornerRadius = radioButtonSize/4
         innerCircle.backgroundColor = MLStyleSheetManager.styleSheet.secondaryColor
         innerCircle.alpha = 0
-        return radioButton
+        return innerCircle
     }
 
     func setupIssuerImage(rightOf radioButton: UIView) {
