@@ -26,9 +26,6 @@ open class MLCardFormViewController: UIViewController {
     
     private let cardFieldCellInset: CGFloat = 30
     private let cardFieldHeight: CGFloat = 75
-
-    // MARK: IssuersScreen vars
-    private var issuersVC: MLCardFormIssuersViewController?
     private var setupControllerCompleted = false
 
     let viewModel: MLCardFormViewModel = MLCardFormViewModel()
@@ -181,12 +178,10 @@ private extension MLCardFormViewController {
     }
 
     func setupIssuersScreen() {
-        issuersVC = MLCardFormIssuersViewController(viewModel: self.viewModel)
-        if let issuersVC = issuersVC {
-            issuersVC.delegate = self
-            let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
-            navigationController?.present(issuersNavigation, animated: true, completion: nil)
-        }
+        let issuersVC = MLCardFormIssuersViewController(viewModel: self.viewModel)
+        issuersVC.delegate = self
+        let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
+        navigationController?.present(issuersNavigation, animated: true, completion: nil)
     }
 
     private func showViewWithAnimation() {

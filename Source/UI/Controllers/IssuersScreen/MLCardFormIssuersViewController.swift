@@ -33,6 +33,11 @@ final class MLCardFormIssuersViewController: UIViewController {
         setupNavigationBar()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.userDidCancel(controller: self)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
