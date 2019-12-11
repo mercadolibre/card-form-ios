@@ -14,12 +14,14 @@ final class MLCardFormIssuersViewController: UIViewController {
     private let issuersData: [MLCardFormIssuer]?
     private let issuersTableView = UITableView()
     weak var delegate: IssuerSelectedProtocol?
+    private var selectedIssuer: MLCardFormIssuer?
 
     public init(viewModel: MLCardFormViewModel) {
         issuersData = viewModel.getIssuers()
         super.init(nibName: nil, bundle: nil)
-        setupIssuersTableView()
-        setupShadowViews()
+        let bottomView = setupBottomView()
+        setupIssuersTableView(aboveOf: bottomView)
+        setupShadowViews(aboveOf: bottomView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -34,7 +36,21 @@ final class MLCardFormIssuersViewController: UIViewController {
 
 // MARK: Privates
 private extension MLCardFormIssuersViewController {
-    func setupIssuersTableView() {
+    func setupBottomView() -> UIView {
+        let bottomView = UIView()
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.backgroundColor = .white
+        view.addSubview(bottomView)
+        NSLayoutConstraint.activate([
+             bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+             bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+             bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+             bottomView.heightAnchor.constraint(equalToConstant: 96)
+        ])
+        return bottomView
+    }
+
+    func setupIssuersTableView(aboveOf bottomView: UIView) {
         issuersTableView.translatesAutoresizingMaskIntoConstraints = false
         issuersTableView.backgroundColor = .white
         issuersTableView.delegate = self
@@ -42,12 +58,13 @@ private extension MLCardFormIssuersViewController {
         issuersTableView.tableFooterView = UIView()
         issuersTableView.register(MLCardFormIssuerTableViewCell.self, forCellReuseIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier)
         issuersTableView.register(MLCardFormTopViewCell.self, forCellReuseIdentifier: MLCardFormTopViewCell.cellIdentifier)
+        issuersTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 22, right: 0)
         view.addSubview(issuersTableView)
         NSLayoutConstraint.activate([
             issuersTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             issuersTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            issuersTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            issuersTableView.topAnchor.constraint(equalTo: view.topAnchor)
+            issuersTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            issuersTableView.bottomAnchor.constraint(equalTo: bottomView.topAnchor)
         ])
     }
 
@@ -60,7 +77,7 @@ private extension MLCardFormIssuersViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
     }
 
-    func setupShadowViews() {
+    func setupShadowViews(aboveOf bottomView: UIView) {
         let topShadowView = UIImageView(image: UIImage(named: "gradient_top", in: Bundle(for: MLCardFormIssuersViewController.self), compatibleWith: nil))
         topShadowView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topShadowView)
@@ -76,7 +93,7 @@ private extension MLCardFormIssuersViewController {
         NSLayoutConstraint.activate([
             bottomShadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomShadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomShadowView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomShadowView.bottomAnchor.constraint(equalTo: bottomView.topAnchor),
             bottomShadowView.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
@@ -103,9 +120,9 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
                 return topCell
             }
         } else {
-            if let rowCell = issuersTableView.dequeueReusableCell(withIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier, for: indexPath) as? MLCardFormIssuerTableViewCell,
-                let currentIssuer = issuersData?[indexPath.row] {
-                rowCell.setupCell(with: currentIssuer.imageUrl)
+            if let rowCell = issuersTableView.dequeueReusableCell(withIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier, for: indexPath) as? MLCardFormIssuerTableViewCell, let currentIssuer = issuersData?[indexPath.row] {
+                let radioButtonOn = selectedIssuer?.id == currentIssuer.id ? true : false
+                rowCell.setupCell(with: currentIssuer.imageUrl, radioButtonOn: radioButtonOn)
                 return rowCell
             }
         }
@@ -119,7 +136,23 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section != 0,
             let currentIssuer = issuersData?[indexPath.row] {
-            delegate?.userDidSelectIssuer(issuer: currentIssuer, controller: self)
+            if let issuersCell = tableView.cellForRow(at: indexPath) as? MLCardFormIssuerTableViewCell {
+                setOffAllRadioButtons()
+                issuersCell.setupRadioButton(radioButtonOn: true)
+                selectedIssuer = currentIssuer
+            }
+            //            delegate?.userDidSelectIssuer(issuer: currentIssuer, controller: self)
+        }
+    }
+}
+
+extension MLCardFormIssuersViewController {
+    func setOffAllRadioButtons() {
+        if let issuers = issuersData?.count {
+            for issuer in 0...issuers-1 {
+                let cell = issuersTableView.cellForRow(at: IndexPath(item: issuer, section: 1)) as? MLCardFormIssuerTableViewCell
+                cell?.setupRadioButton(radioButtonOn: false)
+            }
         }
     }
 }
