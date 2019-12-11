@@ -44,6 +44,10 @@ final class MLCardFormBinService {
         }
         return AppIdentifier.other.rawValue
     }
+
+    deinit {
+      removeReachabilityObserver()
+    }
 }
 
 // MARK: Headers & Query Params
@@ -105,7 +109,13 @@ extension MLCardFormBinService {
 
 
 // MARK: Public methods.
-extension MLCardFormBinService {
+extension MLCardFormBinService: ReachabilityObserverDelegate {
+    func reachabilityChanged(_ isReachable: Bool) {
+        if !isReachable {
+            print("No internet connection")
+        }
+    }
+
     func getCardData(binNumber: String, completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
         guard let siteId = siteId,
             let excludedPaymentTypes = excludedPaymentTypes?.joined(separator: ",") else { return }
