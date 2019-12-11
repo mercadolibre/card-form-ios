@@ -60,7 +60,7 @@ private extension MLCardFormIssuersViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UI.Colors.confirmButtonColor
-        button.setTitle("Confirm", for: .normal)
+        button.setTitle("Confirmar".localized, for: .normal)
         button.titleLabel?.font = UIFont.ml_semiboldSystemFont(ofSize: UI.FontSize.XM_FONT)
         button.setTitleColor(UI.Colors.confirmButtonTitleColor, for: .normal)
         button.titleLabel?.textAlignment = .center
