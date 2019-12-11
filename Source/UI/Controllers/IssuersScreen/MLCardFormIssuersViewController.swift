@@ -17,7 +17,7 @@ final class MLCardFormIssuersViewController: UIViewController {
     private var selectedIssuer: MLCardFormIssuer?
     private let confirmButtonHeight: CGFloat = 48
     private let shadowViewHeight: CGFloat = 40
-    private let bottomViewHeight: CGFloat = 96
+    private let bottomViewHeight: CGFloat = 100
 
     public init(viewModel: MLCardFormViewModel) {
         issuersData = viewModel.getIssuers()
@@ -115,7 +115,7 @@ private extension MLCardFormIssuersViewController {
         NSLayoutConstraint.activate([
             bottomShadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomShadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomShadowView.bottomAnchor.constraint(equalTo: bottomView.topAnchor),
+            bottomShadowView.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: 2),
             bottomShadowView.heightAnchor.constraint(equalToConstant: shadowViewHeight)
         ])
     }
