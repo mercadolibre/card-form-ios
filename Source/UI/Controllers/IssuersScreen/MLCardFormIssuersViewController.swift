@@ -15,6 +15,7 @@ final class MLCardFormIssuersViewController: UIViewController {
     private let issuersTableView = UITableView()
     weak var delegate: IssuerSelectedProtocol?
     private var selectedIssuer: MLCardFormIssuer?
+    private weak var confirmButton: UIButton?
     private let confirmButtonHeight: CGFloat = 48
     private let shadowViewHeight: CGFloat = 40
     private let bottomViewHeight: CGFloat = 100
@@ -51,24 +52,25 @@ private extension MLCardFormIssuersViewController {
              bottomView.heightAnchor.constraint(equalToConstant: bottomViewHeight)
         ])
 
-        let confirmButton = UIButton()
-        confirmButton.translatesAutoresizingMaskIntoConstraints = false
-        confirmButton.backgroundColor = UI.Colors.confirmButtonColor
-        confirmButton.setTitle("Confirm", for: .normal)
-        confirmButton.titleLabel?.font = UIFont.ml_semiboldSystemFont(ofSize: UI.FontSize.XM_FONT)
-        confirmButton.setTitleColor(UI.Colors.confirmButtonTitleColor, for: .normal)
-        confirmButton.titleLabel?.textAlignment = .center
-        confirmButton.layer.cornerRadius = 6
-        view.addSubview(confirmButton)
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UI.Colors.confirmButtonColor
+        button.setTitle("Confirm", for: .normal)
+        button.titleLabel?.font = UIFont.ml_semiboldSystemFont(ofSize: UI.FontSize.XM_FONT)
+        button.setTitleColor(UI.Colors.confirmButtonTitleColor, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.layer.cornerRadius = 6
+        view.addSubview(button)
         NSLayoutConstraint.activate([
-            confirmButton.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
-            confirmButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: UI.Margin.L_MARGIN),
-            confirmButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -UI.Margin.L_MARGIN),
-            confirmButton.heightAnchor.constraint(equalToConstant: confirmButtonHeight)
+            button.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
+            button.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: UI.Margin.L_MARGIN),
+            button.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -UI.Margin.L_MARGIN),
+            button.heightAnchor.constraint(equalToConstant: confirmButtonHeight)
         ])
-        confirmButton.isUserInteractionEnabled = true
+        button.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
-        confirmButton.addGestureRecognizer(tapGesture)
+        button.addGestureRecognizer(tapGesture)
+        confirmButton = button
         return bottomView
     }
 
@@ -168,6 +170,11 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
                 setOffAllRadioButtons()
                 issuersCell.setupRadioButton(radioButtonOn: true)
                 selectedIssuer = currentIssuer
+                UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: { [weak self] in
+                    guard let self = self else { return }
+                    self.confirmButton?.backgroundColor = MLStyleSheetManager.styleSheet.secondaryColor
+                    self.confirmButton?.setTitleColor(.white, for: .normal)
+                })
             }
         }
     }
