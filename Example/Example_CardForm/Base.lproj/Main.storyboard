@@ -18,6 +18,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_global" translatesAutoresizingMaskIntoConstraints="NO" id="6Ze-YW-xcx">
+                                <rect key="frame" x="95.5" y="206" width="223" height="155"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="223" id="Lwz-HJ-cXV"/>
+                                    <constraint firstAttribute="height" constant="155" id="Vub-KI-qM9"/>
+                                </constraints>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CqS-II-Fb8">
                                 <rect key="frame" x="20" y="457" width="374" height="36"/>
                                 <constraints>
@@ -29,19 +36,12 @@
                                     <action selector="nuevaTarjetaTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lNo-Uk-CvZ"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_global" translatesAutoresizingMaskIntoConstraints="NO" id="6Ze-YW-xcx">
-                                <rect key="frame" x="95.5" y="206" width="223" height="155"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="223" id="Lwz-HJ-cXV"/>
-                                    <constraint firstAttribute="height" constant="155" id="Vub-KI-qM9"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Ze-YW-xcx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="118" id="AR4-Rs-FoH"/>
-                            <constraint firstItem="CqS-II-Fb8" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="TdK-jd-kuS"/>
                             <constraint firstItem="6Ze-YW-xcx" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="gt3-fs-hqd"/>
+                            <constraint firstItem="CqS-II-Fb8" firstAttribute="top" secondItem="6Ze-YW-xcx" secondAttribute="bottom" constant="96" id="oEa-p8-3XL"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CqS-II-Fb8" secondAttribute="trailing" constant="20" id="yfb-KR-vBA"/>
                             <constraint firstItem="CqS-II-Fb8" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="zf4-Bo-wxk"/>
                         </constraints>
