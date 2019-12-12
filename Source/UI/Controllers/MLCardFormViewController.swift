@@ -9,7 +9,7 @@ import UIKit
 import MLCardDrawer
 import MLUI
 
-open class MLCardFormViewController: UIViewController {
+open class MLCardFormViewController: MLCardFormBaseViewController {
     // MARK: Outlets.
     @IBOutlet weak var cardContainerView: UIView!
     @IBOutlet weak var progressBarView: UIProgressView!
@@ -26,9 +26,6 @@ open class MLCardFormViewController: UIViewController {
     
     private let cardFieldCellInset: CGFloat = 30
     private let cardFieldHeight: CGFloat = 75
-
-    // MARK: IssuersScreen vars
-    private var issuersVC: MLCardFormIssuersViewController?
     private var setupControllerCompleted = false
 
     let viewModel: MLCardFormViewModel = MLCardFormViewModel()
@@ -181,12 +178,10 @@ private extension MLCardFormViewController {
     }
 
     func setupIssuersScreen() {
-        issuersVC = MLCardFormIssuersViewController(viewModel: self.viewModel)
-        if let issuersVC = issuersVC {
-            issuersVC.delegate = self
-            let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
-            navigationController?.present(issuersNavigation, animated: true, completion: nil)
-        }
+        let issuersVC = MLCardFormIssuersViewController(viewModel: self.viewModel)
+        issuersVC.delegate = self
+        let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
+        navigationController?.present(issuersNavigation, animated: true, completion: nil)
     }
 
     private func showViewWithAnimation() {
@@ -259,6 +254,7 @@ extension MLCardFormViewController {
     }
 }
 
+// MARK: UICollectionView methods.
 extension MLCardFormViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.size.width - cardFieldCellInset * 2, height: collectionView.frame.size.height)
@@ -277,6 +273,7 @@ extension MLCardFormViewController: UICollectionViewDelegateFlowLayout, UICollec
     }
 }
 
+// MARK: MLCardFormFieldNotifierProtocol
 extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     func didChangeValue(newValue: String?, from: MLCardFormField) {
         guard let newValue = newValue else { return }
@@ -397,6 +394,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
     }
 }
 
+// MARK: MLCardFormViewModelProtocol
 extension MLCardFormViewController: MLCardFormViewModelProtocol {
     
     func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]) {
