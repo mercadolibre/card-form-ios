@@ -53,6 +53,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
         let (backgroundNavigationColor, textNavigationColor) = viewModel.getNavigationBarCustomColor()
         super.loadStyles(customNavigationBackgroundColor: backgroundNavigationColor, customNavigationTextColor: textNavigationColor)
         addStatusBarBackground(color: backgroundNavigationColor)
+        setupCardContainer()
     }
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -151,8 +152,14 @@ private extension MLCardFormViewController {
     
     func setupCardDrawer() {
         cardDrawer = MLCardDrawerController(viewModel.cardUIHandler, viewModel.cardDataHandler)
-        cardDrawer?.setUp(inView: cardContainerView).show()
+        cardDrawer?.view.backgroundColor = .clear
+        cardDrawer?.setUp(inView: cardContainerView)
         cardContainerView.addShadow()
+    }
+
+    func setupCardContainer() {
+        cardContainerView.backgroundColor = .clear
+        containerBottomConstraint.constant = containerBottomConstraint.constant - UIScreen.main.bounds.height
     }
     
     func setupFieldCollectionView() {

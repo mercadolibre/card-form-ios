@@ -14,9 +14,9 @@ class DefaultCardUIHandler: NSObject, CardUI {
     var placeholderExpiration = "MM/AA"
     var bankImage: UIImage?
     var cardPattern = [4, 4, 4, 4]
-    var cardFontColor: UIColor = UIColor(red: 102/255, green: 102/255, blue: 102/255, alpha: 1)
+    var cardFontColor: UIColor = .white
     var cardLogoImage: UIImage?
-    var cardBackgroundColor: UIColor = UIColor(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
+    var cardBackgroundColor: UIColor = .clear
     var securityCodeLocation: MLCardSecurityCodeLocation = .back
     var defaultUI = true
     var securityCodePattern = 3
