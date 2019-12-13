@@ -16,28 +16,18 @@ open class MLCardFormBaseViewController: UIViewController {
     var navBarTextColor = MLStyleSheetManager.styleSheet.blackColor
     var navBarBackgroundColor = MLStyleSheetManager.styleSheet.primaryColor
 
-    override open var preferredStatusBarStyle : UIStatusBarStyle {
-        return .lightContent
-    }
-
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.loadStyles()
-    }
-
-    private func loadStyles() {
+    internal func loadStyles(customNavigationBackgroundColor: UIColor? = nil, customNavigationTextColor: UIColor? = nil) {
         if let navigationController = navigationController {
             // Navigation bar colors
             let fontSize: CGFloat = 18
             let font = getFontWithSize(font: fontName, size: fontSize)
-            let titleTextAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: navBarTextColor, NSAttributedString.Key.font: font]
+            let titleTextAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: customNavigationTextColor ?? navBarTextColor, NSAttributedString.Key.font: font]
             navigationController.navigationBar.titleTextAttributes = titleTextAttributes
-            navigationController.navigationBar.tintColor = navBarBackgroundColor
-            navigationController.navigationBar.barTintColor = navBarBackgroundColor
-//            navigationController.navigationBar.isTranslucent = false
-            navigationController.view.backgroundColor = navBarBackgroundColor
-            // Navigation back button
-            setupBackButton()
+            navigationController.navigationBar.tintColor = customNavigationBackgroundColor ?? navBarBackgroundColor
+            navigationController.navigationBar.barTintColor = customNavigationBackgroundColor ?? navBarBackgroundColor
+            // navigationController.navigationBar.isTranslucent = false
+            navigationController.navigationBar.backgroundColor = customNavigationBackgroundColor ?? navBarBackgroundColor
+            setupBackButton(textColor: customNavigationTextColor ?? navBarTextColor)
         }
     }
 
@@ -49,13 +39,13 @@ open class MLCardFormBaseViewController: UIViewController {
         return UIInterfaceOrientationMask.portrait
     }
 
-    private func setupBackButton() {
+    private func setupBackButton(textColor: UIColor? = nil) {
         let backButton = UIBarButtonItem()
         let back = UIImage(named: "back", in: Bundle(for: type(of: self)), compatibleWith: nil)
         backButton.image = back
         backButton.style = .plain
         backButton.target = self
-        backButton.tintColor = navBarTextColor
+        backButton.tintColor = textColor
         backButton.action = #selector(pop)
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = backButton

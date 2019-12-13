@@ -19,6 +19,8 @@ open class MLCardFormBuilder: NSObject {
     internal var flowId: String?
     internal var excludedPaymentTypes: [String]?
     internal var trackingConfiguration: MLCardFormTrackerConfiguration?
+    internal var navigationCustomBackgroundColor: UIColor?
+    internal var navigationCustomTextColor: UIColor?
     
     // MARK: Initialization
     
@@ -74,6 +76,18 @@ extension MLCardFormBuilder {
     @discardableResult @objc(setTrackingConfigurationWithConfiguration:)
     open func setTrackingConfiguration(_ trackingConfiguration: MLCardFormTrackerConfiguration) -> MLCardFormBuilder {
         self.trackingConfiguration = trackingConfiguration
+        return self
+    }
+
+    /**
+     Customize navigation bar background color and tint text color.
+     - parameter backgroundColor: `UIColor` object.
+     - parameter textColor: `UIColor` object.
+     */
+    @discardableResult
+    open func setNavigationBarCustomColor(backgroundColor: UIColor, textColor: UIColor) -> MLCardFormBuilder {
+        self.navigationCustomBackgroundColor = backgroundColor
+        self.navigationCustomTextColor = textColor
         return self
     }
 }

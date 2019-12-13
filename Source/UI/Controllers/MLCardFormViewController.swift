@@ -40,12 +40,19 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
             setupCardDrawer()
             setupFieldCollectionView()
             showViewWithAnimation()
-            title = AppBar.Generic.title
             setupTempTextField()
             setupSpinner()
             viewModel.viewModelDelegate = self
             setupControllerCompleted = true
         }
+    }
+
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        title = AppBar.Generic.title
+        let (backgroundNavigationColor, textNavigationColor) = viewModel.getNavigationBarCustomColor()
+        super.loadStyles(customNavigationBackgroundColor: backgroundNavigationColor, customNavigationTextColor: textNavigationColor)
+        addStatusBarBackground(color: backgroundNavigationColor)
     }
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -190,16 +197,17 @@ private extension MLCardFormViewController {
     }
 
     private func showViewWithAnimation() {
-        UIView.animate(withDuration: 0.5) { [weak self] in
-            self?.cardFieldCollectionView?.alpha = 1
-            self?.cardContainerView.alpha = 1
-        }
         if let field = viewModel.cardFormFields?.first?.first {
             field.doFocus()
             if viewModel.updateProgressWithCompletion {
                 updateProgressFromField(field)
             }
         }
+
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.cardFieldCollectionView?.alpha = 1
+            self?.cardContainerView.alpha = 1
+        })
     }
 
     private func updateProgressFromField(_ cardFormField: MLCardFormField) {
