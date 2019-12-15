@@ -19,17 +19,16 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     // Constraints.
     @IBOutlet weak var containerBottomConstraint: NSLayoutConstraint!
 
-    // MARK: Private Vars
-    private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
-    private var cardDrawer: MLCardDrawerController?
-    private weak var cardFieldCollectionView: UICollectionView?
-    
+    // MARK: Constants
     private let cardFieldCellInset: CGFloat = 30
     private let cardFieldHeight: CGFloat = 75
+    internal let viewModel: MLCardFormViewModel = MLCardFormViewModel()
 
-    // MARK: IssuersScreen vars
+    // MARK: Private Vars
+    private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
+    private weak var cardFieldCollectionView: UICollectionView?
+    private var cardDrawer: MLCardDrawerController?
     private var issuersVC: MLCardFormIssuersViewController?
-    let viewModel: MLCardFormViewModel = MLCardFormViewModel()
 
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,7 +158,8 @@ private extension MLCardFormViewController {
                 cardView.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
                 cardView.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor),
                 cardView.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor),
-                cardView.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor)])
+                cardView.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor)
+            ])
         }
     }
 
@@ -213,9 +213,6 @@ private extension MLCardFormViewController {
     func animateCardAppear() {
         if let field = viewModel.cardFormFields?.first?.first {
             field.doFocus()
-            if viewModel.updateProgressWithCompletion {
-                updateProgressFromField(field)
-            }
         }
         UIView.animate(withDuration: 0.5, animations: { [weak self] in
             self?.cardFieldCollectionView?.alpha = 1
@@ -223,11 +220,18 @@ private extension MLCardFormViewController {
     }
 
     func updateProgressFromField(_ cardFormField: MLCardFormField) {
+        let isFirstTime: Bool = progressBarView.progress == 0
         let animator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 0.9) { [weak self] in
             guard let self = self else { return }
             self.progressBarView.setProgress(self.viewModel.getProgressFromField(cardFormField), animated: true)
         }
-        animator.startAnimation()
+        if isFirstTime {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.60) {
+                animator.startAnimation()
+            }
+        } else {
+            animator.startAnimation()
+        }
     }
 
     func setupTempTextField() {
