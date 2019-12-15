@@ -251,6 +251,10 @@ final class MLCardFormViewModel {
     func getNavigationBarCustomColor() -> (backgroundColor: UIColor?, textColor: UIColor?) {
         return (builder?.navigationCustomBackgroundColor, builder?.navigationCustomTextColor)
     }
+
+    func shouldAnimateOnLoad() -> Bool {
+        return builder?.animateOnLoad ?? false
+    }
 }
 
 // MARK: IssuersScreen

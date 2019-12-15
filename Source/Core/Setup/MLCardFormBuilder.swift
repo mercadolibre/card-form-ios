@@ -21,6 +21,7 @@ open class MLCardFormBuilder: NSObject {
     internal var trackingConfiguration: MLCardFormTrackerConfiguration?
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
+    internal var animateOnLoad: Bool = false
     
     // MARK: Initialization
     
@@ -88,6 +89,16 @@ extension MLCardFormBuilder {
     open func setNavigationBarCustomColor(backgroundColor: UIColor, textColor: UIColor) -> MLCardFormBuilder {
         self.navigationCustomBackgroundColor = backgroundColor
         self.navigationCustomTextColor = textColor
+        return self
+    }
+
+    /**
+     Determinates if MLCardForm ViewController should be present animated or not. Default is no animated. Use true only for your own custom transitions.
+     - parameter animated: `Bool`
+     */
+    @discardableResult
+    open func setAnimated(_ animated: Bool) -> MLCardFormBuilder {
+        self.animateOnLoad = animated
         return self
     }
 }

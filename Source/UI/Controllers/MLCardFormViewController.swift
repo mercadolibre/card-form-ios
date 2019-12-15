@@ -35,6 +35,13 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
         initialSetup()
     }
 
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !viewModel.shouldAnimateOnLoad() {
+            animateCardAppear()
+        }
+    }
+
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupKeyboardNotifications()
@@ -47,8 +54,8 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
 }
 
 // MARK: Public API.
-extension MLCardFormViewController {
-    public static func setupWithBuilder(_ builder: MLCardFormBuilder) -> MLCardFormViewController {
+internal extension MLCardFormViewController {
+    static func setupWithBuilder(_ builder: MLCardFormBuilder) -> MLCardFormViewController {
         let controller = MLCardFormViewController(nibName: "MLCardFormViewController", bundle: Bundle(for: MLCardFormViewController.self))
         controller.lifeCycleDelegate = builder.lifeCycleDelegate
         controller.viewModel.updateWithBuilder(builder)
@@ -136,8 +143,10 @@ private extension MLCardFormViewController {
         setupCardDrawer()
         setupFieldCollectionView()
         viewModel.viewModelDelegate = self
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            self?.animateCardAppear()
+        if viewModel.shouldAnimateOnLoad() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                self?.animateCardAppear()
+            }
         }
     }
     
@@ -166,7 +175,9 @@ private extension MLCardFormViewController {
     func setupCardContainer() {
         cardContainerView.alpha = 1
         cardContainerView.backgroundColor = .clear
-        containerBottomConstraint.constant = containerBottomConstraint.constant - view.frame.height - cardContainerView.frame.height
+        if viewModel.shouldAnimateOnLoad() {
+            containerBottomConstraint.constant = containerBottomConstraint.constant - view.frame.height - cardContainerView.frame.height
+        }
     }
     
     func setupFieldCollectionView() {
@@ -184,7 +195,7 @@ private extension MLCardFormViewController {
         collectionView.register(MLCardFormFieldCell.self, forCellWithReuseIdentifier: MLCardFormFieldCell.cellIdentifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.alpha = 0
+        collectionView.alpha = viewModel.shouldAnimateOnLoad() ? 0 : 1
 
         view.addSubview(collectionView)
         collectionView.backgroundColor = .white
@@ -214,9 +225,11 @@ private extension MLCardFormViewController {
         if let field = viewModel.cardFormFields?.first?.first {
             field.doFocus()
         }
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
-            self?.cardFieldCollectionView?.alpha = 1
-        })
+        if viewModel.shouldAnimateOnLoad() {
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.cardFieldCollectionView?.alpha = 1
+            })
+        }
     }
 
     func updateProgressFromField(_ cardFormField: MLCardFormField) {
