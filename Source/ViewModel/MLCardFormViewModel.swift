@@ -56,8 +56,11 @@ final class MLCardFormViewModel {
     private let addCardService: MLCardFormAddCardService = MLCardFormAddCardService()
 
     weak var viewModelDelegate: MLCardFormViewModelProtocol?
+
+    private var builder: MLCardFormBuilder?
     
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
+        self.builder = builder
         trackingConfiguration = builder.trackingConfiguration
         addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
         binService.update(siteId: builder.siteId, excludedPaymentTypes: builder.excludedPaymentTypes, flowId: builder.flowId)
@@ -243,6 +246,14 @@ final class MLCardFormViewModel {
             cardHandlerToUpdate.update(cardUI: cardUI)
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
         }
+    }
+
+    func getNavigationBarCustomColor() -> (backgroundColor: UIColor?, textColor: UIColor?) {
+        return (builder?.navigationCustomBackgroundColor, builder?.navigationCustomTextColor)
+    }
+
+    func shouldAnimateOnLoad() -> Bool {
+        return builder?.animateOnLoad ?? false
     }
 }
 
