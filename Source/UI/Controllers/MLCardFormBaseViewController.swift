@@ -25,7 +25,6 @@ open class MLCardFormBaseViewController: UIViewController {
             navigationController.navigationBar.titleTextAttributes = titleTextAttributes
             navigationController.navigationBar.tintColor = customNavigationBackgroundColor ?? navBarBackgroundColor
             navigationController.navigationBar.barTintColor = customNavigationBackgroundColor ?? navBarBackgroundColor
-            // navigationController.navigationBar.isTranslucent = false
             navigationController.navigationBar.backgroundColor = customNavigationBackgroundColor ?? navBarBackgroundColor
             setupBackButton(textColor: customNavigationTextColor ?? navBarTextColor)
         }
