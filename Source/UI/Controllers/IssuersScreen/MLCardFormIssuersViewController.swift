@@ -14,17 +14,28 @@ final class MLCardFormIssuersViewController: UIViewController {
     private let issuersData: [MLCardFormIssuer]?
     private let issuersTableView = UITableView()
     weak var delegate: IssuerSelectedProtocol?
+    private var selectedIssuer: MLCardFormIssuer?
+    private weak var confirmButton: UIButton?
+    private let confirmButtonHeight: CGFloat = 48
+    private let shadowViewHeight: CGFloat = 40
+    private let bottomViewHeight: CGFloat = 100
 
     public init(viewModel: MLCardFormViewModel) {
         issuersData = viewModel.getIssuers()
         super.init(nibName: nil, bundle: nil)
-        setupIssuersTableView()
-        setupShadowViews()
+        let bottomView = setupBottomView()
+        setupIssuersTableView(aboveOf: bottomView)
+        setupShadowViews(aboveOf: bottomView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationBar()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.userDidCancel(controller: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,7 +45,41 @@ final class MLCardFormIssuersViewController: UIViewController {
 
 // MARK: Privates
 private extension MLCardFormIssuersViewController {
-    func setupIssuersTableView() {
+    func setupBottomView() -> UIView {
+        let bottomView = UIView()
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.backgroundColor = .white
+        view.addSubview(bottomView)
+        NSLayoutConstraint.activate([
+             bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+             bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+             bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+             bottomView.heightAnchor.constraint(equalToConstant: bottomViewHeight)
+        ])
+
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UI.Colors.confirmButtonColor
+        button.setTitle("Confirmar".localized, for: .normal)
+        button.titleLabel?.font = UIFont.ml_semiboldSystemFont(ofSize: UI.FontSize.XM_FONT)
+        button.setTitleColor(UI.Colors.confirmButtonTitleColor, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.layer.cornerRadius = 6
+        view.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.centerYAnchor.constraint(equalTo: bottomView.centerYAnchor),
+            button.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: UI.Margin.L_MARGIN),
+            button.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -UI.Margin.L_MARGIN),
+            button.heightAnchor.constraint(equalToConstant: confirmButtonHeight)
+        ])
+        button.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        button.addGestureRecognizer(tapGesture)
+        confirmButton = button
+        return bottomView
+    }
+
+    func setupIssuersTableView(aboveOf bottomView: UIView) {
         issuersTableView.translatesAutoresizingMaskIntoConstraints = false
         issuersTableView.backgroundColor = .white
         issuersTableView.delegate = self
@@ -42,12 +87,13 @@ private extension MLCardFormIssuersViewController {
         issuersTableView.tableFooterView = UIView()
         issuersTableView.register(MLCardFormIssuerTableViewCell.self, forCellReuseIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier)
         issuersTableView.register(MLCardFormTopViewCell.self, forCellReuseIdentifier: MLCardFormTopViewCell.cellIdentifier)
+        issuersTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 22, right: 0)
         view.addSubview(issuersTableView)
         NSLayoutConstraint.activate([
             issuersTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             issuersTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            issuersTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            issuersTableView.topAnchor.constraint(equalTo: view.topAnchor)
+            issuersTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            issuersTableView.bottomAnchor.constraint(equalTo: bottomView.topAnchor)
         ])
     }
 
@@ -60,7 +106,7 @@ private extension MLCardFormIssuersViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
     }
 
-    func setupShadowViews() {
+    func setupShadowViews(aboveOf bottomView: UIView) {
         let topShadowView = UIImageView(image: UIImage(named: "gradient_top", in: Bundle(for: MLCardFormIssuersViewController.self), compatibleWith: nil))
         topShadowView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topShadowView)
@@ -68,7 +114,7 @@ private extension MLCardFormIssuersViewController {
             topShadowView.topAnchor.constraint(equalTo: view.topAnchor, constant: -1),
             topShadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topShadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topShadowView.heightAnchor.constraint(equalToConstant: 40)
+            topShadowView.heightAnchor.constraint(equalToConstant: shadowViewHeight)
         ])
         let bottomShadowView = UIImageView(image: UIImage(named: "gradient_bottom", in: Bundle(for: MLCardFormIssuersViewController.self), compatibleWith: nil))
         bottomShadowView.translatesAutoresizingMaskIntoConstraints = false
@@ -76,13 +122,19 @@ private extension MLCardFormIssuersViewController {
         NSLayoutConstraint.activate([
             bottomShadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomShadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomShadowView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            bottomShadowView.heightAnchor.constraint(equalToConstant: 40)
+            bottomShadowView.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: 2),
+            bottomShadowView.heightAnchor.constraint(equalToConstant: shadowViewHeight)
         ])
     }
 
     @objc func close() {
         delegate?.userDidCancel(controller: self)
+    }
+
+    @objc func didTap() {
+        if let selectedIssuer = selectedIssuer {
+            delegate?.userDidSelectIssuer(issuer: selectedIssuer, controller: self)
+        }
     }
 }
 
@@ -103,9 +155,9 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
                 return topCell
             }
         } else {
-            if let rowCell = issuersTableView.dequeueReusableCell(withIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier, for: indexPath) as? MLCardFormIssuerTableViewCell,
-                let currentIssuer = issuersData?[indexPath.row] {
-                rowCell.setupCell(with: currentIssuer.imageUrl)
+            if let rowCell = issuersTableView.dequeueReusableCell(withIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier, for: indexPath) as? MLCardFormIssuerTableViewCell, let currentIssuer = issuersData?[indexPath.row] {
+                let radioButtonOn = selectedIssuer?.id == currentIssuer.id ? true : false
+                rowCell.setupCell(with: currentIssuer.imageUrl, radioButtonOn: radioButtonOn)
                 return rowCell
             }
         }
@@ -119,7 +171,28 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section != 0,
             let currentIssuer = issuersData?[indexPath.row] {
-            delegate?.userDidSelectIssuer(issuer: currentIssuer, controller: self)
+            if let issuersCell = tableView.cellForRow(at: indexPath) as? MLCardFormIssuerTableViewCell {
+                setOffAllRadioButtons()
+                issuersCell.setupRadioButton(radioButtonOn: true)
+                selectedIssuer = currentIssuer
+                UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: { [weak self] in
+                    guard let self = self else { return }
+                    self.confirmButton?.backgroundColor = MLStyleSheetManager.styleSheet.secondaryColor
+                    self.confirmButton?.setTitleColor(.white, for: .normal)
+                })
+            }
+        }
+    }
+}
+
+// MARK: RadioButton OFF
+extension MLCardFormIssuersViewController {
+    func setOffAllRadioButtons() {
+        if let issuers = issuersData?.count {
+            for issuer in 0...issuers-1 {
+                let cell = issuersTableView.cellForRow(at: IndexPath(item: issuer, section: 1)) as? MLCardFormIssuerTableViewCell
+                cell?.setupRadioButton(radioButtonOn: false)
+            }
         }
     }
 }

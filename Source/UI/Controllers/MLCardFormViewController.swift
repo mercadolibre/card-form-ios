@@ -213,12 +213,10 @@ private extension MLCardFormViewController {
     }
 
     func setupIssuersScreen() {
-        issuersVC = MLCardFormIssuersViewController(viewModel: self.viewModel)
-        if let issuersVC = issuersVC {
-            issuersVC.delegate = self
-            let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
-            navigationController?.present(issuersNavigation, animated: true, completion: nil)
-        }
+        let issuersVC = MLCardFormIssuersViewController(viewModel: self.viewModel)
+        issuersVC.delegate = self
+        let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
+        navigationController?.present(issuersNavigation, animated: true, completion: nil)
     }
 
     func animateCardAppear() {

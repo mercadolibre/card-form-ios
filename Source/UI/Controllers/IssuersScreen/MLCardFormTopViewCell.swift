@@ -44,8 +44,8 @@ private extension MLCardFormTopViewCell {
         titleLabel.font = UIFont.ml_semiboldSystemFont(ofSize: UI.FontSize.L_FONT)
         contentView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UI.Margin.S_MARGIN),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UI.Margin.S_MARGIN),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UI.Margin.M_MARGIN),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UI.Margin.M_MARGIN),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
