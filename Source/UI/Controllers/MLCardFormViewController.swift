@@ -19,34 +19,32 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     // Constraints.
     @IBOutlet weak var containerBottomConstraint: NSLayoutConstraint!
 
-    // MARK: Private Vars
-    private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
-    private var cardDrawer: MLCardDrawerController?
-    private weak var cardFieldCollectionView: UICollectionView?
-    
+    // MARK: Constants
     private let cardFieldCellInset: CGFloat = 30
     private let cardFieldHeight: CGFloat = 75
-    private var setupControllerCompleted = false
-    private var internetConnection: Bool = true
+    internal let viewModel: MLCardFormViewModel = MLCardFormViewModel()
 
-    let viewModel: MLCardFormViewModel = MLCardFormViewModel()
+    // MARK: Private Vars
+    private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
+    private weak var cardFieldCollectionView: UICollectionView?
+
+    private var internetConnection: Bool = true
+    private var cardDrawer: MLCardDrawerController?
+    private var issuersVC: MLCardFormIssuersViewController?
+
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        initialSetup()
+    }
 
     deinit {
         removeReachabilityObserver()
     }
 
-    override open func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if !setupControllerCompleted {
-            setupProgress()
-            setupCardDrawer()
-            setupFieldCollectionView()
-            showViewWithAnimation()
-            title = AppBar.Generic.title
-            setupTempTextField()
-            setupSpinner()
-            viewModel.viewModelDelegate = self
-            setupControllerCompleted = true
+        if !viewModel.shouldAnimateOnLoad() {
+            animateCardAppear()
         }
     }
 
@@ -63,8 +61,8 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
 }
 
 // MARK: Public API.
-extension MLCardFormViewController {
-    public static func setupWithBuilder(_ builder: MLCardFormBuilder) -> MLCardFormViewController {
+internal extension MLCardFormViewController {
+    static func setupWithBuilder(_ builder: MLCardFormBuilder) -> MLCardFormViewController {
         let controller = MLCardFormViewController(nibName: "MLCardFormViewController", bundle: Bundle(for: MLCardFormViewController.self))
         controller.lifeCycleDelegate = builder.lifeCycleDelegate
         controller.viewModel.updateWithBuilder(builder)
@@ -148,6 +146,25 @@ private extension MLCardFormViewController {
             }
         })
     }
+
+    func initialSetup() {
+        title = AppBar.Generic.title
+        let (backgroundNavigationColor, textNavigationColor) = viewModel.getNavigationBarCustomColor()
+        super.loadStyles(customNavigationBackgroundColor: backgroundNavigationColor, customNavigationTextColor: textNavigationColor)
+        addStatusBarBackground(color: backgroundNavigationColor)
+        setupCardContainer()
+        setupProgress()
+        setupTempTextField()
+        setupSpinner()
+        setupCardDrawer()
+        setupFieldCollectionView()
+        viewModel.viewModelDelegate = self
+        if viewModel.shouldAnimateOnLoad() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                self?.animateCardAppear()
+            }
+        }
+    }
     
     func setupProgress() {
         progressBarView.progressTintColor = MLStyleSheetManager.styleSheet.secondaryColor
@@ -156,8 +173,27 @@ private extension MLCardFormViewController {
     
     func setupCardDrawer() {
         cardDrawer = MLCardDrawerController(viewModel.cardUIHandler, viewModel.cardDataHandler)
-        cardDrawer?.setUp(inView: cardContainerView).show()
+        cardDrawer?.view.backgroundColor = .clear
         cardContainerView.addShadow()
+        if let cardDrawerInstance = cardDrawer {
+            let cardView = cardDrawerInstance.getCardView()
+            cardView.translatesAutoresizingMaskIntoConstraints = false
+            cardContainerView.addSubview(cardView)
+            NSLayoutConstraint.activate([
+                cardView.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
+                cardView.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor),
+                cardView.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor),
+                cardView.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor)
+            ])
+        }
+    }
+
+    func setupCardContainer() {
+        cardContainerView.alpha = 1
+        cardContainerView.backgroundColor = .clear
+        if viewModel.shouldAnimateOnLoad() {
+            containerBottomConstraint.constant = containerBottomConstraint.constant - view.frame.height - cardContainerView.frame.height
+        }
     }
     
     func setupFieldCollectionView() {
@@ -175,7 +211,7 @@ private extension MLCardFormViewController {
         collectionView.register(MLCardFormFieldCell.self, forCellWithReuseIdentifier: MLCardFormFieldCell.cellIdentifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.alpha = 0
+        collectionView.alpha = viewModel.shouldAnimateOnLoad() ? 0 : 1
 
         view.addSubview(collectionView)
         collectionView.backgroundColor = .white
@@ -199,29 +235,38 @@ private extension MLCardFormViewController {
         navigationController?.present(issuersNavigation, animated: true, completion: nil)
     }
 
-    private func showViewWithAnimation() {
-        UIView.animate(withDuration: 0.5) { [weak self] in
-            self?.cardFieldCollectionView?.alpha = 1
-            self?.cardContainerView.alpha = 1
-        }
+    func animateCardAppear() {
         if let field = viewModel.cardFormFields?.first?.first {
             field.doFocus()
-            if viewModel.updateProgressWithCompletion {
-                updateProgressFromField(field)
-            }
+        }
+        if viewModel.shouldAnimateOnLoad() {
+            UIView.animate(withDuration: 0.5, animations: { [weak self] in
+                self?.cardFieldCollectionView?.alpha = 1
+            })
         }
     }
 
-    private func updateProgressFromField(_ cardFormField: MLCardFormField) {
-        progressBarView.setProgress(viewModel.getProgressFromField(cardFormField), animated: true)
+    func updateProgressFromField(_ cardFormField: MLCardFormField) {
+        let isFirstTime: Bool = progressBarView.progress == 0
+        let animator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 0.9) { [weak self] in
+            guard let self = self else { return }
+            self.progressBarView.setProgress(self.viewModel.getProgressFromField(cardFormField), animated: true)
+        }
+        if isFirstTime {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.60) {
+                animator.startAnimation()
+            }
+        } else {
+            animator.startAnimation()
+        }
     }
 
-    private func setupTempTextField() {
+    func setupTempTextField() {
         viewModel.tempTextField.notifierProtocol = self
         view.addSubview(viewModel.tempTextField)
     }
     
-    private func setupSpinner() {
+    func setupSpinner() {
         let color = MLStyleSheetManager.styleSheet.primaryColor
         let spinnerConfig = MLSpinnerConfig(size: .big, primaryColor: color, secondaryColor: color)
         spinnerView.setUpWith(spinnerConfig)
@@ -258,11 +303,14 @@ extension MLCardFormViewController {
                 safeArea = view.safeAreaInsets.bottom
             }
             let bottomConstraintConstant = (notification.name == UIResponder.keyboardWillHideNotification) ? 0.0 : keyboardViewEndFrame.height + cardFieldHeight / deltaBottomMargin - safeArea
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                guard let self = self else { return }
-                self.containerBottomConstraint.constant = bottomConstraintConstant
-                self.view.layoutIfNeeded()
+
+            let animator = UIViewPropertyAnimator(duration: 0.8, dampingRatio: 1.0) {
+                [weak self] in
+                        guard let self = self else { return }
+                        self.containerBottomConstraint.constant = bottomConstraintConstant
+                        self.view.layoutIfNeeded()
             }
+            animator.startAnimation()
         }
         getKeyboardSize(notification)
     }
