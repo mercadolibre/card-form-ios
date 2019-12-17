@@ -16,6 +16,5 @@ Pod::Spec.new do |s|
     default.resources = "Source/Resources/*.xcassets", "Source/UI/**/*.xib", "Source/Translations/**/**.{strings}"
     s.dependency 'MLUI', '~> 5.0'
     s.dependency 'MLCardDrawer', '~> 1.0'
-    s.dependency 'ReachabilitySwift'
   end
 end

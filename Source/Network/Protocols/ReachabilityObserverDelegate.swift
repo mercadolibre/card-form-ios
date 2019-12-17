@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Reachability
 
 private var reachability: Reachability!
 
