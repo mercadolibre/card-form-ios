@@ -8,6 +8,7 @@
 import Foundation
 import MLUI
 
+/** :nodoc: */
 open class MLCardFormBaseViewController: UIViewController {
     private var fontName: String = ".SFUIDisplay-Regular"
     private var fontLightName: String = ".SFUIDisplay-Light"
@@ -30,10 +31,12 @@ open class MLCardFormBaseViewController: UIViewController {
         }
     }
 
+    /// :nodoc
     override open var shouldAutorotate: Bool {
         return false
     }
 
+    /// :nodoc
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.portrait
     }

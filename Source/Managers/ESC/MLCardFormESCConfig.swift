@@ -11,6 +11,8 @@ import Foundation
  Whe use this object to store properties related to ESC module.
  Check MLCardFormESCProtocol methods.
  */
+
+/** :nodoc: */
 @objcMembers
 open class MLCardFormESCConfig: NSObject {
     public let enabled: Bool
