@@ -20,10 +20,7 @@ protocol ReachabilityObserverDelegate: class, ReachabilityActionDelegate {
 
 // Declaring default implementation of adding/removing observer
 extension ReachabilityObserverDelegate {
-
-    /** Subscribe on reachability changing */
     func addReachabilityObserver() {
-
         do {
             reachability = try Reachability()
         } catch {
@@ -45,7 +42,6 @@ extension ReachabilityObserverDelegate {
         }
     }
 
-    /** Unsubscribe */
     func removeReachabilityObserver() {
         reachability?.stopNotifier()
         reachability = nil
