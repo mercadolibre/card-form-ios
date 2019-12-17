@@ -14,7 +14,9 @@
     <a title="MLCardFormViewController Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">MLCardForm Docs</a> (48% documented)</p>
+        <p><a href="../index.html">MLCardForm 1.0.0 Docs</a> (47% documented)</p>
+        <p class="header-right"><a href="https://github.com/mercadolibre/card-form-ios"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fmercadolibre%2Egithub%2Eio%2Fdocsets%2FMLCardForm%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -34,7 +36,16 @@
                 <a href="../Classes/MLCardForm.html">MLCardForm</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/MLCardFormBaseViewController.html">MLCardFormBaseViewController</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/MLCardFormBuilder.html">MLCardFormBuilder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MLCardFormConfiguratorManager.html">MLCardFormConfiguratorManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MLCardFormESCConfig.html">MLCardFormESCConfig</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MLCardFormTrackerConfiguration.html">MLCardFormTrackerConfiguration</a>
@@ -47,6 +58,9 @@
           <li class="nav-group-name">
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/MLCardFormESCProtocol.html">MLCardFormESCProtocol</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Protocols/MLCardFormLifeCycleDelegate.html">MLCardFormLifeCycleDelegate</a>
               </li>
@@ -63,7 +77,8 @@
             <h1>MLCardFormViewController</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">MLCardFormViewController</span> <span class="p">:</span> <span class="kt">UIViewController</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">MLCardFormViewController</span> <span class="p">:</span> <span class="kt"><a href="../Classes/MLCardFormBaseViewController.html">MLCardFormBaseViewController</a></span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">MLCardFormViewController</span><span class="p">:</span> <span class="kt">UICollectionViewDelegateFlowLayout</span><span class="p">,</span> <span class="kt">UICollectionViewDataSource</span></code></pre>
 
                 </div>
               </div>
@@ -75,11 +90,43 @@
               <div class="task-name-container">
                 <a name="/Private%20Vars"></a>
                 <a name="//apple_ref/swift/Section/Private Vars" class="dashAnchor"></a>
-                <a href="#/Private%20Vars">
-                  <h3 class="section-name">Private Vars</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Private%20Vars"></a>
+                  <h3 class="section-name"><p>Private Vars</p>
+</h3>
+                </div>
               </div>
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@MLCardForm@objc(cs)MLCardFormViewController(im)viewDidLoad"></a>
+                    <a name="//apple_ref/swift/Method/viewDidLoad()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MLCardForm@objc(cs)MLCardFormViewController(im)viewDidLoad">viewDidLoad()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/UI/Controllers/MLCardFormViewController.swift#L33-L36">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -100,9 +147,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">viewDidAppear</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidAppear</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/UI/Controllers/MLCardFormViewController.swift#L38-L43">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -131,6 +181,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/UI/Controllers/MLCardFormViewController.swift#L45-L48">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -158,43 +211,8 @@
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Public%20API."></a>
-                <a name="//apple_ref/swift/Section/Public API." class="dashAnchor"></a>
-                <a href="#/Public%20API.">
-                  <h3 class="section-name">Public API.</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10MLCardForm0aB14ViewControllerC16setupWithBuilderyAcA0abG0CFZ"></a>
-                    <a name="//apple_ref/swift/Method/setupWithBuilder(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10MLCardForm0aB14ViewControllerC16setupWithBuilderyAcA0abG0CFZ">setupWithBuilder(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">setupWithBuilder</span><span class="p">(</span><span class="n">_</span> <span class="nv">builder</span><span class="p">:</span> <span class="kt"><a href="../Classes/MLCardFormBuilder.html">MLCardFormBuilder</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormViewController</span></code></pre>
-
-                        </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/UI/Controllers/MLCardFormViewController.swift#L50-L53">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -203,11 +221,13 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Keyboard%20methods."></a>
-                <a name="//apple_ref/swift/Section/Keyboard methods." class="dashAnchor"></a>
-                <a href="#/Keyboard%20methods.">
-                  <h3 class="section-name">Keyboard methods.</h3>
-                </a>
+                <a name="/UICollectionView%20methods."></a>
+                <a name="//apple_ref/swift/Section/UICollectionView methods." class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/UICollectionView%20methods."></a>
+                  <h3 class="section-name"><p>UICollectionView methods.</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -233,6 +253,9 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">layout</span> <span class="nv">collectionViewLayout</span><span class="p">:</span> <span class="kt">UICollectionViewLayout</span><span class="p">,</span> <span class="n">sizeForItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGSize</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/UI/Controllers/MLCardFormViewController.swift#L306-L308">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -261,6 +284,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/UI/Controllers/MLCardFormViewController.swift#L310-L312">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -288,6 +314,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/UI/Controllers/MLCardFormViewController.swift#L314-L320">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -296,8 +325,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://www.mercadolibre.com" target="_blank" rel="external">PX Team - Juan Sanzone - Eric Ertl - Esteban Boffa</a>. All rights reserved. (Last updated: 2019-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/mercadolibre/card-form-ios" target="_blank" rel="external">Mercadopago</a>. All rights reserved. (Last updated: 2019-12-17)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

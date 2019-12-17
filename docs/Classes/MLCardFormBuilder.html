@@ -14,7 +14,9 @@
     <a title="MLCardFormBuilder Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">MLCardForm Docs</a> (48% documented)</p>
+        <p><a href="../index.html">MLCardForm 1.0.0 Docs</a> (47% documented)</p>
+        <p class="header-right"><a href="https://github.com/mercadolibre/card-form-ios"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fmercadolibre%2Egithub%2Eio%2Fdocsets%2FMLCardForm%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -34,7 +36,16 @@
                 <a href="../Classes/MLCardForm.html">MLCardForm</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/MLCardFormBaseViewController.html">MLCardFormBaseViewController</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/MLCardFormBuilder.html">MLCardFormBuilder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MLCardFormConfiguratorManager.html">MLCardFormConfiguratorManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MLCardFormESCConfig.html">MLCardFormESCConfig</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MLCardFormTrackerConfiguration.html">MLCardFormTrackerConfiguration</a>
@@ -47,6 +58,9 @@
           <li class="nav-group-name">
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/MLCardFormESCProtocol.html">MLCardFormESCProtocol</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Protocols/MLCardFormLifeCycleDelegate.html">MLCardFormLifeCycleDelegate</a>
               </li>
@@ -76,17 +90,19 @@
               <div class="task-name-container">
                 <a name="/Initialization"></a>
                 <a name="//apple_ref/swift/Section/Initialization" class="dashAnchor"></a>
-                <a href="#/Initialization">
-                  <h3 class="section-name">Initialization</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initialization"></a>
+                  <h3 class="section-name"><p>Initialization</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:@M@MLCardForm@objc(cs)MLCardFormBuilder(im)initWithPublicKey:lifeCycleDelegate:"></a>
-                    <a name="//apple_ref/swift/Method/init(publicKey:lifeCycleDelegate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@MLCardForm@objc(cs)MLCardFormBuilder(im)initWithPublicKey:lifeCycleDelegate:">init(publicKey:lifeCycleDelegate:)</a>
+                    <a name="/c:@M@MLCardForm@objc(cs)MLCardFormBuilder(im)initWithPublicKey:siteId:lifeCycleDelegate:"></a>
+                    <a name="//apple_ref/swift/Method/init(publicKey:siteId:lifeCycleDelegate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MLCardForm@objc(cs)MLCardFormBuilder(im)initWithPublicKey:siteId:lifeCycleDelegate:">init(publicKey:siteId:lifeCycleDelegate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -101,7 +117,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lifeCycleDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/MLCardFormLifeCycleDelegate.html">MLCardFormLifeCycleDelegate</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">siteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lifeCycleDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/MLCardFormLifeCycleDelegate.html">MLCardFormLifeCycleDelegate</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -136,26 +152,18 @@
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L33-L38">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Setters/Builders"></a>
-                <a name="//apple_ref/swift/Section/Setters/Builders" class="dashAnchor"></a>
-                <a href="#/Setters/Builders">
-                  <h3 class="section-name">Setters/Builders</h3>
-                </a>
-              </div>
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setPrivateKeyWithPrivateKey:"></a>
-                    <a name="//apple_ref/swift/Method/setPrivateKey(privateKey:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setPrivateKeyWithPrivateKey:">setPrivateKey(privateKey:)</a>
+                    <a name="/c:@M@MLCardForm@objc(cs)MLCardFormBuilder(im)initWithPrivateKey:siteId:lifeCycleDelegate:"></a>
+                    <a name="//apple_ref/swift/Method/init(privateKey:siteId:lifeCycleDelegate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@MLCardForm@objc(cs)MLCardFormBuilder(im)initWithPrivateKey:siteId:lifeCycleDelegate:">init(privateKey:siteId:lifeCycleDelegate:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -163,15 +171,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Private key provides save card capabilities and account money balance. (User logged)</p>
+                        <p>Mandatory init.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setPrivateKey</span><span class="p">(</span><span class="nv">privateKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">privateKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">siteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lifeCycleDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/MLCardFormLifeCycleDelegate.html">MLCardFormLifeCycleDelegate</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -187,22 +194,50 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The user private key</p>
+                                  <p>Logged user key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lifeCycleDelegate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The protocol to stay informed about credit card creation life cycle. (<code>didAddCard</code>)</p>
                                 </div>
                               </td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L45-L50">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Setters/Builders"></a>
+                <a name="//apple_ref/swift/Section/Setters/Builders" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Setters/Builders"></a>
+                  <h3 class="section-name"><p>Setters/Builders</p>
+</h3>
+                </div>
+              </div>
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setSiteIdWithSiteId:"></a>
-                    <a name="//apple_ref/swift/Method/setSiteId(siteId:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setSiteIdWithSiteId:">setSiteId(siteId:)</a>
+                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setFlowIdWithID:"></a>
+                    <a name="//apple_ref/swift/Method/setFlowId(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setFlowIdWithID:">setFlowId(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -218,9 +253,13 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setSiteId</span><span class="p">(</span><span class="nv">siteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
+<span class="kd">@objc(setFlowIdWithID:)</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setFlowId</span><span class="p">(</span><span class="n">_</span> <span class="nv">flowId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L56-L59">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -228,9 +267,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setLanguageWithLanguage:"></a>
-                    <a name="//apple_ref/swift/Method/setLanguage(language:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setLanguageWithLanguage:">setLanguage(language:)</a>
+                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setLanguage:"></a>
+                    <a name="//apple_ref/swift/Method/setLanguage(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setLanguage:">setLanguage(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -246,9 +285,12 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setLanguage</span><span class="p">(</span><span class="nv">language</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setLanguage</span><span class="p">(</span><span class="n">_</span> <span class="nv">language</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L62-L65">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -256,9 +298,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setExcludedPaymentTypesWithExcludedPaymentTypes:"></a>
-                    <a name="//apple_ref/swift/Method/setExcludedPaymentTypes(excludedPaymentTypes:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setExcludedPaymentTypesWithExcludedPaymentTypes:">setExcludedPaymentTypes(excludedPaymentTypes:)</a>
+                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setExcludedPaymentTypesWithTypes:"></a>
+                    <a name="//apple_ref/swift/Method/setExcludedPaymentTypes(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setExcludedPaymentTypesWithTypes:">setExcludedPaymentTypes(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -274,9 +316,13 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setExcludedPaymentTypes</span><span class="p">(</span><span class="nv">excludedPaymentTypes</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
+<span class="kd">@objc(setExcludedPaymentTypesWithTypes:)</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setExcludedPaymentTypes</span><span class="p">(</span><span class="n">_</span> <span class="nv">excludedPaymentTypes</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L68-L71">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -284,9 +330,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setTrackingConfigurationWithTrackingConfiguration:"></a>
-                    <a name="//apple_ref/swift/Method/setTrackingConfiguration(trackingConfiguration:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setTrackingConfigurationWithTrackingConfiguration:">setTrackingConfiguration(trackingConfiguration:)</a>
+                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setTrackingConfigurationWithConfiguration:"></a>
+                    <a name="//apple_ref/swift/Method/setTrackingConfiguration(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setTrackingConfigurationWithConfiguration:">setTrackingConfiguration(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -302,7 +348,8 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setTrackingConfiguration</span><span class="p">(</span><span class="nv">trackingConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/MLCardFormTrackerConfiguration.html">MLCardFormTrackerConfiguration</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
+<span class="kd">@objc(setTrackingConfigurationWithConfiguration:)</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setTrackingConfiguration</span><span class="p">(</span><span class="n">_</span> <span class="nv">trackingConfiguration</span><span class="p">:</span> <span class="kt"><a href="../Classes/MLCardFormTrackerConfiguration.html">MLCardFormTrackerConfiguration</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
 
                         </div>
                       </div>
@@ -325,6 +372,121 @@
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L78-L81">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setNavigationBarCustomColorWithBackgroundColor:textColor:"></a>
+                    <a name="//apple_ref/swift/Method/setNavigationBarCustomColor(backgroundColor:textColor:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setNavigationBarCustomColorWithBackgroundColor:textColor:">setNavigationBarCustomColor(backgroundColor:textColor:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Customize navigation bar background color and tint text color.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setNavigationBarCustomColor</span><span class="p">(</span><span class="nv">backgroundColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="p">,</span> <span class="nv">textColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>backgroundColor</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code>UIColor</code> object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>textColor</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code>UIColor</code> object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L89-L93">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setAnimated:"></a>
+                    <a name="//apple_ref/swift/Method/setAnimated(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@MLCardForm@objc(cs)MLCardFormBuilder(im)setAnimated:">setAnimated(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determinates if MLCardForm ViewController should be present animated or not. Default is no animated. Use true only for your own custom transitions.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">open</span> <span class="kd">func</span> <span class="nf">setAnimated</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MLCardFormBuilder</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>animated</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code>Bool</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/mercadolibre/card-form-ios/tree/develop/Source/Core/Setup/MLCardFormBuilder.swift#L100-L103">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -333,8 +495,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://www.mercadolibre.com" target="_blank" rel="external">PX Team - Juan Sanzone - Eric Ertl - Esteban Boffa</a>. All rights reserved. (Last updated: 2019-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/mercadolibre/card-form-ios" target="_blank" rel="external">Mercadopago</a>. All rights reserved. (Last updated: 2019-12-17)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
