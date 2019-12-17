@@ -93,11 +93,6 @@ extension MLCardFormViewController {
 // MARK:  Privates.
 private extension MLCardFormViewController {
     func getCardData(binNumber: String, showProggressAndSnackBar: Bool = false) {
-        if !internetConnection {
-            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-            return
-        }
-
         if showProggressAndSnackBar {
             showProgress()
         }
@@ -353,6 +348,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         case MLCardFormFields.cardNumber:
             self.viewModel.tempTextField.input.text = newValue
             if newValue.count == 6 {
+                guard internetConnection else { return }
                 getCardData(binNumber: newValue)
             } else if newValue.count == 5 {
                 shouldUpdateCard(cardUI: DefaultCardUIHandler())
@@ -420,6 +416,10 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     func shouldNext(from: MLCardFormField) {
         let returnValue = viewModel.isCardNumberFieldAndIsMissingCardData(cardFormField: from)
         if returnValue.isCardNumberMissingCardData, let currentBin = returnValue.currentBin {
+            if !internetConnection {
+                MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                return
+            }
             getCardData(binNumber: currentBin, showProggressAndSnackBar: true)
             return
         }
