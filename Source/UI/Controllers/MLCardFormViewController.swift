@@ -27,8 +27,13 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     private let cardFieldCellInset: CGFloat = 30
     private let cardFieldHeight: CGFloat = 75
     private var setupControllerCompleted = false
+    private var internetConnection: Bool = true
 
     let viewModel: MLCardFormViewModel = MLCardFormViewModel()
+
+    deinit {
+        removeReachabilityObserver()
+    }
 
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -47,6 +52,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        addReachabilityObserver()
         setupKeyboardNotifications()
     }
 
@@ -89,6 +95,11 @@ extension MLCardFormViewController {
 // MARK:  Privates.
 private extension MLCardFormViewController {
     func getCardData(binNumber: String, showProggressAndSnackBar: Bool = false) {
+        if !internetConnection {
+            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+            return
+        }
+
         if showProggressAndSnackBar {
             showProgress()
         }
@@ -111,6 +122,10 @@ private extension MLCardFormViewController {
     }
     
     func addCard() {
+        if !internetConnection {
+            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+            return
+        }
         showProgress()
         viewModel.addCard(completion: { (result: Result<String, Error>) in
             DispatchQueue.main.async { [weak self] in
@@ -212,6 +227,13 @@ private extension MLCardFormViewController {
         spinnerView.setUpWith(spinnerConfig)
         spinnerContainerView.alpha = 0
         view.sendSubviewToBack(spinnerContainerView)
+    }
+}
+
+// MARK: Reachablity
+extension MLCardFormViewController: ReachabilityObserverDelegate {
+    func reachabilityChanged(_ isReachable: Bool) {
+        internetConnection = isReachable ? true : false
     }
 }
 
