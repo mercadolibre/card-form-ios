@@ -7,7 +7,7 @@
 
 import Foundation
 
-private var reachability: Reachability!
+private var reachability: Reachability?
 
 protocol ReachabilityActionDelegate {
     func reachabilityChanged(_ isReachable: Bool)
@@ -30,16 +30,16 @@ extension ReachabilityObserverDelegate {
             print("Unable to add reachability observer")
         }
 
-        reachability.whenReachable = { [weak self] reachability in
+        reachability?.whenReachable = { [weak self] reachability in
             self?.reachabilityChanged(true)
         }
 
-        reachability.whenUnreachable = { [weak self] reachability in
+        reachability?.whenUnreachable = { [weak self] reachability in
             self?.reachabilityChanged(false)
         }
 
         do {
-            try reachability.startNotifier()
+            try reachability?.startNotifier()
         } catch {
             print("Unable to start notifier")
         }
@@ -47,7 +47,7 @@ extension ReachabilityObserverDelegate {
 
     /** Unsubscribe */
     func removeReachabilityObserver() {
-        reachability.stopNotifier()
+        reachability?.stopNotifier()
         reachability = nil
     }
 }
