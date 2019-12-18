@@ -100,7 +100,12 @@ private extension MLCardFormViewController {
                             break
                         case .failure(let error):
                             // Show error to the user
-                            self.showSnackBar(error: error, duration: MLSnackbarDuration.long)
+                            switch error {
+                            case NetworkLayerError.noInternetConnection:
+                                MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            default:
+                                MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            }
                         }
                     })
                 }
@@ -124,7 +129,14 @@ private extension MLCardFormViewController {
                     // Notify listener
                     self.lifeCycleDelegate?.didFailAddCard()
                     // Show error to the user
-                    self.showSnackBar(error: error, duration: MLSnackbarDuration.indefinitely, actionTitle: "Reintentar")
+                    switch error {
+                    case NetworkLayerError.noInternetConnection:
+                        MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                    default:
+                        MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
+                            self?.addCard()
+                            }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
+                    }
                 }
             }
         })
@@ -297,20 +309,6 @@ extension MLCardFormViewController {
             let keyboardScreenEndFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
             else { return }
         viewModel.measuredKeyboardSize = keyboardScreenEndFrame
-    }
-
-    func showSnackBar(error: Error, duration: MLSnackbarDuration, actionTitle: String? = nil) {
-        switch error {
-        case NetworkLayerError.noInternetConnection:
-            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-        default:
-            if let action = actionTitle {
-                MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: action.localized, actionBlock: { [weak self] in
-                    self?.addCard()
-                }, type: MLSnackbarType.error(), duration: duration)
-            }
-            MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: duration)
-        }
     }
 }
 
