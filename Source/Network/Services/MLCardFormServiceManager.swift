@@ -8,7 +8,7 @@
 import Foundation
 
 final class MLCardFormServiceManager: NSObject {
-    var binService: MLCardFormBinService = MLCardFormBinService()
+    let binService: MLCardFormBinService = MLCardFormBinService()
     let addCardService: MLCardFormAddCardService = MLCardFormAddCardService()
     private var hasInternet: Bool = true
 
