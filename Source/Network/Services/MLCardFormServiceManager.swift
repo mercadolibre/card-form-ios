@@ -10,6 +10,7 @@ import Foundation
 final class MLCardFormServiceManager: NSObject {
     let binService: MLCardFormBinService = MLCardFormBinService()
     let addCardService: MLCardFormAddCardService = MLCardFormAddCardService()
+    private var reachability: Reachability?
     private var hasInternet: Bool = true
 
     public override init() {
@@ -24,10 +25,37 @@ final class MLCardFormServiceManager: NSObject {
     }
 }
 
-// MARK: ReachabilityObserverProtocol
-extension MLCardFormServiceManager: ReachabilityObserverProtocol {
+// MARK: Reachability
+private extension MLCardFormServiceManager {
     func reachabilityChanged(_ isReachable: Bool) {
         hasInternet = isReachable
+    }
+
+    func addReachabilityObserver() {
+        do {
+            reachability = try Reachability()
+        } catch {
+            print("Unable to add reachability observer")
+        }
+
+        reachability?.whenReachable = { [weak self] reachability in
+            self?.reachabilityChanged(true)
+        }
+
+        reachability?.whenUnreachable = { [weak self] reachability in
+            self?.reachabilityChanged(false)
+        }
+
+        do {
+            try reachability?.startNotifier()
+        } catch {
+            print("Unable to start notifier")
+        }
+    }
+
+    func removeReachabilityObserver() {
+        reachability?.stopNotifier()
+        reachability = nil
     }
 }
 
