@@ -273,7 +273,7 @@ private extension MLCardFormViewController {
 // MARK: Reachablity
 extension MLCardFormViewController: ReachabilityObserverDelegate {
     func reachabilityChanged(_ isReachable: Bool) {
-        internetConnection = isReachable ? true : false
+        internetConnection = isReachable
     }
 }
 
