@@ -27,6 +27,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     // MARK: Private Vars
     private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
     private weak var cardFieldCollectionView: UICollectionView?
+
     private var cardDrawer: MLCardDrawerController?
     private var issuersVC: MLCardFormIssuersViewController?
 
@@ -97,9 +98,14 @@ private extension MLCardFormViewController {
                         switch result {
                         case .success:
                             break
-                        case .failure:
+                        case .failure(let error):
                             // Show error to the user
-                            MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            switch error {
+                            case NetworkLayerError.noInternetConnection:
+                                MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            default:
+                                MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            }
                         }
                     })
                 }
@@ -119,13 +125,18 @@ private extension MLCardFormViewController {
                     self.lifeCycleDelegate?.didAddCard(cardID: cardID)
                     // Save data for next time
                     self.viewModel.saveDataForReuse()
-                case .failure:
+                case .failure(let error):
                     // Notify listener
                     self.lifeCycleDelegate?.didFailAddCard()
                     // Show error to the user
-                    MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
-                        self?.addCard()
-                    }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
+                    switch error {
+                    case NetworkLayerError.noInternetConnection:
+                        MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                    default:
+                        MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
+                            self?.addCard()
+                            }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
+                    }
                 }
             }
         })
