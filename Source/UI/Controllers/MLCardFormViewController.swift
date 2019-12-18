@@ -9,6 +9,7 @@ import UIKit
 import MLCardDrawer
 import MLUI
 
+/** :nodoc: */
 open class MLCardFormViewController: MLCardFormBaseViewController {
     // MARK: Outlets.
     @IBOutlet weak var cardContainerView: UIView!
@@ -31,11 +32,13 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     private var cardDrawer: MLCardDrawerController?
     private var issuersVC: MLCardFormIssuersViewController?
 
+    /// :nodoc
     open override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
     }
 
+    /// :nodoc
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !viewModel.shouldAnimateOnLoad() {
@@ -43,11 +46,13 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
         }
     }
 
+    /// :nodoc
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupKeyboardNotifications()
     }
 
+    /// :nodoc
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeKeyboardNotifications()
@@ -65,6 +70,7 @@ internal extension MLCardFormViewController {
 }
 
 // MARK: AppBar
+/** :nodoc: */
 extension MLCardFormViewController {
     enum AppBar: String {
         case Generic
@@ -313,6 +319,7 @@ extension MLCardFormViewController {
 }
 
 // MARK: UICollectionView methods.
+/** :nodoc: */
 extension MLCardFormViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.size.width - cardFieldCellInset * 2, height: collectionView.frame.size.height)

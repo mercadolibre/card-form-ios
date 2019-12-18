@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// :nodoc
+/** :nodoc: */
 @objcMembers
 open class MLCardFormConfiguratorManager: NSObject {
     // MARK: Internal definitions.

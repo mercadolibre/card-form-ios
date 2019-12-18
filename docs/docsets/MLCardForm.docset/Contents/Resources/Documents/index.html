@@ -13,7 +13,9 @@
     <a title="MLCardForm  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">MLCardForm Docs</a> (48% documented)</p>
+        <p><a href="index.html">MLCardForm 1.0.0 Docs</a> (80% documented)</p>
+        <p class="header-right"><a href="https://github.com/mercadolibre/card-form-ios"><img src="img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fmercadolibre%2Egithub%2Eio%2Fdocsets%2FMLCardForm%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -38,9 +40,6 @@
               <li class="nav-group-task">
                 <a href="Classes/MLCardFormTrackerConfiguration.html">MLCardFormTrackerConfiguration</a>
               </li>
-              <li class="nav-group-task">
-                <a href="Classes/MLCardFormViewController.html">MLCardFormViewController</a>
-              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -60,13 +59,110 @@
         <section>
           <section class="section">
             
-            <p>//</p>
+            <p align="center">
+    <img src="https://img.shields.io/badge/Swift-5.0-orange.svg" />
+    <a href="https://cocoapods.org/pods/">
+        <img src="https://img.shields.io/cocoapods/v/MLCardForm.svg" alt="CocoaPods" />
+    </a>
+    <a href="https://cocoapods.org/pods/MLCardForm">
+        <img src="https://img.shields.io/cocoapods/dt/MLCardForm.svg?style=flat" alt="CocoaPods downloads" />
+    </a>
+</p>
+<h2 id='how-to-install' class='heading'>📲 How to Install</h2>
+<h4 id='using-a-href-https-cocoapods-org-cocoapods-a' class='heading'>Using <a href="https://cocoapods.org">CocoaPods</a></h4>
+
+<p>Edit your <code>Podfile</code> and specify the dependency:</p>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'MLCardForm'</span>
+</code></pre>
+<h2 id='features' class='heading'>🌟 Features</h2>
+
+<ul>
+<li>[x] Easy to integrate</li>
+<li>[x] PCI compliance (We do not save anything)</li>
+</ul>
+<h2 id='how-to-use' class='heading'>🐒 How to use</h2>
+<h3 id='1-import-into-project' class='heading'>1 - Import into project</h3>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">MLCardForm</span>
+</code></pre>
+<h3 id='2-create-an-instance-of-mlcardformbuilder-with-your-code-publickey-code-or-code-privatekey-code-and-your-siteid' class='heading'>2 - Create an instance of MLCardFormBuilder with your <code>PublicKey</code> or <code>PrivateKey</code> and your `siteId</h3>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">builder</span> <span class="o">=</span> <span class="kt">MLCardFormBuilder</span><span class="p">(</span><span class="nv">publicKey</span><span class="p">:</span> <span class="n">yourPublicKey</span><span class="p">,</span> <span class="nv">siteId</span><span class="p">:</span> <span class="n">yourSiteId</span><span class="p">,</span> <span class="nv">lifeCycleDelegate</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
+</code></pre>
+<h3 id='3-implement-code-mlcardformlifecycledelegate-code-to-get-notified-about-mlcardform-events' class='heading'>3 - Implement <code><a href="Protocols/MLCardFormLifeCycleDelegate.html">MLCardFormLifeCycleDelegate</a></code> to get notified about MLCardForm events.</h3>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">YourViewController</span><span class="p">:</span> <span class="kt">MLCardFormLifeCycleDelegate</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">didAddCard</span><span class="p">(</span><span class="nv">cardID</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// The card has been added. You can pop the `MLCardFormViewController` here.</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">didFailAddCard</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// There was an error adding the card.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<h3 id='4-use-the-builder-as-parameter-to-get-an-instance-of-mlcardformviewcontroller' class='heading'>4 - Use the builder as parameter to get an instance of MLCardFormViewController.</h3>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">cardFormVC</span> <span class="o">=</span> <span class="kt">MLCardForm</span><span class="p">(</span><span class="nv">builder</span><span class="p">:</span> <span class="n">builder</span><span class="p">)</span><span class="o">.</span><span class="nf">setupController</span><span class="p">()</span>
+</code></pre>
+<h3 id='5-push-the-instance-of-mlcardformviewcontroller-to-your-stack' class='heading'>5 - Push the instance of MLCardFormViewController to your stack.</h3>
+<pre class="highlight swift"><code><span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">pushViewController</span><span class="p">(</span><span class="n">cardFormVC</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+</code></pre>
+<h2 id='advanced-features' class='heading'>💡 Advanced features</h2>
+<h3 id='tracking' class='heading'>📈 Tracking</h3>
+
+<p>We provide <code><a href="Protocols/MLCardFormTrackerDelegate.html">MLCardFormTrackerDelegate</a></code> protocol to notify each tracking event. You can subscribe to this protocol using MLCardFormBuilder</p>
+<pre class="highlight swift"><code><span class="kd">@objc</span> <span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">MLCardFormTrackerDelegate</span><span class="p">:</span> <span class="kt">NSObjectProtocol</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">trackScreen</span><span class="p">(</span><span class="nv">screenName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">extraParams</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]?)</span>
+    <span class="kd">func</span> <span class="nf">trackEvent</span><span class="p">(</span><span class="nv">screenName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">action</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">result</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">extraParams</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]?)</span>
+<span class="p">}</span>
+</code></pre>
+<h3 id='next-steps' class='heading'>😉 Next steps</h3>
+
+<ul>
+<li>[ ] Bitrise integration</li>
+<li>[ ] UI XCtest</li>
+<li>[ ] SwiftLint</li>
+</ul>
+<h3 id='project-example' class='heading'>🔮 Project Example</h3>
+
+<p>This project include an example project using <code><a href="Classes/MLCardForm.html">MLCardForm</a></code>.
+Enter to path: <code>card-form-ios/Example</code> and run pod install command. After that, you can open <code>Example_CardForm.xcworkspace</code></p>
+<h3 id='supported-os-amp-sdk-versions' class='heading'>📋 Supported OS &amp; SDK Versions</h3>
+
+<ul>
+<li>iOS 10.0+</li>
+<li>Swift 5</li>
+<li>xCode 10+</li>
+<li>@Objc full compatibility</li>
+</ul>
+<h2 id='️-feedback' class='heading'>❤️ Feedback</h2>
+
+<p>This is an open source project, so feel free to contribute. How? -&gt; Fork this project and propose your own fixes, suggestions and open a pull request with the changes.</p>
+<h2 id='authors' class='heading'>👨🏻‍💻 Authors</h2>
+
+<ul>
+<li>Esteban Boffa</li>
+<li>Eric Ertl</li>
+<li>Juan Sanzone</li>
+</ul>
+<h2 id='license' class='heading'>👮🏻 License</h2>
+<pre class="highlight plaintext"><code>Copyright 2019 Mercadolibre Developers
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://www.mercadolibre.com" target="_blank" rel="external">PX Team - Juan Sanzone - Eric Ertl - Esteban Boffa</a>. All rights reserved. (Last updated: 2019-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/mercadolibre/card-form-ios" target="_blank" rel="external">Mercadopago</a>. All rights reserved. (Last updated: 2019-12-17)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

@@ -10,6 +10,7 @@ import Foundation
 /**
  Use this protocol to implement ESC functionality
  */
+/** :nodoc: */
 @objc public protocol MLCardFormESCProtocol: NSObjectProtocol {
     @discardableResult func saveESC(config: MLCardFormESCConfig, firstSixDigits: String, lastFourDigits: String, esc: String) -> Bool
 }
