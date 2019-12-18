@@ -16,6 +16,7 @@ enum MLCardFormAddCardServiceError: Error {
 final class MLCardFormAddCardService {
     private var publicKey: String?
     private var privateKey: String?
+    weak var delegate: MLCardFormInternetConnectionProtocol?
     
     func update(publicKey: String?, privateKey: String?) {
         self.publicKey = publicKey
@@ -58,6 +59,11 @@ extension MLCardFormAddCardService {
     func addCard(tokenizationData: MLCardFormAddCardService.TokenizationBody, addCardData: MLCardFormAddCardService.AddCardBody, completion: ((Result<MLCardFormAddCardData, Error>) -> ())? = nil) {
         if publicKey == nil && privateKey == nil {
             completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
+            return
+        }
+
+        if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
+            completion?(.failure(NetworkLayerError.noInternetConnection))
             return
         }
         let queryParams = MLCardFormAddCardService.KeyParam(publicKey: publicKey, accessToken: privateKey)

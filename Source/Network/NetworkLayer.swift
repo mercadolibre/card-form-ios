@@ -12,6 +12,7 @@ enum NetworkLayerError: Error {
     case dataTask
     case statusCode
     case data
+    case noInternetConnection
 }
 
 struct NetworkLayer {

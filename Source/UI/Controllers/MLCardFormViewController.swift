@@ -28,17 +28,12 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
     private weak var cardFieldCollectionView: UICollectionView?
 
-    private var internetConnection: Bool = true
     private var cardDrawer: MLCardDrawerController?
     private var issuersVC: MLCardFormIssuersViewController?
 
     open override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
-    }
-
-    deinit {
-        removeReachabilityObserver()
     }
 
     open override func viewDidAppear(_ animated: Bool) {
@@ -50,7 +45,6 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addReachabilityObserver()
         setupKeyboardNotifications()
     }
 
@@ -104,9 +98,9 @@ private extension MLCardFormViewController {
                         switch result {
                         case .success:
                             break
-                        case .failure:
+                        case .failure(let error):
                             // Show error to the user
-                            MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self.showSnackBar(error: error, duration: MLSnackbarDuration.long)
                         }
                     })
                 }
@@ -115,10 +109,6 @@ private extension MLCardFormViewController {
     }
     
     func addCard() {
-        if !internetConnection {
-            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-            return
-        }
         showProgress()
         viewModel.addCard(completion: { (result: Result<String, Error>) in
             DispatchQueue.main.async { [weak self] in
@@ -130,13 +120,11 @@ private extension MLCardFormViewController {
                     self.lifeCycleDelegate?.didAddCard(cardID: cardID)
                     // Save data for next time
                     self.viewModel.saveDataForReuse()
-                case .failure:
+                case .failure(let error):
                     // Notify listener
                     self.lifeCycleDelegate?.didFailAddCard()
                     // Show error to the user
-                    MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
-                        self?.addCard()
-                    }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
+                    self.showSnackBar(error: error, duration: MLSnackbarDuration.indefinitely, actionTitle: "Reintentar")
                 }
             }
         })
@@ -270,13 +258,6 @@ private extension MLCardFormViewController {
     }
 }
 
-// MARK: Reachablity
-extension MLCardFormViewController: ReachabilityObserverDelegate {
-    func reachabilityChanged(_ isReachable: Bool) {
-        internetConnection = isReachable
-    }
-}
-
 // MARK: Keyboard methods.
 extension MLCardFormViewController {
     private func setupKeyboardNotifications() {
@@ -317,6 +298,20 @@ extension MLCardFormViewController {
             else { return }
         viewModel.measuredKeyboardSize = keyboardScreenEndFrame
     }
+
+    func showSnackBar(error: Error, duration: MLSnackbarDuration, actionTitle: String? = nil) {
+        switch error {
+        case NetworkLayerError.noInternetConnection:
+            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+        default:
+            if let action = actionTitle {
+                MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: action.localized, actionBlock: { [weak self] in
+                    self?.addCard()
+                }, type: MLSnackbarType.error(), duration: duration)
+            }
+            MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: duration)
+        }
+    }
 }
 
 // MARK: UICollectionView methods.
@@ -348,7 +343,6 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         case MLCardFormFields.cardNumber:
             self.viewModel.tempTextField.input.text = newValue
             if newValue.count == 6 {
-                guard internetConnection else { return }
                 getCardData(binNumber: newValue)
             } else if newValue.count == 5 {
                 shouldUpdateCard(cardUI: DefaultCardUIHandler())
@@ -416,10 +410,6 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     func shouldNext(from: MLCardFormField) {
         let returnValue = viewModel.isCardNumberFieldAndIsMissingCardData(cardFormField: from)
         if returnValue.isCardNumberMissingCardData, let currentBin = returnValue.currentBin {
-            if !internetConnection {
-                MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                return
-            }
             getCardData(binNumber: currentBin, showProggressAndSnackBar: true)
             return
         }

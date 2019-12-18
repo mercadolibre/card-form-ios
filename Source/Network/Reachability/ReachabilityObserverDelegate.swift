@@ -1,5 +1,5 @@
 //
-//  ReachabilityObserverDelegate.swift
+//  ReachabilityObserverProtocol.swift
 //  MLCardForm
 //
 //  Created by Esteban Adrian Boffa on 11/12/2019.
@@ -9,17 +9,17 @@ import Foundation
 
 private var reachability: Reachability?
 
-protocol ReachabilityActionDelegate {
+protocol ReachabilityActionProtocol {
     func reachabilityChanged(_ isReachable: Bool)
 }
 
-protocol ReachabilityObserverDelegate: class, ReachabilityActionDelegate {
+protocol ReachabilityObserverProtocol: class, ReachabilityActionProtocol {
     func addReachabilityObserver()
     func removeReachabilityObserver()
 }
 
 // Declaring default implementation of adding/removing observer
-extension ReachabilityObserverDelegate {
+extension ReachabilityObserverProtocol {
     func addReachabilityObserver() {
         do {
             reachability = try Reachability()

@@ -48,12 +48,11 @@ final class MLCardFormViewModel {
     
     private var trackingConfiguration: MLCardFormTrackerConfiguration?
     var measuredKeyboardSize: CGRect = CGRect.zero
-    
-    private var binService: MLCardFormBinService = MLCardFormBinService()
+
+    private let serviceManager: MLCardFormServiceManager = MLCardFormServiceManager()
     var lastFetchedBinNumber: String = ""
     private var binData: MLCardFormBinData?
     private var addCardData: MLCardFormAddCardData?
-    private let addCardService: MLCardFormAddCardService = MLCardFormAddCardService()
 
     weak var viewModelDelegate: MLCardFormViewModelProtocol?
 
@@ -62,8 +61,8 @@ final class MLCardFormViewModel {
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
         trackingConfiguration = builder.trackingConfiguration
-        addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
-        binService.update(siteId: builder.siteId, excludedPaymentTypes: builder.excludedPaymentTypes, flowId: builder.flowId)
+        serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
+        serviceManager.binService.update(siteId: builder.siteId, excludedPaymentTypes: builder.excludedPaymentTypes, flowId: builder.flowId)
     }
     
     func setupDefaultCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
@@ -286,7 +285,7 @@ extension MLCardFormViewModel {
 // MARK: Services
 extension MLCardFormViewModel {
     func getCardData(binNumber: String, completion: ((Result<String, Error>) -> ())? = nil) {
-        binService.getCardData(binNumber: binNumber, completion: { [weak self] (result: Result<MLCardFormBinData, Error>) in
+        serviceManager.binService.getCardData(binNumber: binNumber, completion: { [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let cardFormBinData):
@@ -305,7 +304,7 @@ extension MLCardFormViewModel {
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
-        addCardService.addCard(tokenizationData: tokenizationData, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
+        serviceManager.addCardService.addCard(tokenizationData: tokenizationData, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let addCardData):

@@ -16,6 +16,8 @@ final class MLCardFormBinService {
     }
     private let meliName: String = "mercadolibre"
     private let mpName: String = "mercadopago"
+
+    weak var delegate: MLCardFormInternetConnectionProtocol?
     
     private var siteId: String?
     private var flowId: String?
@@ -113,33 +115,39 @@ extension MLCardFormBinService {
         if let lastResponse = lastResponse, let lastBin = lastBin, lastBin == binNumber {
             debugLog("Bin data From memory cache")
             completion?(.success(lastResponse))
-        } else {
-            debugLog("Bin data New call: Operation -> \(binNumber)")
-            let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: getPlatform(), excludedPaymentTypes: excludedPaymentTypes)
-            let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId())
-            let operation = BlockOperation(block: {
-                NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)) { [weak self] (result: Result<MLCardFormBinData, Error>) in
-                    guard let self = self else { return }
-                    switch result {
-                    case .success(let cardFormBinData):
-                        MLCardFormConfiguratorManager.updateConfig(enabled: cardFormBinData.escEnabled)
-                        self.lastBin = queryParams.bin
-                        self.lastResponse = cardFormBinData
-                    case .failure(let error):
-                        self.debugLog(error)
-                    }
-                    completion?(result)
-                }
-            })
-
-            operation.name = queryParams.bin
-            operation.completionBlock = { [weak self] in
-                if let name = operation.name {
-                    self?.debugLog("Operation is completed -> \(name)")
-                }
-            }
-            queue.addOperation(operation)
+            return
         }
+
+        if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
+            completion?(.failure(NetworkLayerError.noInternetConnection))
+            return
+        }
+
+        debugLog("Bin data New call: Operation -> \(binNumber)")
+        let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: getPlatform(), excludedPaymentTypes: excludedPaymentTypes)
+        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId())
+        let operation = BlockOperation(block: {
+            NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)) { [weak self] (result: Result<MLCardFormBinData, Error>) in
+                guard let self = self else { return }
+                switch result {
+                case .success(let cardFormBinData):
+                    MLCardFormConfiguratorManager.updateConfig(enabled: cardFormBinData.escEnabled)
+                    self.lastBin = queryParams.bin
+                    self.lastResponse = cardFormBinData
+                case .failure(let error):
+                    self.debugLog(error)
+                }
+                completion?(result)
+            }
+        })
+
+        operation.name = queryParams.bin
+        operation.completionBlock = { [weak self] in
+            if let name = operation.name {
+                self?.debugLog("Operation is completed -> \(name)")
+            }
+        }
+        queue.addOperation(operation)
     }
 }
 
