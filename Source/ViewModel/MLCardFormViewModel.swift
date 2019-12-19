@@ -74,10 +74,7 @@ final class MLCardFormViewModel {
             [MLCardFormField(fieldProperty:IDTypeFormFieldProperty()),
              MLCardFormField(fieldProperty:IDNumberFormFieldProperty())],
         ]
-        cardFormFields?.forEach{ $0.forEach{
-            $0.notifierProtocol = notifierProtocol
-            $0.render()
-        }}
+        setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
     }
 
     func updateCardFormFields(_ remoteSettings: [MLCardFormFieldSetting], notifierProtocol: MLCardFormFieldNotifierProtocol?) {
@@ -110,6 +107,10 @@ final class MLCardFormViewModel {
                 MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, remoteSetting: idNumberSetting, idNumberValue: storedIDNumber))
                 ])
         }
+        setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
+    }
+    
+    func setupAndRenderCardFormFields(cardFormFields: [[MLCardFormField]]?, notifierProtocol: MLCardFormFieldNotifierProtocol?) {
         cardFormFields?.forEach{ $0.forEach{
             $0.notifierProtocol = notifierProtocol
             $0.render()
