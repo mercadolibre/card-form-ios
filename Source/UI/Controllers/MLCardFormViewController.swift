@@ -14,8 +14,9 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     // MARK: Outlets.
     @IBOutlet weak var cardContainerView: UIView!
     @IBOutlet weak var progressBarView: UIProgressView!
-    @IBOutlet weak var spinnerContainerView: UIView!
-    @IBOutlet weak var spinnerView: MLSpinner!
+
+    // Loading
+    private let loadingVC = MLCardFormLoadingViewController()
     
     // Constraints.
     @IBOutlet weak var containerBottomConstraint: NSLayoutConstraint!
@@ -56,6 +57,11 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeKeyboardNotifications()
+    }
+
+    open func dismissLoadingAndPop() {
+        hideProgress()
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -124,7 +130,6 @@ private extension MLCardFormViewController {
         viewModel.addCard(completion: { (result: Result<String, Error>) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.hideProgress()
                 switch result {
                 case .success(let cardID):
                     // Notify listener
@@ -132,6 +137,7 @@ private extension MLCardFormViewController {
                     // Save data for next time
                     self.viewModel.saveDataForReuse()
                 case .failure(let error):
+                    self.hideProgress()
                     // Notify listener
                     self.lifeCycleDelegate?.didFailAddCard()
                     // Show error to the user
@@ -156,7 +162,6 @@ private extension MLCardFormViewController {
         setupCardContainer()
         setupProgress()
         setupTempTextField()
-        setupSpinner()
         setupCardDrawer()
         setupFieldCollectionView()
         viewModel.viewModelDelegate = self
@@ -265,14 +270,6 @@ private extension MLCardFormViewController {
     func setupTempTextField() {
         viewModel.tempTextField.notifierProtocol = self
         view.addSubview(viewModel.tempTextField)
-    }
-    
-    func setupSpinner() {
-        let color = MLStyleSheetManager.styleSheet.primaryColor
-        let spinnerConfig = MLSpinnerConfig(size: .big, primaryColor: color, secondaryColor: color)
-        spinnerView.setUpWith(spinnerConfig)
-        spinnerContainerView.alpha = 0
-        view.sendSubviewToBack(spinnerContainerView)
     }
 }
 
@@ -534,29 +531,10 @@ private extension MLCardFormViewController {
 // MARK: Progress methods.
 private extension MLCardFormViewController {
     func showProgress() {
-        view.bringSubviewToFront(spinnerContainerView)
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveLinear, .curveEaseInOut],
-                       animations: { [weak self] in
-                        if let spinnerContainerView = self?.spinnerContainerView {
-                            spinnerContainerView.alpha = 1
-                            self?.spinnerView?.show()
-                        }
-        })
+        loadingVC.showFrom(self)
     }
     
     func hideProgress(completion: ((Bool) -> Void)? = nil) {
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveLinear, .curveEaseInOut],
-                       animations: { [weak self] in
-                        if let spinnerContainerView = self?.spinnerContainerView {
-                            spinnerContainerView.alpha = 0
-                            self?.spinnerView?.hide()
-                        }
-            },
-                       completion: { [weak self] (_) in
-                        if let spinnerContainerView = self?.spinnerContainerView {
-                            self?.view.sendSubviewToBack(spinnerContainerView)
-                        }
-                        completion?(true)
-        })
+        loadingVC.hide()
     }
 }
