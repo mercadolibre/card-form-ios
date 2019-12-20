@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,8 +13,6 @@
                 <outlet property="cardContainerView" destination="L3x-zk-529" id="YdC-AT-kHH"/>
                 <outlet property="containerBottomConstraint" destination="KFO-p9-diC" id="PbI-Rv-Or5"/>
                 <outlet property="progressBarView" destination="MXn-cR-3SN" id="MLS-qL-gDo"/>
-                <outlet property="spinnerContainerView" destination="0Av-PM-eR5" id="FxG-FE-8bJ"/>
-                <outlet property="spinnerView" destination="Ozr-kg-yT6" id="e33-Ad-HLt"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -25,25 +21,6 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Av-PM-eR5" userLabel="spinnerContainerView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ozr-kg-yT6" customClass="MLSpinner">
-                            <rect key="frame" x="177" y="418" width="60" height="60"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="60" id="kdL-dI-GAI"/>
-                                <constraint firstAttribute="height" constant="60" id="syY-w4-MKh"/>
-                            </constraints>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.5" alpha="0.4960402397" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstItem="Ozr-kg-yT6" firstAttribute="centerY" secondItem="0Av-PM-eR5" secondAttribute="centerY" id="hSp-ba-Olc"/>
-                        <constraint firstItem="Ozr-kg-yT6" firstAttribute="centerX" secondItem="0Av-PM-eR5" secondAttribute="centerX" id="vSU-2t-pHH"/>
-                    </constraints>
-                    <viewLayoutGuide key="safeArea" id="ecK-GH-gMg"/>
-                </view>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MXn-cR-3SN">
                     <rect key="frame" x="0.0" y="44" width="414" height="2"/>
                     <color key="progressTintColor" red="0.0" green="0.36862745098039218" blue="0.53333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -147,15 +124,11 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="0Av-PM-eR5" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="BS8-Qb-tKP"/>
                 <constraint firstItem="2T3-eD-26P" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="EcS-Vk-AUP"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="2T3-eD-26P" secondAttribute="bottom" id="KFO-p9-diC"/>
                 <constraint firstItem="2T3-eD-26P" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="KOZ-Kh-MjB"/>
-                <constraint firstItem="0Av-PM-eR5" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Pkb-Z7-5Zg"/>
                 <constraint firstItem="MXn-cR-3SN" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ZQV-3Z-Fea"/>
-                <constraint firstItem="0Av-PM-eR5" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="dGz-PH-94V"/>
                 <constraint firstItem="MXn-cR-3SN" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="jtD-QQ-LoJ"/>
-                <constraint firstItem="0Av-PM-eR5" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" id="odc-3A-SHE"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="MXn-cR-3SN" secondAttribute="trailing" id="sbY-Xt-grr"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="2T3-eD-26P" secondAttribute="trailing" id="vW9-P9-lSh"/>
             </constraints>
