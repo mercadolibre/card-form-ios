@@ -462,7 +462,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
 // MARK: MLCardFormViewModelProtocol
 extension MLCardFormViewController: MLCardFormViewModelProtocol {
     
-    func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]) {
+    func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.viewModel.tempTextField.doFocus()

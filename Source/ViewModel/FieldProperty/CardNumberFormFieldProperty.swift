@@ -91,11 +91,22 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     }
     
     func isValid(value: String?) -> Bool {
-//        #if DEBUG
-//        return true
-//        #else
-        guard let value = value, value.count == patternMask()?.count else { return false }
-        let cleanValue = value.replacingOccurrences(of: " ", with: "")
+        guard let value = value else { return false }
+        let cleanValue = value.removingWhitespaceAndNewlines()
+        
+        if let remoteSettingLenght = remoteSetting?.lenght, cleanValue.count != remoteSettingLenght {
+            return false
+        } else {
+            switch CardState(fromPrefix: cleanValue) {
+            case .identified(let cardType):
+                let cardNumberLength = cardType.segmentGroupings.reduce(0, +)
+                if cleanValue.count != cardNumberLength {
+                    return false
+                }
+            default:
+                return false
+            }
+        }
         
         var sum = 0
         let digitStrings = cleanValue.reversed().map { String($0) }
