@@ -77,10 +77,13 @@ final class MLCardFormViewModel {
         setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
     }
 
-    func updateCardFormFields(_ remoteSettings: [MLCardFormFieldSetting], notifierProtocol: MLCardFormFieldNotifierProtocol?) {
+    func updateCardFormFields(_ remoteSettings: [MLCardFormFieldSetting]?, notifierProtocol: MLCardFormFieldNotifierProtocol?) {
+        if remoteSettings == nil {
+            updateOfflineCardFormFields(notifierProtocol: notifierProtocol)
+            return
+        }
+        guard let cardUI = binData?.cardUI, let remoteSettings = remoteSettings else { return }
         cardFormFields = [[MLCardFormField]]()
-        guard let cardUI = binData?.cardUI else { return }
-
         if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
             let numberField = MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))
             cardFormFields?.append([numberField])
@@ -108,6 +111,46 @@ final class MLCardFormViewModel {
                 ])
         }
         setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
+    }
+    
+    func updateOfflineCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
+        if let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler,
+            let cardNumberField = getCardFormFieldWithID(MLCardFormFields.cardNumber.rawValue) {
+            
+            let cardNumberValue = tempTextField.input.text ?? ""
+            var cardNumberLength = cardNumberField.property.minLenght()
+            let patternMask = cardNumberField.property.patternMask() ?? ""
+            var cardPattern = patternMask.components(separatedBy: " ").map { $0.count }
+            
+            switch CardState(fromPrefix: cardNumberValue) {
+            case .identified(let cardType):
+                let cardPatternLength = cardType.segmentGroupings.reduce(0, +)
+                cardNumberLength = cardPatternLength
+                cardPattern = cardType.segmentGroupings
+            default:
+                cardNumberLength = cardHandlerToUpdate.cardPattern.reduce(0, +)
+                cardPattern = cardHandlerToUpdate.cardPattern
+            }
+            
+            let paymentMethod = MLCardFormPaymentMethod(paymentMethodId: "", paymentTypeId: "", name: "", processingModes: [])
+            let cardUI = MLCardFormCardUI(cardNumberLength: cardNumberLength, cardPattern: cardPattern, cardColor: cardHandlerToUpdate.cardBackgroundColor.toHexString(), cardFontColor: cardHandlerToUpdate.cardFontColor.toHexString(), cardFontType: "", securityCodeLocation: "back", securityCodeLength: cardHandlerToUpdate.securityCodePattern, issuerImageUrl: nil, paymentMethodImageUrl: nil, issuerImage: nil, paymentMethodImage: nil)
+            
+            cardHandlerToUpdate.update(cardUI: cardUI)
+            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
+            
+            binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [])
+            if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
+                cardFormFields = [
+                    [MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))],
+                    [MLCardFormField(fieldProperty:CardNameFormFieldProperty(cardNameValue: storedCardName))],
+                    [MLCardFormField(fieldProperty:CardExpirationFormFieldProperty()),
+                     MLCardFormField(fieldProperty:CardSecurityCodeFormFieldProperty())],
+                    [MLCardFormField(fieldProperty:IDTypeFormFieldProperty()),
+                     MLCardFormField(fieldProperty:IDNumberFormFieldProperty())],
+                ]
+                setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
+            }
+        }
     }
     
     func setupAndRenderCardFormFields(cardFormFields: [[MLCardFormField]]?, notifierProtocol: MLCardFormFieldNotifierProtocol?) {
@@ -295,6 +338,7 @@ extension MLCardFormViewModel {
                 self.updateHandlers()
                 completion?(.success(binNumber))
             case .failure(let error):
+                self.viewModelDelegate?.shouldUpdateFields(remoteSettings: nil)
                 completion?(.failure(error))
             }
         })

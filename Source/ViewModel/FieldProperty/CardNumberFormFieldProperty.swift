@@ -94,7 +94,7 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
         guard let value = value else { return false }
         let cleanValue = value.removingWhitespaceAndNewlines()
         
-        if let mask = remoteSetting?.mask, value.count == mask.count {
+        if let remoteSettingLenght = remoteSetting?.lenght, cleanValue.count != remoteSettingLenght {
             return false
         } else {
             switch CardState(fromPrefix: cleanValue) {
