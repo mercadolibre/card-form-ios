@@ -55,8 +55,8 @@ extension MLCardFormLoadingViewController {
         }
     }
 
-    func hide() {
+    func hide(completion: (() -> Void)? = nil) {
         isShowing = false
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: completion)
     }
 }

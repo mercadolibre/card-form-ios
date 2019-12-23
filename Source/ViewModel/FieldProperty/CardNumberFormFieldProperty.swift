@@ -128,7 +128,6 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
             }
         }
         return sum % 10 == 0
-//        #endif
     }
     
     func keyboardBackEnabled() -> Bool {
