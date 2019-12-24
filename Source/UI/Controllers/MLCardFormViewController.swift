@@ -60,8 +60,9 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     }
 
     open func dismissLoadingAndPop() {
-        hideProgress()
-        navigationController?.popViewController(animated: true)
+        hideProgress(completion: { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        })
     }
 }
 
@@ -106,7 +107,7 @@ private extension MLCardFormViewController {
             if showProggressAndSnackBar {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.hideProgress(completion: { _ in
+                    self.hideProgress(completion: { 
                         switch result {
                         case .success:
                             break
@@ -137,18 +138,19 @@ private extension MLCardFormViewController {
                     // Save data for next time
                     self.viewModel.saveDataForReuse()
                 case .failure(let error):
-                    self.hideProgress()
-                    // Notify listener
-                    self.lifeCycleDelegate?.didFailAddCard()
-                    // Show error to the user
-                    switch error {
-                    case NetworkLayerError.noInternetConnection:
-                        MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                    default:
-                        MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
-                            self?.addCard()
-                            }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
-                    }
+                    self.hideProgress(completion: { [weak self] in
+                        // Notify listener
+                        self?.lifeCycleDelegate?.didFailAddCard()
+                        // Show error to the user
+                        switch error {
+                        case NetworkLayerError.noInternetConnection:
+                            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                        default:
+                            MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
+                                self?.addCard()
+                                }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
+                        }
+                    })
                 }
             }
         })
@@ -534,7 +536,7 @@ private extension MLCardFormViewController {
         loadingVC.showFrom(self)
     }
     
-    func hideProgress(completion: ((Bool) -> Void)? = nil) {
-        loadingVC.hide()
+    func hideProgress(completion: (() -> Void)? = nil) {
+        loadingVC.hide(completion: completion)
     }
 }

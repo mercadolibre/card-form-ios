@@ -29,6 +29,9 @@ struct CardSecurityCodeFormFieldProperty : MLCardFormFieldPropertyProtocol {
     }
 
     func minLenght() -> Int {
+        if let lenght = remoteSetting?.lenght {
+            return lenght
+        }
         return 3
     }
 
