@@ -32,7 +32,7 @@ extension MLCardForm {
      Setup MLCardForm settings and return main ViewController. Push this ViewController in your navigation stack.
      */
     public func setupController() -> MLCardFormViewController {
-        MLCardFormTrackingStore.sharedInstance.initializeInitDate()
+        MLCardFormTracker.sharedInstance.startNewSession()
         return MLCardFormViewController.setupWithBuilder(builder)
     }
 }

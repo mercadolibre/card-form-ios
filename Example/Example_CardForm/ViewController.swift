@@ -46,6 +46,7 @@ extension ViewController: MLCardFormLifeCycleDelegate {
     }
 }
 
+// Tracking
 extension ViewController: MLCardFormTrackerDelegate {
     func trackScreen(screenName: String, extraParams: [String : Any]?) {
         // Track screen
@@ -56,15 +57,22 @@ extension ViewController: MLCardFormTrackerDelegate {
     }
 }
 
+// ESC
+extension ViewController: MLCardFormESCProtocol {
+    func saveESC(config: MLCardFormESCConfig, firstSixDigits: String, lastFourDigits: String, esc: String) -> Bool {
+        return false
+    }
+}
+
 private extension ViewController {
     func openCardForm() {
         title = ""
         let publicKey = ""
-        let trackingConfiguration = MLCardFormTrackerConfiguration(delegate: self, flowName: nil, flowDetails: nil, sessionId: nil)
-        let builder = MLCardFormBuilder(publicKey: publicKey, siteId: "MLA", lifeCycleDelegate: self)
+        let builder = MLCardFormBuilder(publicKey: publicKey, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
         builder.setLanguage("pt")
         builder.setExcludedPaymentTypes(["ticket"])
-        builder.setTrackingConfiguration(trackingConfiguration)
+
+        MLCardFormConfiguratorManager.with(esc: self, tracking: self)
         
         let cardFormVC = MLCardForm(builder: builder).setupController()
         navigationController?.pushViewController(cardFormVC, animated: true)
