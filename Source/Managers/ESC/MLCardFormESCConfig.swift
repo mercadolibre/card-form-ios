@@ -16,27 +16,23 @@ import Foundation
 @objcMembers
 open class MLCardFormESCConfig: NSObject {
     public let enabled: Bool
-    public let sessionId: String
-    public let flow: String
     
-    init(_ enabled: Bool, _ sessionId: String, _ flow: String) {
+    init(_ enabled: Bool) {
         self.enabled = enabled
-        self.sessionId = sessionId
-        self.flow = flow
+    }
+
+    func getFlowId() -> String? {
+        MLCardFormTrackingStore.sharedInstance.flowId
+    }
+
+    func getSessionId() -> String? {
+        MLCardFormTracker.sharedInstance.getSessionID()
     }
 }
 
 // MARK: Internals
 internal extension MLCardFormESCConfig {
-    static func createConfig(enabled: Bool = false, sessionId: String? = nil, flow: String? = nil) -> MLCardFormESCConfig {
-        var sessionId = sessionId
-        if sessionId == nil {
-            sessionId = MLCardFormTracker.sharedInstance.getSessionID()
-        }
-        var flow = flow
-        if flow == nil {
-            flow = MLCardFormTracker.sharedInstance.getFlowName() ?? "MLCardForm"
-        }
-        return MLCardFormESCConfig(enabled, sessionId ?? "", flow ?? "")
+    static func createConfig(enabled: Bool = false) -> MLCardFormESCConfig {
+        return MLCardFormESCConfig(enabled)
     }
 }

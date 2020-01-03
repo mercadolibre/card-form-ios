@@ -45,8 +45,7 @@ final class MLCardFormViewModel {
     }
     var updateProgressWithCompletion: Bool = false
     var issuerWasSelected: Bool = false
-    
-    private var trackingConfiguration: MLCardFormTrackerConfiguration?
+
     var measuredKeyboardSize: CGRect = CGRect.zero
 
     private let serviceManager: MLCardFormServiceManager = MLCardFormServiceManager()
@@ -60,7 +59,6 @@ final class MLCardFormViewModel {
     
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
-        trackingConfiguration = builder.trackingConfiguration
         serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
         serviceManager.binService.update(siteId: builder.siteId, excludedPaymentTypes: builder.excludedPaymentTypes, flowId: builder.flowId)
     }

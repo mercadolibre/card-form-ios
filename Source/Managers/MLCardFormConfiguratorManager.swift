@@ -13,23 +13,16 @@ open class MLCardFormConfiguratorManager: NSObject {
     // MARK: Internal definitions.
     internal static var escProtocol: MLCardFormESCProtocol = MLCardFormESCDefault()
     internal static var escConfig: MLCardFormESCConfig = MLCardFormESCConfig.createConfig()
-    
+
     // MARK: Public
     // Set external implementation of MLCardFormESCProtocol
-    public static func with(esc escProtocol: MLCardFormESCProtocol) {
+    public static func with(esc escProtocol: MLCardFormESCProtocol, tracking trackingProtocol: MLCardFormTrackerDelegate) {
         self.escProtocol = escProtocol
+        MLCardFormTracker.sharedInstance.setTrackerDelegate(trackingProtocol)
     }
     
-    static func updateConfig(enabled: Bool = false, sessionId: String? = nil, flow: String? = nil) {
-        var sessionId = sessionId
-        if sessionId == nil {
-            sessionId = MLCardFormConfiguratorManager.escConfig.sessionId
-        }
-        var flow = flow
-        if flow == nil {
-            flow = MLCardFormConfiguratorManager.escConfig.flow
-        }
-        let escConfig = MLCardFormESCConfig.createConfig(enabled: enabled, sessionId: sessionId, flow: flow)
+    static func updateConfig(escEnabled: Bool = false) {
+        let escConfig = MLCardFormESCConfig.createConfig(enabled: escEnabled)
         self.escConfig = escConfig
     }
 }

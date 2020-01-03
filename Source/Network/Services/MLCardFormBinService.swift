@@ -131,7 +131,7 @@ extension MLCardFormBinService {
                 guard let self = self else { return }
                 switch result {
                 case .success(let cardFormBinData):
-                    MLCardFormConfiguratorManager.updateConfig(enabled: cardFormBinData.escEnabled)
+                    MLCardFormConfiguratorManager.updateConfig(escEnabled: cardFormBinData.escEnabled)
                     self.lastBin = queryParams.bin
                     self.lastResponse = cardFormBinData
                 case .failure(let error):

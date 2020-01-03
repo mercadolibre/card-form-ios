@@ -7,16 +7,11 @@
 
 import Foundation
 
-internal final class MLCardFormTrackingStore {
-    enum TrackingChoType: String {
-        case one_tap
-        case traditional
-    }
-    
-    static let sharedInstance = MLCardFormTrackingStore()
+final class MLCardFormTrackingStore {
+    internal static let sharedInstance = MLCardFormTrackingStore()
     private var initDate: Date = Date()
-    private var trackingChoType: TrackingChoType?
-    
+    internal var flowId: String?
+    internal var siteId: String?
 }
 
 // MARK: Screen time support methods.
@@ -31,17 +26,9 @@ extension MLCardFormTrackingStore {
     }
 }
 
-// MARK: Tracking cho type.
 extension MLCardFormTrackingStore {
-    func getChoType() -> String? {
-        return trackingChoType?.rawValue
-    }
-    
-    func setChoType(_ type: TrackingChoType) {
-        trackingChoType = type
-    }
-    
-    func cleanChoType() {
-        trackingChoType = nil
+    func clean() {
+        flowId = nil
+        siteId = nil
     }
 }

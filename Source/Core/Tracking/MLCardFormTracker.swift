@@ -7,93 +7,74 @@
 
 import Foundation
 
-@objc internal class MLCardFormTracker: NSObject {
-    @objc internal static let sharedInstance = MLCardFormTracker()
+final class MLCardFormTracker: NSObject {
+    internal enum TrackerParams: String {
+        case sessionId = "session_id"
+        case sessionTime  = "session_time"
+        case siteId = "site_id"
+        case flowId = "flow_id"
+        var value: String {
+            return self.rawValue
+        }
+    }
+    internal static let sharedInstance = MLCardFormTracker()
     
-    private weak var delegate: MLCardFormTrackerDelegate?
-    private var flowDetails: [String: Any]?
-    private var flowName: String?
-    private var customSessionId: String?
     private var sessionService: MLCardFormSessionService = MLCardFormSessionService()
+    private var trackerDelegate: MLCardFormTrackerDelegate?
+    private var trackerStore: MLCardFormTrackingStore = MLCardFormTrackingStore.sharedInstance
 }
 
 // MARK: Getters/setters.
 internal extension MLCardFormTracker {
-    
-    func setDelegate(delegate: MLCardFormTrackerDelegate) {
-        self.delegate = delegate
+    func setTrackerDelegate(_ delegate: MLCardFormTrackerDelegate) {
+        trackerDelegate = delegate
     }
-    
-    func setFlowDetails(flowDetails: [String: Any]?) {
-        self.flowDetails = flowDetails
+
+    func set(flowId: String, siteId: String) {
+        trackerStore.flowId = flowId
+        trackerStore.siteId = siteId
     }
-    
-    func setFlowName(name: String?) {
-        self.flowName = name
-    }
-    
-    func setCustomSessionId(_ customSessionId: String?) {
-        self.customSessionId = customSessionId
-    }
-    
+
     func startNewSession() {
         sessionService.startNewSession()
-    }
-    
-    func startNewSession(externalSessionId: String) {
-        sessionService.startNewSession(externalSessionId: externalSessionId)
+        trackerStore.initializeInitDate()
     }
     
     func getSessionID() -> String {
-        return customSessionId ?? sessionService.getSessionId()
-    }
-    
-    func getRequestId() -> String {
-        return sessionService.getRequestId()
+        return sessionService.getSessionId()
     }
     
     func clean() {
-        MLCardFormTracker.sharedInstance.flowDetails = [:]
-        MLCardFormTracker.sharedInstance.delegate = nil
-    }
-    
-    func getFlowName() -> String? {
-        return flowName
+        trackerStore.clean()
     }
 }
 
-// MARK: Public interfase.
+// MARK: Track methods.
 internal extension MLCardFormTracker {
     func trackScreen(screenName: String, properties: [String: Any] = [:]) {
-        if let delegate = delegate {
-            var metadata = properties
-            if let flowDetails = flowDetails {
-                metadata["flow_detail"] = flowDetails
-            }
-            if let flowName = flowName {
-                metadata["flow"] = flowName
-            }
-            metadata[MLCardFormSessionService.SESSION_ID_KEY] = getSessionID()
-            //metadata["security_enabled"] = PXConfiguratorManager.hasSecurityValidation()
-            metadata["session_time"] = MLCardFormTrackingStore.sharedInstance.getSecondsAfterInit()
-            if let choType = MLCardFormTrackingStore.sharedInstance.getChoType() {
-                metadata["checkout_type"] = choType
-            }
+        if let delegate = trackerDelegate {
+            let metadata = buildCommonParams(properties)
             delegate.trackScreen(screenName: screenName, extraParams: metadata)
         }
     }
     
     func trackEvent(path: String, properties: [String: Any] = [:]) {
-        if let delegate = delegate {
-            var metadata = properties
-            metadata[MLCardFormSessionService.SESSION_ID_KEY] = getSessionID()
-            //metadata["security_enabled"] = PXConfiguratorManager.hasSecurityValidation()
-            metadata["session_time"] = MLCardFormTrackingStore.sharedInstance.getSecondsAfterInit()
-            if let choType = MLCardFormTrackingStore.sharedInstance.getChoType() {
-                metadata["checkout_type"] = choType
-            }
-            metadata["session_time"] = MLCardFormTrackingStore.sharedInstance.getSecondsAfterInit()
+        if let delegate = trackerDelegate {
+            let metadata = buildCommonParams(properties)
             delegate.trackEvent(screenName: path, action: "", result: "", extraParams: metadata)
         }
+    }
+
+    private func buildCommonParams(_ properties: [String: Any]) -> [String: Any] {
+        var metadata = properties
+        if let flowId = trackerStore.flowId {
+            metadata[TrackerParams.flowId.value] = flowId
+        }
+        if let siteId = trackerStore.siteId {
+            metadata[TrackerParams.siteId.value] = siteId
+        }
+        metadata[TrackerParams.sessionId.value] = getSessionID()
+        metadata[TrackerParams.sessionTime.value] = trackerStore.getSecondsAfterInit()
+        return metadata
     }
 }

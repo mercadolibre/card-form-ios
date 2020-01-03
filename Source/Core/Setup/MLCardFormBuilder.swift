@@ -15,49 +15,51 @@ open class MLCardFormBuilder: NSObject {
     internal let publicKey: String?
     internal let lifeCycleDelegate: MLCardFormLifeCycleDelegate
     internal let privateKey: String?
-    internal var siteId: String
-    internal var flowId: String?
+    internal let flowId: String
+    internal let siteId: String
     internal var excludedPaymentTypes: [String]?
-    internal var trackingConfiguration: MLCardFormTrackerConfiguration?
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
     internal var animateOnLoad: Bool = false
+    private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
     
     // MARK: Initialization
     
     /**
      Mandatory init.
      - parameter publicKey: Merchant public key / collector public key
+     - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
+     - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(publicKey: String, siteId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
         self.siteId = siteId
+        self.flowId = flowId
         self.privateKey = nil
         self.lifeCycleDelegate = lifeCycleDelegate
+        tracker.set(flowId: flowId, siteId: siteId)
     }
     
     /**
      Mandatory init.
-     - parameter privateKey: Logged user key
+     - parameter privateKey: Logged access token - user key
+     - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
+     - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(privateKey: String, siteId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = siteId
+        self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
+        tracker.set(flowId: flowId, siteId: siteId)
     }
 }
 
 // MARK: - Setters/Builders
 extension MLCardFormBuilder {
-    @discardableResult @objc(setFlowIdWithID:)
-    open func setFlowId(_ flowId: String) -> MLCardFormBuilder {
-        self.flowId = flowId
-        return self
-    }
-
     @discardableResult
     open func setLanguage(_ language: String) -> MLCardFormBuilder {
         MLCardFormLocalizatorManager.shared.setLanguage(language)
@@ -67,16 +69,6 @@ extension MLCardFormBuilder {
     @discardableResult @objc(setExcludedPaymentTypesWithTypes:)
     open func setExcludedPaymentTypes(_ excludedPaymentTypes: [String]) -> MLCardFormBuilder {
         self.excludedPaymentTypes = excludedPaymentTypes
-        return self
-    }
-
-    /**
-     It provides support for tracking related functionalities.
-     - parameter trackingConfiguration: `MLCardFormTrackerConfiguration` object.
-     */
-    @discardableResult @objc(setTrackingConfigurationWithConfiguration:)
-    open func setTrackingConfiguration(_ trackingConfiguration: MLCardFormTrackerConfiguration) -> MLCardFormBuilder {
-        self.trackingConfiguration = trackingConfiguration
         return self
     }
 

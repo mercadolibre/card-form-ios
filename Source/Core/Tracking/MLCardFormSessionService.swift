@@ -8,8 +8,6 @@
 import Foundation
 
 final class MLCardFormSessionService {
-    
-    static let SESSION_ID_KEY: String = "session_id"
     private var sessionId: String
     
     init(_ currentSessionId: String = MLCardFormSessionService.getUUID()) {
@@ -20,16 +18,8 @@ final class MLCardFormSessionService {
         return sessionId
     }
     
-    func getRequestId() -> String {
-        return MLCardFormSessionService.getUUID()
-    }
-    
     func startNewSession() {
         sessionId = MLCardFormSessionService.getUUID()
-    }
-    
-    func startNewSession(externalSessionId: String) {
-        sessionId = externalSessionId
     }
 }
 
