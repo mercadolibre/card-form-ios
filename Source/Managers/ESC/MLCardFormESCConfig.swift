@@ -20,6 +20,14 @@ open class MLCardFormESCConfig: NSObject {
     init(_ enabled: Bool) {
         self.enabled = enabled
     }
+
+    func getFlowId() -> String? {
+        MLCardFormTrackingStore.sharedInstance.flowId
+    }
+
+    func getSessionId() -> String? {
+        MLCardFormTracker.sharedInstance.getSessionID()
+    }
 }
 
 // MARK: Internals
