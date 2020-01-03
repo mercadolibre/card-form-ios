@@ -1,0 +1,12 @@
+app_name: card-form-ios
+project_name: add-card
+
+source_directories:
+  - module: cardform
+    base_translation: Source/Translations/es.lproj
+    translations:
+      - Source/Translations/en.lproj
+      - Source/Translations/es-AR.lproj
+      - Source/Translations/es-MX.lproj
+      - Source/Translations/es-VE.lproj
+      - Source/Translations/pt.lproj

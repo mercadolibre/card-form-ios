@@ -22,11 +22,11 @@ open class MLCardFormESCConfig: NSObject {
     }
 
     func getFlowId() -> String? {
-        MLCardFormTrackingStore.sharedInstance.flowId
+        return MLCardFormTrackingStore.sharedInstance.flowId
     }
 
     func getSessionId() -> String? {
-        MLCardFormTracker.sharedInstance.getSessionID()
+        return MLCardFormTracker.sharedInstance.getSessionID()
     }
 }
 
