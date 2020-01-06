@@ -21,11 +21,11 @@ open class MLCardFormESCConfig: NSObject {
         self.enabled = enabled
     }
 
-    func getFlowId() -> String? {
+    public func getFlowId() -> String? {
         return MLCardFormTrackingStore.sharedInstance.flowId
     }
 
-    func getSessionId() -> String? {
+    public func getSessionId() -> String? {
         return MLCardFormTracker.sharedInstance.getSessionID()
     }
 }
