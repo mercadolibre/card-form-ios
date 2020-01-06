@@ -52,7 +52,7 @@ extension ViewController: MLCardFormTrackerDelegate {
         // Track screen
     }
     
-    func trackEvent(screenName: String?, action: String, result: String?, extraParams: [String : Any]?) {
+    func trackEvent(screenName: String?, extraParams: [String : Any]?) {
         // Track event
     }
 }

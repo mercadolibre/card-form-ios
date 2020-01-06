@@ -61,7 +61,7 @@ internal extension MLCardFormTracker {
     func trackEvent(path: String, properties: [String: Any] = [:]) {
         if let delegate = trackerDelegate {
             let metadata = buildCommonParams(properties)
-            delegate.trackEvent(screenName: path, action: "", result: "", extraParams: metadata)
+            delegate.trackEvent(screenName: path, extraParams: metadata)
         }
     }
 
