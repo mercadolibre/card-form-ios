@@ -26,7 +26,7 @@
 
 "Nombre y apellido" = "Name and surname";
 
-"Error no internet" = "No internet";
+"Revisa tu conexión a internet." = "No internet";
 
 "¿Quién emitió tu tarjeta?" = "Choose card issuer";
 
@@ -34,4 +34,4 @@
 
 "Reintentar" = "Retry";
 
-"No hay conexión a internet." = "No internet connection";
+"Confirmar" = "Confirmar";

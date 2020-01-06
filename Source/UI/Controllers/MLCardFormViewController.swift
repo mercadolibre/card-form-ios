@@ -115,7 +115,7 @@ private extension MLCardFormViewController {
                             // Show error to the user
                             switch error {
                             case NetworkLayerError.noInternetConnection:
-                                MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                                MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             default:
                                 MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             }
@@ -144,7 +144,7 @@ private extension MLCardFormViewController {
                         // Show error to the user
                         switch error {
                         case NetworkLayerError.noInternetConnection:
-                            MLSnackbar.show(withTitle: "No hay conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                         default:
                             MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
                                 self?.addCard()

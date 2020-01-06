@@ -26,10 +26,12 @@
 
 "Nombre y apellido" = "Nome e sobrenome";
 
-"Error no internet" = "No internet";
+"Revisa tu conexión a internet." = "No internet";
 
 "¿Quién emitió tu tarjeta?" = "Quem emitiu seu cartão?";
 
 "Algo salió mal." = "Algo deu errado.";
 
 "Reintentar" = "Repetir";
+
+"Confirmar" = "Confirmar";
