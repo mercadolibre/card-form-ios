@@ -59,11 +59,11 @@ navigationController?.pushViewController(cardFormVC, animated: true)
 
 ## 💡 Advanced features
 ### 📈 Tracking
-We provide `MLCardFormTrackerDelegate` protocol to notify each tracking event. You can subscribe to this protocol using MLCardFormBuilder
+We provide `MLCardFormTrackerDelegate` protocol to notify each tracking event. You can subscribe to this protocol using MLCardFormConfiguratorManager
 ```swift
 @objc public protocol MLCardFormTrackerDelegate: NSObjectProtocol {
     func trackScreen(screenName: String, extraParams: [String: Any]?)
-    func trackEvent(screenName: String?, action: String, result: String?, extraParams: [String: Any]?)
+    func trackEvent(screenName: String?, extraParams: [String: Any]?)
 }
 ```
 

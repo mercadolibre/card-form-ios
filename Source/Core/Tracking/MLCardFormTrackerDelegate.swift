@@ -21,9 +21,7 @@ import Foundation
     /**
      This method is called when a new event is ocurred to the user and tracked by our Checkout.
      - parameter screenName: Event name.
-     - parameter action: action.
-     - parameter result: result.
      - parameter extraParams: Extra data.
      */
-    func trackEvent(screenName: String?, action: String, result: String?, extraParams: [String: Any]?)
+    func trackEvent(screenName: String?, extraParams: [String: Any]?)
 }
