@@ -69,7 +69,7 @@ private extension ViewController {
         title = ""
         let publicKey = ""
         let builder = MLCardFormBuilder(publicKey: publicKey, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
-        builder.setLanguage("pt")
+        builder.setLanguage("es")
         builder.setExcludedPaymentTypes(["ticket"])
 
         MLCardFormConfiguratorManager.with(esc: self, tracking: self)

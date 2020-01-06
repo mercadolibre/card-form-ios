@@ -9,4 +9,4 @@ source_directories:
       - Source/Translations/es-AR.lproj
       - Source/Translations/es-MX.lproj
       - Source/Translations/es-VE.lproj
-      - Source/Translations/pt.lproj
+      - Source/Translations/pt-BR.lproj
