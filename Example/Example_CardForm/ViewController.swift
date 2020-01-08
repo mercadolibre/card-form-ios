@@ -36,8 +36,9 @@ class ViewController: UIViewController {
 
 extension ViewController: MLCardFormLifeCycleDelegate {
     func didAddCard(cardID: String) {
-        if let navigationController = navigationController {
-            navigationController.popViewController(animated: true)
+        if let navigationController = navigationController,
+            let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormViewController }) as? MLCardFormViewController {
+            cardFormViewController.dismissLoadingAndPop()
         }
     }
     
@@ -49,11 +50,11 @@ extension ViewController: MLCardFormLifeCycleDelegate {
 // Tracking
 extension ViewController: MLCardFormTrackerDelegate {
     func trackScreen(screenName: String, extraParams: [String : Any]?) {
-        // Track screen
+        print("trackScreen: \(screenName)")
     }
     
     func trackEvent(screenName: String?, extraParams: [String : Any]?) {
-        // Track event
+        print("trackEvent: \(screenName ?? "")")
     }
 }
 
@@ -67,8 +68,10 @@ extension ViewController: MLCardFormESCProtocol {
 private extension ViewController {
     func openCardForm() {
         title = ""
-        let publicKey = ""
-        let builder = MLCardFormBuilder(publicKey: publicKey, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
+        //let publicKey = ""
+        let privateKey = ""
+        let builder = MLCardFormBuilder(privateKey: privateKey, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
+        //let builder = MLCardFormBuilder(publicKey: publicKey, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
         builder.setLanguage("es")
         builder.setExcludedPaymentTypes(["ticket"])
 

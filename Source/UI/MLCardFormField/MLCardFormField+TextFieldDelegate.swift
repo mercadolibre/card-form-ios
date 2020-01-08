@@ -56,6 +56,9 @@ extension MLCardFormField: UITextFieldDelegate {
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        if !String.isNullOrEmpty(input.text) {
+            notifierProtocol?.didTapClear(from: self)
+        }
         if let customMask = customMask {
             _ = customMask.formatString(string: "")
         }

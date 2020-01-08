@@ -17,6 +17,8 @@ extension MLCardFormField {
         if isValid() {
             bottomLine.backgroundColor = bottomLineDefaultColor
             notifierProtocol?.shouldNext(from: self)
+        } else {
+            notifierProtocol?.invalidInput(from: self)
         }
     }
 
