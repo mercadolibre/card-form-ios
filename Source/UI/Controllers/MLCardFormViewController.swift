@@ -31,7 +31,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     private weak var cardFieldCollectionView: UICollectionView?
 
     private var cardDrawer: MLCardDrawerController?
-    private var issuersVC: MLCardFormIssuersViewController?
+    private var mlSnackbar: MLSnackbar?
 
     /// :nodoc
     open override func viewDidLoad() {
@@ -61,6 +61,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeKeyboardNotifications()
+        mlSnackbar?.dismiss()
     }
 
     open func dismissLoadingAndPop() {
@@ -119,9 +120,9 @@ private extension MLCardFormViewController {
                             // Show error to the user
                             switch error {
                             case NetworkLayerError.noInternetConnection:
-                                MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                                self.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             default:
-                                MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                                self.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             }
                         }
                     })
@@ -146,9 +147,9 @@ private extension MLCardFormViewController {
                         // Show error to the user
                         switch error {
                         case NetworkLayerError.noInternetConnection:
-                            MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                         default:
-                            MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
+                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
                                 self?.addCard()
                                 }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
                         }
