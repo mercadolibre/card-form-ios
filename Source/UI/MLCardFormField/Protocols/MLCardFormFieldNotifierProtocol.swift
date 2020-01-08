@@ -12,6 +12,8 @@ protocol MLCardFormFieldNotifierProtocol: NSObjectProtocol {
     func shouldBack(from: MLCardFormField)
     func didChangeValue(newValue: String?, from: MLCardFormField)
     func didBeginEditing(from: MLCardFormField)
+    func didTapClear(from: MLCardFormField)
+    func invalidInput(from: MLCardFormField)
 }
 
 extension MLCardFormFieldNotifierProtocol {

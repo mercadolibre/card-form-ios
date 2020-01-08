@@ -31,12 +31,16 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     private weak var cardFieldCollectionView: UICollectionView?
 
     private var cardDrawer: MLCardDrawerController?
-    private var issuersVC: MLCardFormIssuersViewController?
+    private var mlSnackbar: MLSnackbar?
 
     /// :nodoc
     open override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
+        
+        if let cardNumberField = viewModel.getCardFormFieldWithID(MLCardFormFields.cardNumber.rawValue) {
+            trackScreen(cardNumberField)
+        }
     }
 
     /// :nodoc
@@ -57,6 +61,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeKeyboardNotifications()
+        mlSnackbar?.dismiss()
     }
 
     open func dismissLoadingAndPop() {
@@ -115,9 +120,9 @@ private extension MLCardFormViewController {
                             // Show error to the user
                             switch error {
                             case NetworkLayerError.noInternetConnection:
-                                MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                                self.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             default:
-                                MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                                self.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             }
                         }
                     })
@@ -135,8 +140,6 @@ private extension MLCardFormViewController {
                 case .success(let cardID):
                     // Notify listener
                     self.lifeCycleDelegate?.didAddCard(cardID: cardID)
-                    // Save data for next time
-                    self.viewModel.saveDataForReuse()
                 case .failure(let error):
                     self.hideProgress(completion: { [weak self] in
                         // Notify listener
@@ -144,9 +147,9 @@ private extension MLCardFormViewController {
                         // Show error to the user
                         switch error {
                         case NetworkLayerError.noInternetConnection:
-                            MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                         default:
-                            MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
+                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
                                 self?.addCard()
                                 }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
                         }
@@ -237,10 +240,11 @@ private extension MLCardFormViewController {
     }
 
     func setupIssuersScreen() {
-        let issuersVC = MLCardFormIssuersViewController(viewModel: self.viewModel)
+        let issuersVC = MLCardFormIssuersViewController(viewModel: viewModel)
         issuersVC.delegate = self
         let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
         navigationController?.present(issuersNavigation, animated: true, completion: nil)
+        MLCardFormTracker.sharedInstance.trackScreen(screenName: "/card_form/issuers", properties: ["issuers_quantity": viewModel.getIssuers()?.count ?? 0])
     }
 
     func animateCardAppear() {
@@ -383,28 +387,29 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     
     func didBeginEditing(from: MLCardFormField) {
         guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
-        trackScreen(fieldId: fieldId)
         scrollCollectionViewToCardFormField(from)
+        
+        if fieldId == MLCardFormFields.securityCode {
+            cardDrawer?.showSecurityCode()
+        } else {
+            cardDrawer?.show()
+        }
         
         switch fieldId {
         case MLCardFormFields.name:
             viewModel.cardDataHandler.name = from.getValue() ?? ""
-        case MLCardFormFields.securityCode:
-            cardDrawer?.showSecurityCode()
         case MLCardFormFields.identificationTypesPicker:
-            cardDrawer?.show()
             if let defaultCardDataHandler = viewModel.cardDataHandler as? DefaultCardDataHandler,
                 let identificationType = from.getValue() {
                 defaultCardDataHandler.identificationType = identificationType
             }
         case MLCardFormFields.identificationTypeNumber:
-            cardDrawer?.show()
             if let defaultCardDataHandler = viewModel.cardDataHandler as? DefaultCardDataHandler,
                 let identificationNumber = from.getValue() {
                 defaultCardDataHandler.identificationNumber = identificationNumber
             }
         default:
-            cardDrawer?.show()
+            break
         }
         if !viewModel.updateProgressWithCompletion {
             updateProgressFromField(from)
@@ -420,7 +425,8 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         if viewModel.isSecurityCodeFieldAndIsMissingExpiration(cardFormField: from) {
             return
         }
-
+        trackNextEvent(from)
+        trackValidEvent(from)
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
         if viewModel.isLastField(cardFormField: from) {
             // TODO: Dar de alta la tarjeta
@@ -434,13 +440,23 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     }
     
     func shouldBack(from: MLCardFormField) {
+        trackPreviousEvent(from)
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: -1)
+    }
+    
+    func didTapClear(from: MLCardFormField) {
+        trackClearEvent(from)
+    }
+    
+    func invalidInput(from: MLCardFormField) {
+        trackInvalidEvent(from)
     }
 }
 
 // MARK: IssuerSelectedProtocol
 extension MLCardFormViewController: IssuerSelectedProtocol {
     func userDidSelectIssuer(issuer: MLCardFormIssuer, controller: UIViewController) {
+        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/issuers/selected", properties: ["issuer_id": issuer.id])
         viewModel.setIssuer(issuer: issuer)
         if let imageURL = issuer.imageUrl {
             viewModel.updateCardIssuerImage(imageURL: imageURL)
@@ -451,6 +467,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
     }
 
     func userDidCancel(controller: UIViewController) {
+        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/issuers/close")
         controller.dismiss(animated: true, completion: nil)
         if let field = viewModel.cardFormFields?.last?.last {
             field.doFocus()
@@ -511,6 +528,7 @@ private extension MLCardFormViewController {
         guard index != currentCellIndex() else {
             return
         }
+        trackScreen(cardFormField)
         //debugPrint("Scrolling collection to \(cardFormField.property.fieldId())")
         let section = 0
         let numberOfItems = cardFieldCollectionView.numberOfItems(inSection: section)

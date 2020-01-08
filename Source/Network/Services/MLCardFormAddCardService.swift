@@ -56,7 +56,7 @@ extension MLCardFormAddCardService {
 }
 
 extension MLCardFormAddCardService {
-    func addCard(tokenizationData: MLCardFormAddCardService.TokenizationBody, addCardData: MLCardFormAddCardService.AddCardBody, completion: ((Result<MLCardFormAddCardData, Error>) -> ())? = nil) {
+    func addCardToken(tokenizationData: MLCardFormAddCardService.TokenizationBody, addCardData: MLCardFormAddCardService.AddCardBody, completion: ((Result<MLCardFormTokenizationCardData, Error>) -> ())? = nil) {
         if publicKey == nil && privateKey == nil {
             completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
             return
@@ -68,22 +68,21 @@ extension MLCardFormAddCardService {
         }
         let queryParams = MLCardFormAddCardService.KeyParam(publicKey: publicKey, accessToken: privateKey)
         let headers = MLCardFormAddCardService.Headers(contentType: "application/json")
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
-            guard let self = self else { return }
-            switch result {
-            case .success(let tokenCardData):
-                
-                if let esc = tokenCardData.esc {
-                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: tokenCardData.firstSixDigits, lastFourDigits: tokenCardData.lastFourDigits, esc: esc)
-                }
-                
-                self.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { (result: Result<MLCardFormAddCardData, Error>) in
-                    completion?(result)
-                })
-            case .failure(let error):
-                self.debugLog(error)
-                completion?(.failure(error))
-            }
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
+            completion?(result)
+        }
+    }
+    
+    func saveCard(tokenId: String, addCardData: MLCardFormAddCardService.AddCardBody, completion: ((Result<MLCardFormAddCardData, Error>) -> ())? = nil) {
+        guard let privateKey = privateKey  else {
+            completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
+            return
+        }
+        let queryParams = MLCardFormAddCardService.AddCardParams(accessToken: privateKey)
+        let headers = MLCardFormAddCardService.Headers(contentType: "application/json")
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(queryParams, headers, buildAddCardBody(tokenId, addCardData: addCardData))) {
+            (result: Result<MLCardFormAddCardData, Error>) in
+            completion?(result)
         }
     }
 }
@@ -122,19 +121,6 @@ extension MLCardFormAddCardService {
 
 // MARK: Privates
 private extension MLCardFormAddCardService {
-    func saveCard(tokenId: String, addCardData: MLCardFormAddCardService.AddCardBody, completion: ((Result<MLCardFormAddCardData, Error>) -> ())? = nil) {
-        guard let privateKey = privateKey  else {
-            completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
-            return
-        }
-        let queryParams = MLCardFormAddCardService.AddCardParams(accessToken: privateKey)
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json")
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(queryParams, headers, buildAddCardBody(tokenId, addCardData: addCardData))) {
-            (result: Result<MLCardFormAddCardData, Error>) in
-            completion?(result)
-        }
-    }
-
     func buildTokenizationBody(_ tokenizationData: MLCardFormAddCardService.TokenizationBody) -> MLCardFormTokenizationBody {
         return MLCardFormTokenizationBody(cardNumber: tokenizationData.cardNumber, securityCode: tokenizationData.securityCode, expirationMonth: tokenizationData.expirationMonth, expirationYear: tokenizationData.expirationYear, cardholder: tokenizationData.cardholder, device: tokenizationData.device)
     }

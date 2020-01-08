@@ -51,7 +51,6 @@ final class MLCardFormViewModel {
     private let serviceManager: MLCardFormServiceManager = MLCardFormServiceManager()
     var lastFetchedBinNumber: String = ""
     private var binData: MLCardFormBinData?
-    private var addCardData: MLCardFormAddCardData?
 
     weak var viewModelDelegate: MLCardFormViewModelProtocol?
 
@@ -113,7 +112,7 @@ final class MLCardFormViewModel {
     
     func updateOfflineCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
         if let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler,
-            let cardNumberField = getCardFormFieldWithID(MLCardFormFields.cardNumber.rawValue) {
+            let cardNumberField = getCardFormFieldWithID(MLCardFormFields.cardNumber) {
             
             let cardNumberValue = tempTextField.input.text ?? ""
             var cardNumberLength = cardNumberField.property.minLenght()
@@ -235,8 +234,8 @@ final class MLCardFormViewModel {
     func isSecurityCodeFieldAndIsMissingExpiration(cardFormField: MLCardFormField) -> Bool {
         guard let fieldId = MLCardFormFields(rawValue: cardFormField.property.fieldId()) else { return false }
         if fieldId == MLCardFormFields.securityCode,
-            let expirationField = getCardFormFieldWithID(MLCardFormFields.expiration.rawValue),
-            expirationField.isValid() == false {
+            let cardFormField = getCardFormFieldWithID(MLCardFormFields.expiration),
+            cardFormField.isValid() == false {
             return true
         }
         return false
@@ -253,23 +252,30 @@ final class MLCardFormViewModel {
     }
     
     func updateIDNumberFieldValue(value: String) {
-        if let numberCardFormField = getCardFormFieldWithID(MLCardFormFields.identificationTypeNumber.rawValue) {
-            numberCardFormField.clearValue()
-            numberCardFormField.property.setValue(value: value)
-            numberCardFormField.updateInput()
+        if let cardFormField = getCardFormFieldWithID(MLCardFormFields.identificationTypeNumber) {
+            cardFormField.clearValue()
+            cardFormField.property.setValue(value: value)
+            cardFormField.updateInput()
         }
     }
     
     func saveDataForReuse() {
-        if let cardNameFieldSetting = getCardFormFieldWithID(MLCardFormFields.name.rawValue) {
-            storedCardName = cardNameFieldSetting.getValue()
+        if let cardFormField = getCardFormFieldWithID(MLCardFormFields.name),
+            let value = cardFormField.getValue() {
+            storedCardName = value
         }
-        if let idTypeFieldSetting = getCardFormFieldWithID(MLCardFormFields.identificationTypesPicker.rawValue) {
-            storedIDType = idTypeFieldSetting.getValue()
+        if let cardFormField = getCardFormFieldWithID(MLCardFormFields.identificationTypesPicker),
+            let value = cardFormField.getValue() {
+            storedIDType = value
         }
-        if let idNumberFieldSetting = getCardFormFieldWithID(MLCardFormFields.identificationTypeNumber.rawValue) {
-            storedIDNumber = idNumberFieldSetting.getValue()
+        if let cardFormField = getCardFormFieldWithID(MLCardFormFields.identificationTypeNumber),
+            let value = cardFormField.getValue() {
+            storedIDNumber = value
         }
+    }
+    
+    func getCardFormFieldWithID(_ fieldId: MLCardFormFields) -> MLCardFormField? {
+        return getCardFormFieldWithID(fieldId.rawValue)
     }
     
     func getCardFormFieldWithID(_ fieldId: String) -> MLCardFormField? {
@@ -331,11 +337,15 @@ extension MLCardFormViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let cardFormBinData):
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/bin_number/recognized")
                 self.lastFetchedBinNumber = binNumber
                 self.binData = cardFormBinData
                 self.updateHandlers()
                 completion?(.success(binNumber))
             case .failure(let error):
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/bin_number/unknown", properties: ["bin_number": binNumber])
+                let errorMessage = error.localizedDescription
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "error_message": errorMessage])
                 self.viewModelDelegate?.shouldUpdateFields(remoteSettings: nil)
                 completion?(.failure(error))
             }
@@ -347,18 +357,34 @@ extension MLCardFormViewModel {
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
-        serviceManager.addCardService.addCard(tokenizationData: tokenizationData, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
+        serviceManager.addCardService.addCardToken(tokenizationData: tokenizationData, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let addCardData):
-                self.addCardData = addCardData
-                completion?(.success(addCardData.getId()))
-            case .failure(let error):
-                if case MLCardFormAddCardServiceError.missingPrivateKey = error {
-                    completion?(.success(""))
-                } else {
-                    completion?(.failure(error))
+            case .success(let tokenCardData):
+                if let esc = tokenCardData.esc {
+                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: tokenCardData.firstSixDigits, lastFourDigits: tokenCardData.lastFourDigits, esc: esc)
                 }
+                self.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let addCardData):
+                        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
+                        self.saveDataForReuse()
+                        completion?(.success(addCardData.getId()))
+                    case .failure(let error):
+                        if case MLCardFormAddCardServiceError.missingPrivateKey = error {
+                            completion?(.success(""))
+                        } else {
+                            let errorMessage = error.localizedDescription
+                            MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_data", "error_message": errorMessage])
+                            completion?(.failure(error))
+                        }
+                    }
+                })
+            case .failure(let error):
+                let errorMessage = error.localizedDescription
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
+                completion?(.failure(error))
             }
         })
     }
@@ -396,10 +422,10 @@ private extension MLCardFormViewModel {
     }
 
     func getIdentification() -> MLCardFormIdentification? {
-        guard let idTypeFieldSetting = getCardFormFieldWithID(MLCardFormFields.identificationTypesPicker.rawValue),
-            let type = idTypeFieldSetting.getPickerValue(),
-            let idNumberFieldSetting = getCardFormFieldWithID(MLCardFormFields.identificationTypeNumber.rawValue),
-            let number = idNumberFieldSetting.getUnmaskedValue() else {
+        guard let idTypeCardFormField = getCardFormFieldWithID(MLCardFormFields.identificationTypesPicker),
+            let type = idTypeCardFormField.getPickerValue(),
+            let idNumberCardFormField = getCardFormFieldWithID(MLCardFormFields.identificationTypeNumber),
+            let number = idNumberCardFormField.getUnmaskedValue() else {
             return nil
         }
         return MLCardFormIdentification(type: type, number: number)
