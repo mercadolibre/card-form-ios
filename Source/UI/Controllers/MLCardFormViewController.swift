@@ -131,7 +131,9 @@ private extension MLCardFormViewController {
                 DispatchQueue.main.async { [weak self] in
                     if showProggressAndSnackBar {
                         self?.hideProgress(completion: { [weak self] in
-                            self?.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self?.mlSnackbar = MLSnackbar.show(withTitle: title, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
+                                self?.getCardData(binNumber: binNumber, showProggressAndSnackBar: showProggressAndSnackBar)
+                                }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                         })
                     } else if showOnlySnackBar {
                         self?.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
@@ -159,9 +161,7 @@ private extension MLCardFormViewController {
                         case NetworkLayerError.noInternetConnection:
                             self?.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                         default:
-                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
-                                self?.addCard()
-                                }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.indefinitely)
+                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                         }
                     })
                 }
