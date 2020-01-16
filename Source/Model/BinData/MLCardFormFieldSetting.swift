@@ -33,7 +33,7 @@ extension MLCardFormFieldSetting {
                 String(repeating: "$", count: $0)
                 }.joined(separator: " ")
             
-            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: nil, validationPattern: nil, validationMessage: validationMessage)
+            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: nil, validationPattern: cardUI.validation, validationMessage: validationMessage)
         case .securityCode:
             guard let remoteSetting = remoteSetting, let cardUI = cardUI  else { return nil }
             let name: String = remoteSetting.name

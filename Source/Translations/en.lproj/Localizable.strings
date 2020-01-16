@@ -1,37 +1,13 @@
-/* 
-  Localizable.strings
-  Pods
-
-  Created by Juan sebastian Sanzone on 12/3/19.
-  
-*/
-
-"Número de tarjeta" = "Card number";
-
-"Completa este campo" = "Complete this field";
-
-"Anterior" = "Back";
-
+"Anterior" = "Previous";
 "Siguiente" = "Next";
-
-"Nombre del titular" = "Name";
-
-"Número de tarjeta inválido" = "Invalid card number";
-
-"Nueva tarjeta" = "New card";
-
-"Nueva tarjeta de crédito" = "New credit card";
-
-"Nueva tarjeta de débito" = "New debit card";
-
+"Confirmar" = "Confirm";
 "Nombre y apellido" = "Name and surname";
-
-"Revisa tu conexión a internet." = "No internet";
-
-"¿Quién emitió tu tarjeta?" = "Choose card issuer";
-
-"Algo salió mal." = "Something went wrong.";
-
-"Reintentar" = "Retry";
-
-"Confirmar" = "Confirmar";
+"Reintentar" = "Try again";
+"Nombre del titular" = "Owner’s name";
+"Número de tarjeta" = "Card number";
+"Completa este campo" = "Complete this field";
+"¿Quién emitió tu tarjeta?" = "Which is your bank?";
+"Nueva tarjeta de crédito" = "New credit card";
+"Nueva tarjeta de débito" = "New debit card";
+"Nueva tarjeta" = "New card";
+"Número de tarjeta inválido" = "Invalid card number";

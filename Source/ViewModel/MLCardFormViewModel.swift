@@ -130,7 +130,7 @@ final class MLCardFormViewModel {
             }
             
             let paymentMethod = MLCardFormPaymentMethod(paymentMethodId: "", paymentTypeId: "", name: "", processingModes: [])
-            let cardUI = MLCardFormCardUI(cardNumberLength: cardNumberLength, cardPattern: cardPattern, cardColor: cardHandlerToUpdate.cardBackgroundColor.toHexString(), cardFontColor: cardHandlerToUpdate.cardFontColor.toHexString(), cardFontType: "", securityCodeLocation: "back", securityCodeLength: cardHandlerToUpdate.securityCodePattern, issuerImageUrl: nil, paymentMethodImageUrl: nil, issuerImage: nil, paymentMethodImage: nil)
+            let cardUI = MLCardFormCardUI(cardNumberLength: cardNumberLength, cardPattern: cardPattern, cardColor: cardHandlerToUpdate.cardBackgroundColor.toHexString(), cardFontColor: cardHandlerToUpdate.cardFontColor.toHexString(), cardFontType: "", securityCodeLocation: "back", securityCodeLength: cardHandlerToUpdate.securityCodePattern, issuerImageUrl: nil, paymentMethodImageUrl: nil, issuerImage: nil, paymentMethodImage: nil, validation: nil)
             
             cardHandlerToUpdate.update(cardUI: cardUI)
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
@@ -289,8 +289,7 @@ final class MLCardFormViewModel {
     func updateCardIssuerImage(imageURL: String) {
         if let cardUI = binData?.cardUI,
             let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler {
-            let cardUI = MLCardFormCardUI.copyCardUIWithIssuerImage(cardUI, issuerImageUrl: imageURL)
-            cardHandlerToUpdate.update(cardUI: cardUI)
+            cardHandlerToUpdate.update(cardUI: cardUI.changeIssuerImageUrl(issuerImageUrl: imageURL))
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
         }
     }
@@ -321,7 +320,7 @@ extension MLCardFormViewModel {
     func setIssuer(issuer: MLCardFormIssuer) {
         issuerWasSelected = true
         if let data = binData {
-            binData = MLCardFormBinData.copyCardFormBinDataWithIssuer(data, issuer: issuer)
+            binData = data.changeIssuer(issuer: issuer)
         }
     }
     

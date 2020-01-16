@@ -10,9 +10,43 @@ import Foundation
 
 enum NetworkLayerError: Error {
     case dataTask
-    case statusCode
     case data
+    case response
+    case statusCode(status: Int, message: String)
     case noInternetConnection
+}
+
+extension NetworkLayerError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .statusCode(status: _, message: let message):
+            return message
+        default:
+            return "Algo salió mal.".localized
+        }
+    }
+}
+
+extension NetworkLayerError: CustomNSError {
+    public static var errorDomain: String {
+        return "MLCardForm"
+    }
+    
+    public var errorCode: Int {
+        switch self {
+        case .statusCode(status: let status, message: _):
+            return status
+        default:
+            return 0
+        }
+    }
+    
+    public var errorUserInfo: [String : Any] {
+        if let errorDescription = errorDescription {
+            return ["message": errorDescription]
+        }
+        return [:]
+    }
 }
 
 struct NetworkLayer {
@@ -42,12 +76,25 @@ struct NetworkLayer {
                 completion(.failure(error ?? NetworkLayerError.dataTask))
                 return
             }
-            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
-                completion(.failure(NetworkLayerError.statusCode))
-                return
-            }
             guard let data = data else {
                 completion(.failure(NetworkLayerError.data))
+                return
+            }
+            guard let response = response as? HTTPURLResponse else {
+                completion(.failure(NetworkLayerError.response))
+                return
+            }
+            guard (200...299).contains(response.statusCode) else {
+                var message = ""
+                do {
+                    let responseData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+                    if let responseMessage = responseData?["message"] as? String {
+                        message = responseMessage
+                    }
+                } catch let error as NSError {
+                    print(error)
+                }
+                completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message)))
                 return
             }
             do {
