@@ -81,13 +81,13 @@ struct IDNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
             if type == "number" {
                 return .numberPad
             }
-            return .default
+            return .numbersAndPunctuation
         }
         
         if let type = remoteSetting?.type, type == "number" {
             return .numberPad
         }
-        return .default
+        return .numbersAndPunctuation
     }
     
     func keyboardNextText() -> String? {
