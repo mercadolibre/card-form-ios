@@ -1,3 +1,11 @@
+# v0.7.3
+🚀MVP Release 0.7.3 🚀
+- Cardholder name validation
+- Add validation for Brasil ID's 
+- Disable luhn validation for some cards (eg: Tarjeta shopping) 
+- Updated strings
+- Changed keyboard when id type is not numeric
+
 # v0.7.2
 🚀MVP Release 0.7.2 🚀
 Missing features:
