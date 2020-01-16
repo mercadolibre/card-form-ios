@@ -109,23 +109,33 @@ private extension MLCardFormViewController {
             showProgress()
         }
         viewModel.getCardData(binNumber: binNumber, completion: { (result: Result<String, Error>) in
-            if showProggressAndSnackBar {
+            
+            switch result {
+            case .success:
+                break
+            case .failure(let error):
+                // Show error to the user
+                var title = "Algo salió mal.".localized
+                var showOnlySnackBar = false
+                switch error {
+                case NetworkLayerError.noInternetConnection:
+                    title = "Revisa tu conexión a internet.".localized
+                case NetworkLayerError.statusCode(status: let status, message: let message):
+                    if !String.isNullOrEmpty(message) {
+                        title = message
+                    }
+                    showOnlySnackBar = !showProggressAndSnackBar && status == 400
+                default:
+                    break
+                }
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.hideProgress(completion: { 
-                        switch result {
-                        case .success:
-                            break
-                        case .failure(let error):
-                            // Show error to the user
-                            switch error {
-                            case NetworkLayerError.noInternetConnection:
-                                self.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                            default:
-                                self.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                            }
-                        }
-                    })
+                    if showProggressAndSnackBar {
+                        self?.hideProgress(completion: { [weak self] in
+                            self?.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                        })
+                    } else if showOnlySnackBar {
+                        self?.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                    }
                 }
             }
         })
@@ -158,7 +168,7 @@ private extension MLCardFormViewController {
             }
         })
     }
-
+    
     func initialSetup() {
         title = AppBar.Generic.title
         let (backgroundNavigationColor, textNavigationColor) = viewModel.getNavigationBarCustomColor()

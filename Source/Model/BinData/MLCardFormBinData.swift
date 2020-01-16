@@ -41,11 +41,8 @@ struct MLCardFormBinData: Codable {
         case fieldsSetting
         case identificationTypes
     }
-}
-
-// MARK: MLCardFormBinData Factory
-extension MLCardFormBinData {
-    static func copyCardFormBinDataWithIssuer(_ cardFormBinData: MLCardFormBinData, issuer: MLCardFormIssuer) -> MLCardFormBinData {
-        return MLCardFormBinData(escEnabled: cardFormBinData.escEnabled, enabled: cardFormBinData.enabled, errorMessage: cardFormBinData.errorMessage, paymentMethod: cardFormBinData.paymentMethod, cardUI: cardFormBinData.cardUI, additionalSteps: cardFormBinData.additionalSteps, issuers: [issuer], fieldsSetting: cardFormBinData.fieldsSetting, identificationTypes: cardFormBinData.identificationTypes)
+    
+    func changeIssuer(issuer: MLCardFormIssuer) -> MLCardFormBinData {
+        return MLCardFormBinData(escEnabled: self.escEnabled, enabled: self.enabled, errorMessage: self.errorMessage, paymentMethod: self.paymentMethod, cardUI: self.cardUI, additionalSteps: self.additionalSteps, issuers: [issuer], fieldsSetting: self.fieldsSetting, identificationTypes: self.identificationTypes)
     }
 }

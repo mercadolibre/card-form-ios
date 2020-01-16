@@ -19,11 +19,9 @@ struct MLCardFormCardUI: Codable {
     let paymentMethodImageUrl: String?
     let issuerImage: String?
     let paymentMethodImage: String?
-}
-
-// MARK: MLCardFormCardUI Factory
-extension MLCardFormCardUI {
-    static func copyCardUIWithIssuerImage(_ cardFormCardUI: MLCardFormCardUI, issuerImageUrl: String?) -> MLCardFormCardUI {
-        return MLCardFormCardUI(cardNumberLength: cardFormCardUI.cardNumberLength, cardPattern: cardFormCardUI.cardPattern, cardColor: cardFormCardUI.cardColor, cardFontColor: cardFormCardUI.cardFontColor, cardFontType: cardFormCardUI.cardFontType, securityCodeLocation: cardFormCardUI.securityCodeLocation, securityCodeLength: cardFormCardUI.securityCodeLength, issuerImageUrl: issuerImageUrl, paymentMethodImageUrl: cardFormCardUI.paymentMethodImageUrl, issuerImage: issuerImageUrl, paymentMethodImage: cardFormCardUI.paymentMethodImage)
+    let validation: String?
+    
+    func changeIssuerImageUrl(issuerImageUrl: String?) -> MLCardFormCardUI {
+        return MLCardFormCardUI(cardNumberLength: self.cardNumberLength, cardPattern: self.cardPattern, cardColor: self.cardColor, cardFontColor: self.cardFontColor, cardFontType: self.cardFontType, securityCodeLocation: self.securityCodeLocation, securityCodeLength: self.securityCodeLength, issuerImageUrl: issuerImageUrl, paymentMethodImageUrl: self.paymentMethodImageUrl, issuerImage: issuerImageUrl, paymentMethodImage: self.paymentMethodImage, validation: self.validation)
     }
 }

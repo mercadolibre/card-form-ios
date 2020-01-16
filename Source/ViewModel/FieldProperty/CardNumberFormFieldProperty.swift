@@ -96,6 +96,8 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
         
         if let remoteSettingLenght = remoteSetting?.lenght, cleanValue.count != remoteSettingLenght {
             return false
+        } else if let pattern = validationPattern(), pattern.lowercased() == "none" {
+            return true
         } else {
             switch CardState(fromPrefix: cleanValue) {
             case .identified(let cardType):
