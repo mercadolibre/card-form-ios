@@ -28,11 +28,11 @@ enum MLCardFormApiRouter {
     var path: String {
         switch self {
         case .getCardData:
-            return "/beta/px_mobile/v1/card"
+            return "/production/px_mobile/v1/card"
         case .postCardTokenData:
             return "/v1/card_tokens"
         case .postCardData:
-            return "/beta/px_mobile/v1/card"
+            return "/production/px_mobile/v1/card"
         }
     }
     
