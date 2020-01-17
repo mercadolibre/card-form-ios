@@ -1,3 +1,7 @@
+# v0.7.5
+🚀MVP Release 0.7.5 🚀
+- Changed podspec swift version
+
 # v0.7.4
 🚀MVP Release 0.7.4 🚀
 - Replaced beta API for production
