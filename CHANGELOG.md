@@ -1,3 +1,7 @@
+# v0.7.6
+🚀MVP Release 0.7.6 🚀
+- Revert podspec swift version change
+
 # v0.7.5
 🚀MVP Release 0.7.5 🚀
 - Changed podspec swift version
