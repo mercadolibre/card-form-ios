@@ -79,7 +79,7 @@ extension MLCardFormViewController {
         switch fieldId {
         case MLCardFormFields.cardNumber:
             let bin_number = cardFormField.getUnmaskedValue() ?? ""
-            MLCardFormTracker.sharedInstance.trackEvent(path: path + invalidEventPath, properties: ["bin_number": bin_number])
+            MLCardFormTracker.sharedInstance.trackEvent(path: path + invalidEventPath, properties: ["bin_number": bin_number.prefix(6)])
         case MLCardFormFields.expiration:
             MLCardFormTracker.sharedInstance.trackEvent(path: path + "/date" + invalidEventPath)
         case MLCardFormFields.securityCode:
