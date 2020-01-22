@@ -342,9 +342,19 @@ extension MLCardFormViewModel {
                 self.updateHandlers()
                 completion?(.success(binNumber))
             case .failure(let error):
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/bin_number/unknown", properties: ["bin_number": binNumber])
+                var path = "/card_form/error"
                 let errorMessage = error.localizedDescription
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "error_message": errorMessage])
+                var properties: [String: Any] = ["error_step": "bin_number", "error_message": errorMessage]
+                switch error {
+                case NetworkLayerError.statusCode(status: let status, message: _):
+                    if status == 400 {
+                        path = "/card_form/bin_number/unknown"
+                        properties = ["bin_number": binNumber.prefix(6)]
+                    }
+                default:
+                    break
+                }
+                MLCardFormTracker.sharedInstance.trackEvent(path: path, properties: properties)
                 self.viewModelDelegate?.shouldUpdateFields(remoteSettings: nil)
                 completion?(.failure(error))
             }
