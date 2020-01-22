@@ -1,3 +1,7 @@
+# v0.7.7
+🚀MVP Rease 0.7.7 🚀
+- Fix bin Tracking
+
 # v0.7.6
 🚀MVP Release 0.7.6 🚀
 - Revert podspec swift version change
