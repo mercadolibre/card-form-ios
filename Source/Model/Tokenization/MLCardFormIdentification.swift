@@ -8,6 +8,6 @@
 import Foundation
 
 struct MLCardFormIdentification: Codable {
-    let type: String
-    let number: String
+    let type: String?
+    let number: String?
 }

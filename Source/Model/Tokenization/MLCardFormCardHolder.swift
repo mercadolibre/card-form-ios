@@ -9,5 +9,5 @@ import Foundation
 
 struct MLCardFormCardHolder: Codable {
     let name: String
-    let identification: MLCardFormIdentification
+    let identification: MLCardFormIdentification?
 }
