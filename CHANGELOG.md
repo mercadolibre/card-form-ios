@@ -1,3 +1,7 @@
+# v0.7.8
+🚀MVP Rease 0.7.8 🚀
+- Fix for MLM
+
 # v0.7.7
 🚀MVP Rease 0.7.7 🚀
 - Fix bin Tracking
