@@ -435,7 +435,7 @@ private extension MLCardFormViewModel {
             let type = idTypeCardFormField.getPickerValue(),
             let idNumberCardFormField = getCardFormFieldWithID(MLCardFormFields.identificationTypeNumber),
             let number = idNumberCardFormField.getUnmaskedValue() else {
-            return nil
+            return MLCardFormIdentification(type: "", number: "")
         }
         return MLCardFormIdentification(type: type, number: number)
     }
