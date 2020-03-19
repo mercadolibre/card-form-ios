@@ -22,6 +22,7 @@ class DefaultCardUIHandler: NSObject, CardUI {
     var securityCodePattern = 3
     var cardLogoImageUrl: String?
     var bankImageUrl: String?
+    var fontType: String = ""
 
     func update(cardUI: MLCardFormCardUI?) {
         guard let cardDataUI = cardUI else { return }
@@ -33,5 +34,6 @@ class DefaultCardUIHandler: NSObject, CardUI {
         self.securityCodePattern = cardDataUI.securityCodeLength
         self.cardLogoImageUrl = cardUI?.paymentMethodImageUrl
         self.bankImageUrl = cardUI?.issuerImageUrl
+        self.fontType = cardUI?.cardFontType ?? ""
     }
 }
