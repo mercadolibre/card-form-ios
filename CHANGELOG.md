@@ -1,3 +1,7 @@
+# v0.7.9
+🚀MVP Rease 0.7.9 🚀
+- Fix font type
+
 # v0.7.8
 🚀MVP Rease 0.7.8 🚀
 - Fix for MLM
