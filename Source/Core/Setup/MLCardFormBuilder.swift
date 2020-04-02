@@ -20,6 +20,7 @@ open class MLCardFormBuilder: NSObject {
     internal var excludedPaymentTypes: [String]?
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
+    internal var addStatusBarBackground: Bool?
     internal var animateOnLoad: Bool = false
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
     
@@ -81,6 +82,16 @@ extension MLCardFormBuilder {
     open func setNavigationBarCustomColor(backgroundColor: UIColor, textColor: UIColor) -> MLCardFormBuilder {
         self.navigationCustomBackgroundColor = backgroundColor
         self.navigationCustomTextColor = textColor
+        return self
+    }
+    
+    /**
+     Determinates if MLCardForm ViewController should be add a view for the statusBar with the color of the navigationBar or not. Default is true.
+     - parameter animated: `Bool`
+     */
+    @discardableResult
+    open func setShouldAddStatusBarBackground(_ addStatusBarBackground: Bool) -> MLCardFormBuilder {
+        self.addStatusBarBackground = addStatusBarBackground
         return self
     }
 

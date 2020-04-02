@@ -297,6 +297,10 @@ final class MLCardFormViewModel {
     func getNavigationBarCustomColor() -> (backgroundColor: UIColor?, textColor: UIColor?) {
         return (builder?.navigationCustomBackgroundColor, builder?.navigationCustomTextColor)
     }
+    
+    func shouldAddStatusBarBackground() -> Bool {
+        return builder?.addStatusBarBackground ?? true
+    }
 
     func shouldAnimateOnLoad() -> Bool {
         return builder?.animateOnLoad ?? false
