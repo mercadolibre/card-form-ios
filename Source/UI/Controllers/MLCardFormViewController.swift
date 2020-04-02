@@ -173,7 +173,9 @@ private extension MLCardFormViewController {
         title = AppBar.Generic.title
         let (backgroundNavigationColor, textNavigationColor) = viewModel.getNavigationBarCustomColor()
         super.loadStyles(customNavigationBackgroundColor: backgroundNavigationColor, customNavigationTextColor: textNavigationColor)
-        addStatusBarBackground(color: backgroundNavigationColor)
+        if viewModel.shouldAddStatusBarBackground() {
+            addStatusBarBackground(color: backgroundNavigationColor)
+        }
         setupCardContainer()
         setupProgress()
         setupTempTextField()
