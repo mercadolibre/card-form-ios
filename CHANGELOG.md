@@ -1,3 +1,11 @@
+# v0.8
+🚀MVP Rease 0.8 🚀
+- Add builder property to disable fake statusbar (Produced a visual glitch when setting the navbarcolor)
+
+# v0.7.9
+🚀MVP Rease 0.7.9 🚀
+- Fix font type
+
 # v0.7.8
 🚀MVP Rease 0.7.8 🚀
 - Fix for MLM
