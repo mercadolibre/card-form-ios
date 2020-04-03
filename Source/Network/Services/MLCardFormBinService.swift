@@ -82,6 +82,7 @@ extension MLCardFormBinService {
         case siteId
         case platform
         case excludedPaymentTypes
+        case odr
 
         var getKey: String {
             switch self {
@@ -93,6 +94,8 @@ extension MLCardFormBinService {
                 return "platform"
             case .excludedPaymentTypes:
                 return "excluded_payment_types"
+            case .odr:
+                return "odr"
             }
         }
     }
@@ -102,6 +105,7 @@ extension MLCardFormBinService {
         let siteId: String
         let platform: String
         let excludedPaymentTypes: String?
+        let odr: Bool
     }
 }
 
@@ -124,7 +128,7 @@ extension MLCardFormBinService {
         }
 
         debugLog("Bin data New call: Operation -> \(binNumber)")
-        let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: getPlatform(), excludedPaymentTypes: excludedPaymentTypes)
+        let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: getPlatform(), excludedPaymentTypes: excludedPaymentTypes, odr: true)
         let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId())
         let operation = BlockOperation(block: {
             NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)) { [weak self] (result: Result<MLCardFormBinData, Error>) in
