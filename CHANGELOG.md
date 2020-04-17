@@ -1,3 +1,7 @@
+# v0.8.1
+🚀MVP Release 0.8.1 🚀
+- ODR support for new assets
+
 # v0.8
 🚀MVP Rease 0.8 🚀
 - Add builder property to disable fake statusbar (Produced a visual glitch when setting the navbarcolor)
