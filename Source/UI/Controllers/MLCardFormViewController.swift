@@ -64,9 +64,10 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
         mlSnackbar?.dismiss()
     }
 
-    open func dismissLoadingAndPop() {
+    open func dismissLoadingAndPop(completion: (() -> Void)? = nil) {
         hideProgress(completion: { [weak self] in
             self?.navigationController?.popViewController(animated: true)
+            if let completion = completion { completion() }
         })
     }
 }
