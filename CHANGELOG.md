@@ -1,4 +1,4 @@
-# v0.8.1
+# v0.8.2
 🚀MVP Release 0.8.2 🚀
 - Add closure to dismissLoadingAndPop
 
