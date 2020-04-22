@@ -1,4 +1,8 @@
 # v0.8.1
+🚀MVP Release 0.8.2 🚀
+- Add closure to dismissLoadingAndPop
+
+# v0.8.1
 🚀MVP Release 0.8.1 🚀
 - ODR support for new assets
 
