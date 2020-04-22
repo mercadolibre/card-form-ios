@@ -38,7 +38,9 @@ extension ViewController: MLCardFormLifeCycleDelegate {
     func didAddCard(cardID: String) {
         if let navigationController = navigationController,
             let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormViewController }) as? MLCardFormViewController {
-            cardFormViewController.dismissLoadingAndPop()
+            cardFormViewController.dismissLoadingAndPop(completion: { 
+                print("Se cerro el VC")
+            })
         }
     }
     
