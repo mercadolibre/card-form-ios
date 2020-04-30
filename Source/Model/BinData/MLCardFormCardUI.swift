@@ -20,9 +20,9 @@ struct MLCardFormCardUI: Codable {
     let issuerImage: String?
     let paymentMethodImage: String?
     let validation: String?
-    let extraValidation: [MLCardFormExtraValidation]?
+    let extraValidations: [MLCardFormExtraValidation]?
     
     func changeIssuerImageUrl(issuerImageUrl: String?) -> MLCardFormCardUI {
-        return MLCardFormCardUI(cardNumberLength: self.cardNumberLength, cardPattern: self.cardPattern, cardColor: self.cardColor, cardFontColor: self.cardFontColor, cardFontType: self.cardFontType, securityCodeLocation: self.securityCodeLocation, securityCodeLength: self.securityCodeLength, issuerImageUrl: issuerImageUrl, paymentMethodImageUrl: self.paymentMethodImageUrl, issuerImage: issuerImageUrl, paymentMethodImage: self.paymentMethodImage, validation: self.validation, extraValidation: self.extraValidation)
+        return MLCardFormCardUI(cardNumberLength: self.cardNumberLength, cardPattern: self.cardPattern, cardColor: self.cardColor, cardFontColor: self.cardFontColor, cardFontType: self.cardFontType, securityCodeLocation: self.securityCodeLocation, securityCodeLength: self.securityCodeLength, issuerImageUrl: issuerImageUrl, paymentMethodImageUrl: self.paymentMethodImageUrl, issuerImage: issuerImageUrl, paymentMethodImage: self.paymentMethodImage, validation: self.validation, extraValidations: self.extraValidations)
     }
 }
