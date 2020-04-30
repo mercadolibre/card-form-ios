@@ -8,15 +8,27 @@
 import Foundation
 import MLCardDrawer
 
-struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
+class CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     let remoteSetting: MLCardFormFieldSetting?
     let cardNumberValue: String?
+    var isValid: Bool
     
     init(remoteSetting: MLCardFormFieldSetting? = nil,
-         cardNumberValue: String? = nil) {
-        
+         cardNumberValue: String? = nil, isValid: Bool = true) {
         self.remoteSetting = remoteSetting
         self.cardNumberValue = cardNumberValue
+        self.isValid = isValid
+    }
+
+    enum Validation: String {
+        case SEVENTH_DIGIT
+
+        var getValue: String {
+            switch self {
+            case Validation.SEVENTH_DIGIT:
+                return "seventh_digit"
+            }
+        }
     }
 
     func fieldId() -> String {
@@ -91,23 +103,26 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     }
     
     func isValid(value: String?) -> Bool {
-        guard let value = value else { return false }
+        guard let value = value, isValid else { return false }
+
         let cleanValue = value.removingWhitespaceAndNewlines()
         
         if let remoteSettingLenght = remoteSetting?.lenght, cleanValue.count != remoteSettingLenght {
             return false
         } else if let pattern = validationPattern(), pattern.lowercased() == "none" {
             return true
-        } else {
-            switch CardState(fromPrefix: cleanValue) {
-            case .identified(let cardType):
-                let cardNumberLength = cardType.segmentGroupings.reduce(0, +)
-                if cleanValue.count != cardNumberLength {
-                    return false
-                }
-            default:
-                return false
-            }
+
+        //*** Update IIN prefixes and length requriements if CardState is used ***//
+//        } else {
+//            switch CardState(fromPrefix: cleanValue) {
+//            case .identified(let cardType):
+//                let cardNumberLength = cardType.segmentGroupings.reduce(0, +)
+//                if cleanValue.count != cardNumberLength {
+//                    return false
+//                }
+//            default:
+//                return false
+//            }
         }
         
         var sum = 0

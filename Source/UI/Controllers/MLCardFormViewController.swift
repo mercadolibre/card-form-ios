@@ -368,6 +368,18 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             } else if newValue.count == 5 {
                 shouldUpdateCard(cardUI: DefaultCardUIHandler())
                 shouldUpdateAppBarTitle(paymentTypeId: AppBar.Generic.rawValue)
+            } else if newValue.count >= 7, let seventhDigit = newValue.prefix(7).last,
+                let extraValidations = viewModel.getCardNumberExtraValidation(),
+                let validation = extraValidations.first(where: { $0.name == CardNumberFormFieldProperty.Validation.SEVENTH_DIGIT.getValue }),
+                let value = validation.value {
+                    if let cardNumberFieldProperty = from.property as? CardNumberFormFieldProperty {
+                        if String(seventhDigit) == value {
+                            cardNumberFieldProperty.isValid = false
+                            from.showErrorLabel()
+                        } else {
+                            cardNumberFieldProperty.isValid = true
+                        }
+                    }
             }
             viewModel.cardDataHandler.number = newValue
 
@@ -490,7 +502,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
 
 // MARK: MLCardFormViewModelProtocol
 extension MLCardFormViewController: MLCardFormViewModelProtocol {
-    
+
     func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }

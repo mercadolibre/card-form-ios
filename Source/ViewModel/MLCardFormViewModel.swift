@@ -130,7 +130,7 @@ final class MLCardFormViewModel {
             }
             
             let paymentMethod = MLCardFormPaymentMethod(paymentMethodId: "", paymentTypeId: "", name: "", processingModes: [])
-            let cardUI = MLCardFormCardUI(cardNumberLength: cardNumberLength, cardPattern: cardPattern, cardColor: cardHandlerToUpdate.cardBackgroundColor.toHexString(), cardFontColor: cardHandlerToUpdate.cardFontColor.toHexString(), cardFontType: "", securityCodeLocation: "back", securityCodeLength: cardHandlerToUpdate.securityCodePattern, issuerImageUrl: nil, paymentMethodImageUrl: nil, issuerImage: nil, paymentMethodImage: nil, validation: nil)
+            let cardUI = MLCardFormCardUI(cardNumberLength: cardNumberLength, cardPattern: cardPattern, cardColor: cardHandlerToUpdate.cardBackgroundColor.toHexString(), cardFontColor: cardHandlerToUpdate.cardFontColor.toHexString(), cardFontType: "", securityCodeLocation: "back", securityCodeLength: cardHandlerToUpdate.securityCodePattern, issuerImageUrl: nil, paymentMethodImageUrl: nil, issuerImage: nil, paymentMethodImage: nil, validation: nil, extraValidation: nil)
             
             cardHandlerToUpdate.update(cardUI: cardUI)
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
@@ -280,6 +280,10 @@ final class MLCardFormViewModel {
     
     func getCardFormFieldWithID(_ fieldId: String) -> MLCardFormField? {
         return cardFormFields?.flatMap{$0}.first(where: { $0.property.fieldId() == fieldId })
+    }
+
+    func getCardNumberExtraValidation() -> [MLCardFormExtraValidation]? {
+        return binData?.cardUI.extraValidation
     }
 
     func isSmallDevice() -> Bool {

@@ -26,7 +26,7 @@ extension MLCardFormFieldSetting {
             let name: String = field.rawValue
             let type: String = "number"
             let title: String = "Número de tarjeta".localized
-            let validationMessage: String = "Completa este campo".localized
+            let validationMessage: String = cardUI.extraValidation?.first?.errorMessage ?? "Completa este campo".localized
             
             let lenght: Int = cardUI.cardNumberLength
             let mask = cardUI.cardPattern.map {
