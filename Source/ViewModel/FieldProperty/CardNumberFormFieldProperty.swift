@@ -12,23 +12,13 @@ class CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     let remoteSetting: MLCardFormFieldSetting?
     let cardNumberValue: String?
     var isValid: Bool
+    static let SEVENTH_DIGIT = "seventh_digit"
     
     init(remoteSetting: MLCardFormFieldSetting? = nil,
          cardNumberValue: String? = nil, isValid: Bool = true) {
         self.remoteSetting = remoteSetting
         self.cardNumberValue = cardNumberValue
         self.isValid = isValid
-    }
-
-    enum Validation: String {
-        case SEVENTH_DIGIT
-
-        var getValue: String {
-            switch self {
-            case Validation.SEVENTH_DIGIT:
-                return "seventh_digit"
-            }
-        }
     }
 
     func fieldId() -> String {
@@ -145,6 +135,16 @@ class CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
             }
         }
         return sum % 10 == 0
+    }
+
+    func validateSeventhDigit(seventhDigit: String, value: String) -> Bool {
+        if seventhDigit == value {
+            isValid = false
+            return false
+        } else {
+            isValid = true
+            return true
+        }
     }
     
     func keyboardBackEnabled() -> Bool {
