@@ -8,17 +8,21 @@
 import Foundation
 import MLCardDrawer
 
-class CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
+protocol MLCardFormCardNumberValidationProtocol: NSObjectProtocol {
+    func isCardNumberValid(digit: String) -> Bool
+}
+
+struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     let remoteSetting: MLCardFormFieldSetting?
     let cardNumberValue: String?
-    var isValid: Bool
     static let SEVENTH_DIGIT = "seventh_digit"
+    weak var validationProtocol: MLCardFormCardNumberValidationProtocol?
     
     init(remoteSetting: MLCardFormFieldSetting? = nil,
-         cardNumberValue: String? = nil, isValid: Bool = true) {
+         cardNumberValue: String? = nil, validationProtocol: MLCardFormCardNumberValidationProtocol?) {
         self.remoteSetting = remoteSetting
         self.cardNumberValue = cardNumberValue
-        self.isValid = isValid
+        self.validationProtocol = validationProtocol
     }
 
     func fieldId() -> String {
@@ -91,9 +95,19 @@ class CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     func shouldShowTick() -> Bool {
         return true
     }
+
+    func checkExtraValidations(value: String) -> Bool {
+        let cleanValue = value.removingWhitespaceAndNewlines()
+        if let validationProtocol = validationProtocol, cleanValue.count >= 7,
+            let seventhDigit = cleanValue.prefix(7).last,
+            !validationProtocol.isCardNumberValid(digit: String(seventhDigit)) {
+                return false
+        }
+        return true
+    }
     
     func isValid(value: String?) -> Bool {
-        guard let value = value, isValid else { return false }
+        guard let value = value, !value.isEmpty, checkExtraValidations(value: value) else { return false }
 
         let cleanValue = value.removingWhitespaceAndNewlines()
         
@@ -135,16 +149,6 @@ class CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
             }
         }
         return sum % 10 == 0
-    }
-
-    func validateSeventhDigit(seventhDigit: String, value: String) -> Bool {
-        if seventhDigit == value {
-            isValid = false
-            return false
-        } else {
-            isValid = true
-            return true
-        }
     }
     
     func keyboardBackEnabled() -> Bool {
