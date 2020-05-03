@@ -368,15 +368,9 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             } else if newValue.count == 5 {
                 shouldUpdateCard(cardUI: DefaultCardUIHandler())
                 shouldUpdateAppBarTitle(paymentTypeId: AppBar.Generic.rawValue)
-            } else if newValue.count >= 7, let seventhDigit = newValue.prefix(7).last,
-                let extraValidations = viewModel.getCardNumberExtraValidation(),
-                let validation = extraValidations.first(where: { $0.name == CardNumberFormFieldProperty.SEVENTH_DIGIT }),
-                let value = validation.value,
-                let cardNumberFieldProperty = from.property as? CardNumberFormFieldProperty {
-                    if !cardNumberFieldProperty.validateSeventhDigit(seventhDigit: String(seventhDigit), value: value) {
-                        from.showErrorLabel()
-                    }
-                }
+            } else if newValue.count >= 7 {
+                from.checkExtraValidations()
+            }
             viewModel.cardDataHandler.number = newValue
 
         case MLCardFormFields.name:
