@@ -96,7 +96,7 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
         return true
     }
 
-    func checkExtraValidations(value: String) -> Bool {
+    func passExtraValidations(value: String) -> Bool {
         let cleanValue = value.removingWhitespaceAndNewlines()
         if let validationProtocol = validationProtocol, cleanValue.count >= 7,
             let seventhDigit = cleanValue.prefix(7).last,
@@ -107,7 +107,7 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     }
     
     func isValid(value: String?) -> Bool {
-        guard let value = value, !value.isEmpty, checkExtraValidations(value: value) else { return false }
+        guard let value = value, !value.isEmpty, passExtraValidations(value: value) else { return false }
 
         let cleanValue = value.removingWhitespaceAndNewlines()
         

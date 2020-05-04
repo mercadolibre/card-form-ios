@@ -289,7 +289,7 @@ internal extension MLCardFormField {
     func checkExtraValidations() {
         guard let value = getValue(), !value.isEmpty else { return }
         if let cardNumberField = property as? CardNumberFormFieldProperty,
-            !cardNumberField.checkExtraValidations(value: value) {
+            !cardNumberField.passExtraValidations(value: value) {
             showErrorLabel()
             bottomLine.backgroundColor = errorColor
         }

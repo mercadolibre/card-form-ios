@@ -282,7 +282,7 @@ final class MLCardFormViewModel: NSObject {
         return cardFormFields?.flatMap{$0}.first(where: { $0.property.fieldId() == fieldId })
     }
 
-    func getCardNumberExtraValidation() -> [MLCardFormExtraValidation]? {
+    func getCardNumberExtraValidations() -> [MLCardFormExtraValidation]? {
         return binData?.cardUI.extraValidations
     }
 
@@ -340,7 +340,7 @@ extension MLCardFormViewModel {
 // MARK: MLCardFormCardNumberValidationProtocol
 extension MLCardFormViewModel: MLCardFormCardNumberValidationProtocol {
     func isCardNumberValid(digit: String) -> Bool {
-        if let extraValidations = getCardNumberExtraValidation(),
+        if let extraValidations = getCardNumberExtraValidations(),
             let validation = extraValidations.first(where: { $0.name == CardNumberFormFieldProperty.SEVENTH_DIGIT }),
             let value = validation.value,
             value == digit {
