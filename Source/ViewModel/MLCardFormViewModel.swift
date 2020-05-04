@@ -13,7 +13,7 @@ final class MLCardFormViewModel: NSObject {
     var cardDataHandler: CardData = DefaultCardDataHandler()
     var cardFormFields: [[MLCardFormField]]?
     lazy var tempTextField: MLCardFormField = {
-        let textField = MLCardFormField(fieldProperty:CardNumberFormFieldProperty(validationProtocol: self))
+        let textField = MLCardFormField(fieldProperty:CardNumberFormFieldProperty())
         textField.render()
         textField.alpha = 0
         return textField
@@ -64,7 +64,7 @@ final class MLCardFormViewModel: NSObject {
     
     func setupDefaultCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
         cardFormFields = [
-            [MLCardFormField(fieldProperty:CardNumberFormFieldProperty(validationProtocol: self))],
+            [MLCardFormField(fieldProperty:CardNumberFormFieldProperty())],
             [MLCardFormField(fieldProperty:CardNameFormFieldProperty(cardNameValue: storedCardName))],
             [MLCardFormField(fieldProperty:CardExpirationFormFieldProperty()),
              MLCardFormField(fieldProperty:CardSecurityCodeFormFieldProperty())],
@@ -82,7 +82,7 @@ final class MLCardFormViewModel: NSObject {
         guard let cardUI = binData?.cardUI, let remoteSettings = remoteSettings else { return }
         cardFormFields = [[MLCardFormField]]()
         if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
-            let numberField = MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue(), validationProtocol: self))
+            let numberField = MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))
             cardFormFields?.append([numberField])
         }
 
@@ -138,7 +138,7 @@ final class MLCardFormViewModel: NSObject {
             binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [])
             if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
                 cardFormFields = [
-                    [MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue(), validationProtocol: self))],
+                    [MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))],
                     [MLCardFormField(fieldProperty:CardNameFormFieldProperty(cardNameValue: storedCardName))],
                     [MLCardFormField(fieldProperty:CardExpirationFormFieldProperty()),
                      MLCardFormField(fieldProperty:CardSecurityCodeFormFieldProperty())],
@@ -334,19 +334,6 @@ extension MLCardFormViewModel {
     
     func getPaymentMethodTypeId() -> String? {
         return binData?.paymentMethod.paymentTypeId
-    }
-}
-
-// MARK: MLCardFormCardNumberValidationProtocol
-extension MLCardFormViewModel: MLCardFormCardNumberValidationProtocol {
-    func isCardNumberValid(digit: String) -> Bool {
-        if let extraValidations = getCardNumberExtraValidations(),
-            let validation = extraValidations.first(where: { $0.name == CardNumberFormFieldProperty.SEVENTH_DIGIT }),
-            let value = validation.value,
-            value == digit {
-                return false
-        }
-        return true
     }
 }
 

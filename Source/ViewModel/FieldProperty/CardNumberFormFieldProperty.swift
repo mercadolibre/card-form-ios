@@ -8,21 +8,15 @@
 import Foundation
 import MLCardDrawer
 
-protocol MLCardFormCardNumberValidationProtocol: NSObjectProtocol {
-    func isCardNumberValid(digit: String) -> Bool
-}
-
 struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     let remoteSetting: MLCardFormFieldSetting?
     let cardNumberValue: String?
-    static let SEVENTH_DIGIT = "seventh_digit"
-    weak var validationProtocol: MLCardFormCardNumberValidationProtocol?
+    private let SEVENTH_DIGIT = "seventh_digit"
     
     init(remoteSetting: MLCardFormFieldSetting? = nil,
-         cardNumberValue: String? = nil, validationProtocol: MLCardFormCardNumberValidationProtocol?) {
+         cardNumberValue: String? = nil) {
         self.remoteSetting = remoteSetting
         self.cardNumberValue = cardNumberValue
-        self.validationProtocol = validationProtocol
     }
 
     func fieldId() -> String {
@@ -95,19 +89,9 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     func shouldShowTick() -> Bool {
         return true
     }
-
-    func passExtraValidations(value: String) -> Bool {
-        let cleanValue = value.removingWhitespaceAndNewlines()
-        if let validationProtocol = validationProtocol, cleanValue.count >= 7,
-            let seventhDigit = cleanValue.prefix(7).last,
-            !validationProtocol.isCardNumberValid(digit: String(seventhDigit)) {
-                return false
-        }
-        return true
-    }
     
     func isValid(value: String?) -> Bool {
-        guard let value = value, !value.isEmpty, passExtraValidations(value: value) else { return false }
+        guard let value = value, !value.isEmpty, isExtraValid(value: value) else { return false }
 
         let cleanValue = value.removingWhitespaceAndNewlines()
         
@@ -149,6 +133,20 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
             }
         }
         return sum % 10 == 0
+    }
+    
+    func isExtraValid(value: String?) -> Bool {
+        guard let cleanValue = value?.removingWhitespaceAndNewlines(),
+            cleanValue.count >= 7,
+            let seventhDigit = cleanValue.prefix(7).last else { return false }
+
+        if let extraValidations = remoteSetting?.extraValidations,
+            let validation = extraValidations.first(where: { $0.name == SEVENTH_DIGIT }),
+            let value = validation.value,
+            value == String(seventhDigit) {
+                return false
+        }
+        return true
     }
     
     func keyboardBackEnabled() -> Bool {

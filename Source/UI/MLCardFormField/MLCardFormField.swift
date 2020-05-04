@@ -289,9 +289,10 @@ internal extension MLCardFormField {
     func checkExtraValidations() {
         guard let value = getValue(), !value.isEmpty else { return }
         if let cardNumberField = property as? CardNumberFormFieldProperty,
-            !cardNumberField.passExtraValidations(value: value) {
+            !cardNumberField.isExtraValid(value: value) {
             showErrorLabel()
             bottomLine.backgroundColor = errorColor
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
     }
 }
