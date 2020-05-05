@@ -142,8 +142,7 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
 
         if let extraValidations = remoteSetting?.extraValidations,
             let validation = extraValidations.first(where: { $0.name == SEVENTH_DIGIT }),
-            let value = validation.value,
-            value == String(seventhDigit) {
+            validation.value != String(seventhDigit) {
                 return false
         }
         return true
