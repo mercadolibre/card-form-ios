@@ -9,6 +9,6 @@ import Foundation
 
 struct MLCardFormExtraValidation: Codable {
     let name: String
-    let value: String
+    let values: [String]
     let errorMessage: String
 }
