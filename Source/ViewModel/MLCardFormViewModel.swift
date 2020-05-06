@@ -8,7 +8,7 @@
 import Foundation
 import MLCardDrawer
 
-final class MLCardFormViewModel: NSObject {
+final class MLCardFormViewModel {
     var cardUIHandler: CardUI = DefaultCardUIHandler()
     var cardDataHandler: CardData = DefaultCardDataHandler()
     var cardFormFields: [[MLCardFormField]]?
@@ -280,10 +280,6 @@ final class MLCardFormViewModel: NSObject {
     
     func getCardFormFieldWithID(_ fieldId: String) -> MLCardFormField? {
         return cardFormFields?.flatMap{$0}.first(where: { $0.property.fieldId() == fieldId })
-    }
-
-    func getCardNumberExtraValidations() -> [MLCardFormExtraValidation]? {
-        return binData?.cardUI.extraValidations
     }
 
     func isSmallDevice() -> Bool {
