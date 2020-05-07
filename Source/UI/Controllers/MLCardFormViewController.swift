@@ -368,6 +368,8 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             } else if newValue.count == 5 {
                 shouldUpdateCard(cardUI: DefaultCardUIHandler())
                 shouldUpdateAppBarTitle(paymentTypeId: AppBar.Generic.rawValue)
+            } else if newValue.count >= 7 {
+                from.checkExtraValidations()
             }
             viewModel.cardDataHandler.number = newValue
 
@@ -490,7 +492,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
 
 // MARK: MLCardFormViewModelProtocol
 extension MLCardFormViewController: MLCardFormViewModelProtocol {
-    
+
     func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }

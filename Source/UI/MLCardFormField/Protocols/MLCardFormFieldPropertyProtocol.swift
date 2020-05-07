@@ -36,6 +36,7 @@ protocol MLCardFormFieldPropertyProtocol {
     mutating func setValue(value: String)
     
     func isValid(value: String?) -> Bool
+    func isExtraValid(value: String?) -> Bool
 }
 
 extension MLCardFormFieldPropertyProtocol {
@@ -76,5 +77,9 @@ extension MLCardFormFieldPropertyProtocol {
     func isValid(value: String?) -> Bool {
         guard let value = value else { return false }
         return (minLenght()...maxLenght()).contains(value.count)
+    }
+    
+    func isExtraValid(value: String?) -> Bool {
+        return true
     }
 }

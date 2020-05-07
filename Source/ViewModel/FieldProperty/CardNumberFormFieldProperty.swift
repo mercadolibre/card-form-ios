@@ -11,10 +11,10 @@ import MLCardDrawer
 struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     let remoteSetting: MLCardFormFieldSetting?
     let cardNumberValue: String?
+    private let SEVENTH_DIGIT = "seventh_digit"
     
     init(remoteSetting: MLCardFormFieldSetting? = nil,
          cardNumberValue: String? = nil) {
-        
         self.remoteSetting = remoteSetting
         self.cardNumberValue = cardNumberValue
     }
@@ -91,23 +91,26 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
     }
     
     func isValid(value: String?) -> Bool {
-        guard let value = value else { return false }
+        guard let value = value, !value.isEmpty, isExtraValid(value: value) else { return false }
+
         let cleanValue = value.removingWhitespaceAndNewlines()
         
         if let remoteSettingLenght = remoteSetting?.lenght, cleanValue.count != remoteSettingLenght {
             return false
         } else if let pattern = validationPattern(), pattern.lowercased() == "none" {
             return true
-        } else {
-            switch CardState(fromPrefix: cleanValue) {
-            case .identified(let cardType):
-                let cardNumberLength = cardType.segmentGroupings.reduce(0, +)
-                if cleanValue.count != cardNumberLength {
-                    return false
-                }
-            default:
-                return false
-            }
+
+        //*** Update IIN prefixes and length requriements if CardState is used ***//
+//        } else {
+//            switch CardState(fromPrefix: cleanValue) {
+//            case .identified(let cardType):
+//                let cardNumberLength = cardType.segmentGroupings.reduce(0, +)
+//                if cleanValue.count != cardNumberLength {
+//                    return false
+//                }
+//            default:
+//                return false
+//            }
         }
         
         var sum = 0
@@ -130,6 +133,24 @@ struct CardNumberFormFieldProperty : MLCardFormFieldPropertyProtocol {
             }
         }
         return sum % 10 == 0
+    }
+    
+    func isExtraValid(value: String?) -> Bool {
+        guard let cleanValue = value?.removingWhitespaceAndNewlines(),
+            cleanValue.count >= 7,
+            let seventhDigit = cleanValue.prefix(7).last else { return false }
+
+        if let extraValidations = remoteSetting?.extraValidations,
+            let validation = extraValidations.first(where: { $0.name == SEVENTH_DIGIT }),
+            !validation.values.isEmpty {
+                for value in validation.values {
+                    if value == String(seventhDigit) {
+                        return true
+                    }
+                }
+                return false
+        }
+        return true
     }
     
     func keyboardBackEnabled() -> Bool {

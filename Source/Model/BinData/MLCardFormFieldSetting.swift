@@ -16,6 +16,7 @@ struct MLCardFormFieldSetting: Codable {
     let hintMessage: String?
     let validationPattern: String?
     let validationMessage: String?
+    let extraValidations: [MLCardFormExtraValidation]?
 }
 
 extension MLCardFormFieldSetting {
@@ -26,14 +27,14 @@ extension MLCardFormFieldSetting {
             let name: String = field.rawValue
             let type: String = "number"
             let title: String = "Número de tarjeta".localized
-            let validationMessage: String = "Completa este campo".localized
+            let validationMessage: String = cardUI.extraValidations?.first?.errorMessage ?? "Completa este campo".localized
             
             let lenght: Int = cardUI.cardNumberLength
             let mask = cardUI.cardPattern.map {
                 String(repeating: "$", count: $0)
                 }.joined(separator: " ")
             
-            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: nil, validationPattern: cardUI.validation, validationMessage: validationMessage)
+            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: nil, validationPattern: cardUI.validation, validationMessage: validationMessage, extraValidations: cardUI.extraValidations)
         case .securityCode:
             guard let remoteSetting = remoteSetting, let cardUI = cardUI  else { return nil }
             let name: String = remoteSetting.name
@@ -45,7 +46,7 @@ extension MLCardFormFieldSetting {
             let lenght: Int = cardUI.securityCodeLength
             let mask = String(repeating: "$", count: lenght)
             
-            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: hintMessage, validationPattern: nil, validationMessage: validationMessage)
+            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: hintMessage, validationPattern: nil, validationMessage: validationMessage, extraValidations: nil)
         default:
             return nil
         }
