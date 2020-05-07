@@ -1,3 +1,7 @@
+# v0.8.3
+🚀MVP Release 0.8.3 🚀
+- Caixa support
+
 # v0.8.2
 🚀MVP Release 0.8.2 🚀
 - Add closure to dismissLoadingAndPop
