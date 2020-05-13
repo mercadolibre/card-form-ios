@@ -1,3 +1,7 @@
+# v0.8.4
+🚀MVP Release 0.8.4 🚀
+- Fix loadingView bug
+
 # v0.8.3
 🚀MVP Release 0.8.3 🚀
 - Caixa support
