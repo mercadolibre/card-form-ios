@@ -113,8 +113,10 @@ private extension MLCardFormViewController {
             
             switch result {
             case .success:
-                DispatchQueue.main.async { [weak self] in
-                    self?.hideProgress()
+                if showProggressAndSnackBar {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.hideProgress()
+                    }
                 }
                 break
             case .failure(let error):
