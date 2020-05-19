@@ -207,6 +207,7 @@ private extension MLCardFormViewController {
         if let cardDrawerInstance = cardDrawer {
             let cardView = cardDrawerInstance.getCardView()
             cardView.translatesAutoresizingMaskIntoConstraints = false
+            cardContainerView.accessibilityElementsHidden = true
             cardContainerView.addSubview(cardView)
             NSLayoutConstraint.activate([
                 cardView.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
