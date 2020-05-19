@@ -147,6 +147,7 @@ private extension MLCardFormField {
         input.keyboardAppearance = .light
         input.autocorrectionType = UITextAutocorrectionType.no
         input.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        input.accessibilityLabel = titleLabel.text
 
         if let defaultValue = property.defaultValue()?.uppercased() {
             input.text = defaultValue
