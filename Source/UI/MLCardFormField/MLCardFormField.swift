@@ -270,6 +270,9 @@ internal extension MLCardFormField {
         helpLabel.textColor = errorColor
         helpLabel.font = labelErrorFont
         helpLabel.text = property.errorMessage()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            UIAccessibility.post(notification: .announcement, argument: self?.helpLabel.text)
+        }
     }
 
     func isValid() -> Bool {

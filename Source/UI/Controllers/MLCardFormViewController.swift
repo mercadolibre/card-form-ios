@@ -140,13 +140,26 @@ private extension MLCardFormViewController {
                             self?.mlSnackbar = MLSnackbar.show(withTitle: title, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
                                 self?.getCardData(binNumber: binNumber, showProggressAndSnackBar: showProggressAndSnackBar)
                                 }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                                self?.sendAccessibilityMessage(title)
                         })
                     } else if showOnlySnackBar {
                         self?.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                        UIAccessibility.post(notification: .announcement, argument: title)
                     }
                 }
             }
         })
+    }
+
+    func sendAccessibilityMessage(_ text: String) {
+        mlSnackbar?.isAccessibilityElement = true
+        mlSnackbar?.accessibilityLabel = text
+        UIAccessibility.post(notification: .layoutChanged, argument: mlSnackbar)
+        if let cardNumberField = viewModel.getCardFormFieldWithID(MLCardFormFields.cardNumber.rawValue) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                UIAccessibility.post(notification: .layoutChanged, argument: cardNumberField.input)
+            }
+        }
     }
     
     func addCard() {
@@ -160,14 +173,19 @@ private extension MLCardFormViewController {
                     self.lifeCycleDelegate?.didAddCard(cardID: cardID)
                 case .failure(let error):
                     self.hideProgress(completion: { [weak self] in
+                        guard let self = self else { return }
                         // Notify listener
-                        self?.lifeCycleDelegate?.didFailAddCard()
+                        self.lifeCycleDelegate?.didFailAddCard()
                         // Show error to the user
                         switch error {
                         case NetworkLayerError.noInternetConnection:
-                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self.setFocusOnLastField()
+                            UIAccessibility.post(notification: .announcement, argument: "Revisa tu conexión a internet.".localized)
                         default:
-                            self?.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self.setFocusOnLastField()
+                            UIAccessibility.post(notification: .announcement, argument: "Algo salió mal.".localized)
                         }
                     })
                 }
@@ -295,6 +313,12 @@ private extension MLCardFormViewController {
     func setupTempTextField() {
         viewModel.tempTextField.notifierProtocol = self
         view.addSubview(viewModel.tempTextField)
+    }
+
+    func setFocusOnLastField() {
+        if let field = viewModel.cardFormFields?.last?.last {
+            field.doFocus()
+        }
     }
 }
 
@@ -490,9 +514,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
     func userDidCancel(controller: UIViewController) {
         MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/issuers/close")
         controller.dismiss(animated: true, completion: nil)
-        if let field = viewModel.cardFormFields?.last?.last {
-            field.doFocus()
-        }
+        setFocusOnLastField()
     }
 }
 
