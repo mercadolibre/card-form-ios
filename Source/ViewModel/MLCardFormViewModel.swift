@@ -410,7 +410,7 @@ private extension MLCardFormViewModel {
     func updateHandlers() {
         if let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler  {
             cardHandlerToUpdate.update(cardUI: binData?.cardUI)
-            let accessibilityData = AccessibilityData(paymentMethodId: binData?.paymentMethod.paymentMethodId ?? "", issuer: binData?.issuers.first?.name ?? "")
+            let accessibilityData = AccessibilityData(paymentMethodId: binData?.paymentMethod.paymentMethodId ?? "", issuer: (binData?.issuers.count ?? 0) > 1 ? "" : binData?.issuers.first?.name ?? "")
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: accessibilityData)
             viewModelDelegate?.shouldUpdateAppBarTitle(paymentTypeId: binData?.paymentMethod.paymentTypeId)
         }

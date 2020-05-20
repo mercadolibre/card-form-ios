@@ -396,7 +396,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             if newValue.count == 6 {
                 getCardData(binNumber: newValue)
             } else if newValue.count == 5 {
-                shouldUpdateCard(cardUI: DefaultCardUIHandler())
+                shouldUpdateCard(cardUI: DefaultCardUIHandler(), accessibilityData: AccessibilityData(paymentMethodId: "", issuer: ""))
                 shouldUpdateAppBarTitle(paymentTypeId: AppBar.Generic.rawValue)
             } else if newValue.count >= 7 {
                 from.checkExtraValidations()
