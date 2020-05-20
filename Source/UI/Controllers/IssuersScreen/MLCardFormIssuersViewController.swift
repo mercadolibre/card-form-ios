@@ -19,6 +19,7 @@ final class MLCardFormIssuersViewController: UIViewController {
     private let confirmButtonHeight: CGFloat = 48
     private let shadowViewHeight: CGFloat = 40
     private let bottomViewHeight: CGFloat = 100
+    private var button = UIButton()
 
     public init(viewModel: MLCardFormViewModel) {
         issuersData = viewModel.getIssuers()
@@ -57,7 +58,7 @@ private extension MLCardFormIssuersViewController {
              bottomView.heightAnchor.constraint(equalToConstant: bottomViewHeight)
         ])
 
-        let button = UIButton()
+        button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UI.Colors.confirmButtonColor
         button.setTitle("Confirmar".localized, for: .normal)
@@ -72,7 +73,7 @@ private extension MLCardFormIssuersViewController {
             button.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -UI.Margin.L_MARGIN),
             button.heightAnchor.constraint(equalToConstant: confirmButtonHeight)
         ])
-        button.isUserInteractionEnabled = true
+        button.isUserInteractionEnabled = false
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
         button.addGestureRecognizer(tapGesture)
         confirmButton = button
@@ -102,6 +103,7 @@ private extension MLCardFormIssuersViewController {
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.tintColor = MLStyleSheetManager.styleSheet.secondaryColor
         let closeItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close))
+        closeItem.accessibilityLabel = "cerrar".localized
         navigationController?.navigationBar.topItem?.leftBarButtonItem = closeItem
         navigationController?.navigationBar.shadowImage = UIImage()
     }
@@ -157,7 +159,7 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
         } else {
             if let rowCell = issuersTableView.dequeueReusableCell(withIdentifier: MLCardFormIssuerTableViewCell.cellIdentifier, for: indexPath) as? MLCardFormIssuerTableViewCell, let currentIssuer = issuersData?[indexPath.row] {
                 let radioButtonOn = selectedIssuer?.id == currentIssuer.id ? true : false
-                rowCell.setupCell(with: currentIssuer.imageUrl, radioButtonOn: radioButtonOn)
+                rowCell.setupCell(with: currentIssuer, radioButtonOn: radioButtonOn)
                 return rowCell
             }
         }
@@ -175,6 +177,7 @@ extension MLCardFormIssuersViewController: UITableViewDelegate, UITableViewDataS
                 setOffAllRadioButtons()
                 issuersCell.setupRadioButton(radioButtonOn: true)
                 selectedIssuer = currentIssuer
+                button.isUserInteractionEnabled = true
                 UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: { [weak self] in
                     guard let self = self else { return }
                     self.confirmButton?.backgroundColor = MLStyleSheetManager.styleSheet.secondaryColor

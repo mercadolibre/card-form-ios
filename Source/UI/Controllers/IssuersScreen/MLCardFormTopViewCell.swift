@@ -17,6 +17,7 @@ final class MLCardFormTopViewCell: UITableViewCell {
         selectionStyle = .none
         backgroundColor = .white
         setupLabel()
+        UIAccessibility.post(notification: .layoutChanged, argument: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
