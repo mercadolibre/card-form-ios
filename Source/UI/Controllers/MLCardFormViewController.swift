@@ -504,7 +504,7 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
         MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/issuers/selected", properties: ["issuer_id": issuer.id])
         viewModel.setIssuer(issuer: issuer)
         if let imageURL = issuer.imageUrl {
-            viewModel.updateCardIssuerImage(imageURL: imageURL)
+            viewModel.updateCardIssuerImage(imageURL: imageURL, name: issuer.name)
         }
         dismiss(animated: true) { [weak self] in
             self?.addCard()

@@ -288,11 +288,11 @@ final class MLCardFormViewModel {
         return UIScreen.main.bounds.height <= 568
     }
 
-    func updateCardIssuerImage(imageURL: String) {
+    func updateCardIssuerImage(imageURL: String, name: String) {
         if let cardUI = binData?.cardUI,
             let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler {
             cardHandlerToUpdate.update(cardUI: cardUI.changeIssuerImageUrl(issuerImageUrl: imageURL))
-            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: nil)
+            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: AccessibilityData(paymentMethodId: binData?.paymentMethod.paymentMethodId ?? "", issuer: name))
         }
     }
 
