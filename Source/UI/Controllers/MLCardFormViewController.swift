@@ -225,7 +225,7 @@ private extension MLCardFormViewController {
         if let cardDrawerInstance = cardDrawer {
             let cardView = cardDrawerInstance.getCardView()
             cardView.translatesAutoresizingMaskIntoConstraints = false
-            cardContainerView.accessibilityElementsHidden = true
+            cardContainerView.isAccessibilityElement = true
             cardContainerView.addSubview(cardView)
             NSLayoutConstraint.activate([
                 cardView.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
@@ -541,10 +541,11 @@ extension MLCardFormViewController: MLCardFormViewModelProtocol {
         }
     }
 
-    func shouldUpdateCard(cardUI: CardUI) {
+    func shouldUpdateCard(cardUI: CardUI, accessibilityData: AccessibilityData?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.cardDrawer?.cardUI = cardUI
+            self.setCardAccessibilityLabel(cardData: accessibilityData)
         }
     }
 
@@ -599,5 +600,14 @@ private extension MLCardFormViewController {
     
     func hideProgress(completion: (() -> Void)? = nil) {
         loadingVC.hide(completion: completion)
+    }
+}
+
+// MARK: Accessibility
+private extension MLCardFormViewController {
+    func setCardAccessibilityLabel(cardData: AccessibilityData?) {
+        if let cardData = cardData {
+            cardContainerView.accessibilityLabel = cardData.paymentMethodId + cardData.issuer
+        }
     }
 }

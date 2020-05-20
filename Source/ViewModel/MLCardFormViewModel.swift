@@ -8,6 +8,8 @@
 import Foundation
 import MLCardDrawer
 
+typealias AccessibilityData = (paymentMethodId: String, issuer: String)
+
 final class MLCardFormViewModel {
     var cardUIHandler: CardUI = DefaultCardUIHandler()
     var cardDataHandler: CardData = DefaultCardDataHandler()
@@ -133,7 +135,7 @@ final class MLCardFormViewModel {
             let cardUI = MLCardFormCardUI(cardNumberLength: cardNumberLength, cardPattern: cardPattern, cardColor: cardHandlerToUpdate.cardBackgroundColor.toHexString(), cardFontColor: cardHandlerToUpdate.cardFontColor.toHexString(), cardFontType: "", securityCodeLocation: "back", securityCodeLength: cardHandlerToUpdate.securityCodePattern, issuerImageUrl: nil, paymentMethodImageUrl: nil, issuerImage: nil, paymentMethodImage: nil, validation: nil, extraValidations: nil)
             
             cardHandlerToUpdate.update(cardUI: cardUI)
-            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
+            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: nil)
             
             binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [])
             if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
@@ -290,7 +292,7 @@ final class MLCardFormViewModel {
         if let cardUI = binData?.cardUI,
             let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler {
             cardHandlerToUpdate.update(cardUI: cardUI.changeIssuerImageUrl(issuerImageUrl: imageURL))
-            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
+            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: nil)
         }
     }
 
@@ -408,7 +410,8 @@ private extension MLCardFormViewModel {
     func updateHandlers() {
         if let cardHandlerToUpdate = cardUIHandler as? DefaultCardUIHandler  {
             cardHandlerToUpdate.update(cardUI: binData?.cardUI)
-            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler)
+            let accessibilityData = AccessibilityData(paymentMethodId: binData?.paymentMethod.paymentMethodId ?? "", issuer: binData?.issuers.first?.name ?? "")
+            viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: accessibilityData)
             viewModelDelegate?.shouldUpdateAppBarTitle(paymentTypeId: binData?.paymentMethod.paymentTypeId)
         }
         if let fieldSettings = binData?.fieldsSetting {
