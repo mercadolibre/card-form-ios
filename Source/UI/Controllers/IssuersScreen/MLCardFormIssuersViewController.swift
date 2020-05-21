@@ -58,7 +58,6 @@ private extension MLCardFormIssuersViewController {
              bottomView.heightAnchor.constraint(equalToConstant: bottomViewHeight)
         ])
 
-        button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UI.Colors.confirmButtonColor
         button.setTitle("Confirmar".localized, for: .normal)
