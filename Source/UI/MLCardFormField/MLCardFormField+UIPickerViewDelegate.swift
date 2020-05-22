@@ -31,6 +31,7 @@ extension MLCardFormField: UIPickerViewDataSource, UIPickerViewDelegate {
         var selectedValue = ""
         if let pickerOptions = property.pickerOptions() {
             selectedValue = pickerOptions[row].value
+            UIAccessibility.post(notification: .announcement, argument: pickerOptions[row].value)
         }
         input.text = selectedValue
         updateTextField(input)
