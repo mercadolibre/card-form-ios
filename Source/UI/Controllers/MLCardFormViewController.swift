@@ -536,6 +536,7 @@ extension MLCardFormViewController: MLCardFormViewModelProtocol {
             // Set focus on new reloaded field
             if let field = self.viewModel.cardFormFields?.first?.first {
                 field.doFocus()
+                UIAccessibility.post(notification: .announcement, argument: field.input.text)
             }
             self.setupKeyboardNotifications()
         }
