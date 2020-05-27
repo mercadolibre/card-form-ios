@@ -112,8 +112,12 @@ extension MLCardFormBinService {
 // MARK: Public methods.
 extension MLCardFormBinService {
     func getCardData(binNumber: String, completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
-        guard let siteId = siteId,
-            let excludedPaymentTypes = excludedPaymentTypes?.joined(separator: ",") else { return }
+        guard let siteId = siteId else {
+            let error = NSError(domain:"", code:0, userInfo:nil)
+            completion?(.failure(error))
+            return
+        }
+        let excludedPaymentTypesJoined = excludedPaymentTypes?.joined(separator: ",")
         queue.cancelAllOperations()
 
         if let lastResponse = lastResponse, let lastBin = lastBin, lastBin == binNumber {
@@ -128,7 +132,7 @@ extension MLCardFormBinService {
         }
 
         debugLog("Bin data New call: Operation -> \(binNumber)")
-        let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: getPlatform(), excludedPaymentTypes: excludedPaymentTypes, odr: true)
+        let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: getPlatform(), excludedPaymentTypes: excludedPaymentTypesJoined, odr: true)
         let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId())
         let operation = BlockOperation(block: {
             NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)) { [weak self] (result: Result<MLCardFormBinData, Error>) in
