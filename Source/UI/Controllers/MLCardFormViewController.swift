@@ -167,6 +167,7 @@ private extension MLCardFormViewController {
         viewModel.addCard(completion: { (result: Result<String, Error>) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
+                var title: String?
                 switch result {
                 case .success(let cardID):
                     // Notify listener
@@ -179,13 +180,15 @@ private extension MLCardFormViewController {
                         // Show error to the user
                         switch error {
                         case NetworkLayerError.noInternetConnection:
-                            self.mlSnackbar = MLSnackbar.show(withTitle: "Revisa tu conexión a internet.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            title = "Revisa tu conexión a internet.".localized
+                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             self.setFocusOnLastField()
-                            UIAccessibility.post(notification: .announcement, argument: "Revisa tu conexión a internet.".localized)
+                            UIAccessibility.post(notification: .announcement, argument: title)
                         default:
-                            self.mlSnackbar = MLSnackbar.show(withTitle: "Algo salió mal.".localized, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            title = "Algo salió mal.".localized
+                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
                             self.setFocusOnLastField()
-                            UIAccessibility.post(notification: .announcement, argument: "Algo salió mal.".localized)
+                            UIAccessibility.post(notification: .announcement, argument: title)
                         }
                     })
                 }

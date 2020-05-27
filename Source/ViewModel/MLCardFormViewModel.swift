@@ -8,8 +8,6 @@
 import Foundation
 import MLCardDrawer
 
-typealias AccessibilityData = (paymentMethodId: String, issuer: String)
-
 final class MLCardFormViewModel {
     var cardUIHandler: CardUI = DefaultCardUIHandler()
     var cardDataHandler: CardData = DefaultCardDataHandler()
