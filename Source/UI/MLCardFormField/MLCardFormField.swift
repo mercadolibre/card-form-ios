@@ -147,6 +147,7 @@ private extension MLCardFormField {
         input.keyboardAppearance = .light
         input.autocorrectionType = UITextAutocorrectionType.no
         input.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        input.accessibilityLabel = titleLabel.text
 
         if let defaultValue = property.defaultValue()?.uppercased() {
             input.text = defaultValue
@@ -269,6 +270,7 @@ internal extension MLCardFormField {
         helpLabel.textColor = errorColor
         helpLabel.font = labelErrorFont
         helpLabel.text = property.errorMessage()
+        sendAccessibilityMessage(helpLabel.text)
     }
 
     func isValid() -> Bool {
@@ -293,6 +295,12 @@ internal extension MLCardFormField {
             showErrorLabel()
             bottomLine.backgroundColor = errorColor
             UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
+    }
+
+    func sendAccessibilityMessage(_ text: String?) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIAccessibility.post(notification: .announcement, argument: text)
         }
     }
 }

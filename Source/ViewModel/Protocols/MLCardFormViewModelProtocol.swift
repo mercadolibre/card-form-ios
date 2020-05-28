@@ -9,7 +9,7 @@ import Foundation
 import MLCardDrawer
 
 protocol MLCardFormViewModelProtocol: NSObjectProtocol {
-    func shouldUpdateCard(cardUI: CardUI)
+    func shouldUpdateCard(cardUI: CardUI, accessibilityData: AccessibilityData?)
     func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]?)
     func shouldUpdateAppBarTitle(paymentTypeId: String?)
 }

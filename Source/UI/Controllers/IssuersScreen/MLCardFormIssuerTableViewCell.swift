@@ -33,16 +33,18 @@ final class MLCardFormIssuerTableViewCell: UITableViewCell {
         super.prepareForReuse()
         setupRadioButton(radioButtonOn: false)
         clearImage()
+        clearAccessibilityLabel()
     }
 }
 
 // MARK: Setup cell
 extension MLCardFormIssuerTableViewCell {
-    func setupCell(with issuerImageUrl: String?, radioButtonOn: Bool) {
+    func setupCell(with issuer: MLCardFormIssuer, radioButtonOn: Bool) {
         radioButtonOn ? setupRadioButton(radioButtonOn: true) : setupRadioButton(radioButtonOn: false)
-        if let imageUrl = issuerImageUrl {
+        if let imageUrl = issuer.imageUrl {
             issuerImageView.setRemoteImage(imageUrl: imageUrl)
         }
+        accessibilityLabel = issuer.name
     }
 }
 
@@ -77,6 +79,10 @@ private extension MLCardFormIssuerTableViewCell {
 
     func clearImage() {
         issuerImageView.image = nil
+    }
+
+    func clearAccessibilityLabel() {
+        accessibilityLabel = ""
     }
 }
 

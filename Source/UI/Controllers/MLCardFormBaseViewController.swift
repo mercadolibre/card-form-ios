@@ -51,6 +51,7 @@ open class MLCardFormBaseViewController: UIViewController {
         backButton.action = #selector(pop)
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = backButton
+        navigationItem.leftBarButtonItem?.accessibilityLabel = "atrás".localized
     }
 
     @objc private func pop() {
