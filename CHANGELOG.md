@@ -1,3 +1,8 @@
+# v0.8.5
+🚀MVP Release 0.8.5 🚀
+- Accessibility
+- Fix excludedPaymentTypes bug
+
 # v0.8.4
 🚀MVP Release 0.8.4 🚀
 - Fix loadingView bug
