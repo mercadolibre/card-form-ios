@@ -1,3 +1,7 @@
+# v0.8.7
+🚀MVP Release 0.8.7 🚀
+- Reduce image sizes
+
 # v0.8.6
 🚀MVP Release 0.8.6 🚀
 - Accessibility
