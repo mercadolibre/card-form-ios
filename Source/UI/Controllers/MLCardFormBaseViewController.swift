@@ -10,18 +10,13 @@ import MLUI
 
 /** :nodoc: */
 open class MLCardFormBaseViewController: UIViewController {
-    private var fontName: String = ".SFUIDisplay-Regular"
-    private var fontLightName: String = ".SFUIDisplay-Light"
-    private var fontSemiBoldName: String = ".SFUIDisplay-SemiBold"
-
     var navBarTextColor = MLStyleSheetManager.styleSheet.blackColor
     var navBarBackgroundColor = MLStyleSheetManager.styleSheet.primaryColor
 
     internal func loadStyles(customNavigationBackgroundColor: UIColor? = nil, customNavigationTextColor: UIColor? = nil) {
         if let navigationController = navigationController {
             // Navigation bar colors
-            let fontSize: CGFloat = 18
-            let font = getFontWithSize(font: fontName, size: fontSize)
+            let font = MLStyleSheetManager.styleSheet.boldSystemFont(ofSize: CGFloat(kMLFontsSizeMedium))
             let titleTextAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: customNavigationTextColor ?? navBarTextColor, NSAttributedString.Key.font: font]
             navigationController.navigationBar.titleTextAttributes = titleTextAttributes
             navigationController.navigationBar.tintColor = customNavigationBackgroundColor ?? navBarBackgroundColor
@@ -56,25 +51,5 @@ open class MLCardFormBaseViewController: UIViewController {
 
     @objc private func pop() {
         navigationController?.popViewController(animated: true)
-    }
-
-    private func getFontWithSize(font: String, size: CGFloat, weight: UIFont.Weight? = nil) -> UIFont {
-        let fontNameToIgnore: String = "Times New Roman"
-        let fallBackFontName: String = "Helvetica"
-        if let thisFont = UIFont(name: font, size: size) {
-            if thisFont.familyName != fontNameToIgnore {
-                return thisFont
-            } else {
-                return UIFont(name: fallBackFontName, size: size) ?? getFallbackFont(size)
-            }
-        }
-        return getFallbackFont(size)
-    }
-
-    private func getFallbackFont(_ size: CGFloat, weight: UIFont.Weight?=nil) -> UIFont {
-        if let targetWeight = weight {
-            return UIFont.systemFont(ofSize: size, weight: targetWeight)
-        }
-        return UIFont.systemFont(ofSize: size)
     }
 }
