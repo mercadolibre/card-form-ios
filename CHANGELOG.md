@@ -1,3 +1,7 @@
+# v0.8.8
+🚀MVP Release 0.8.7 🚀
+- Change navigationbar title font
+
 # v0.8.7
 🚀MVP Release 0.8.7 🚀
 - Reduce image sizes
