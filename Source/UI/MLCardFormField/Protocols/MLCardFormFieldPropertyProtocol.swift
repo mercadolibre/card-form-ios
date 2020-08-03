@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol MLCardFormFieldPropertyProtocol {
+public protocol MLCardFormFieldPropertyProtocol {
     func fieldId() -> String
     func fieldTitle() -> String
 
@@ -29,6 +29,7 @@ protocol MLCardFormFieldPropertyProtocol {
     func keyboardHeight() -> CGRect?
     func shouldShowKeyboardClearButton() -> Bool
     func shouldShowTick() -> Bool
+    func shouldShowToolBar() -> Bool
     func shouldChangeFocusOnMaxLength() -> Bool
     func pickerOptions() -> [(id: String, value: String)]?
     func shouldShowPickerInput() -> Bool
@@ -40,46 +41,50 @@ protocol MLCardFormFieldPropertyProtocol {
 }
 
 extension MLCardFormFieldPropertyProtocol {
-    func defaultValue() -> String? {
+    public func defaultValue() -> String? {
         return nil
     }
     
-    func keyboardBackEnabled() -> Bool {
+    public func keyboardBackEnabled() -> Bool {
         return true
     }
 
-    func keyboardHeight() -> CGRect? {
+    public func keyboardHeight() -> CGRect? {
         return CGRect.zero
     }
     
-    func shouldShowTick() -> Bool {
+    public func shouldShowTick() -> Bool {
+        return false
+    }
+    
+    public func shouldShowToolBar() -> Bool {
+        return true
+    }
+
+    public func shouldChangeFocusOnMaxLength() -> Bool {
         return false
     }
 
-    func shouldChangeFocusOnMaxLength() -> Bool {
-        return false
-    }
-    
-    func pickerOptions() -> [(id: String, value: String)]? {
+    public func pickerOptions() -> [(id: String, value: String)]? {
         return nil
     }
     
-    func shouldShowPickerInput() -> Bool {
+    public func shouldShowPickerInput() -> Bool { 
         return false
     }
     
-    func inputConstraintWidthMultiplier() -> CGFloat? {
+    public func inputConstraintWidthMultiplier() -> CGFloat? {
         return nil
     }
+
+    public mutating func setValue(value: String) {}
     
-    mutating func setValue(value: String) {}
-    
-    func isValid(value: String?) -> Bool {
+    public func isValid(value: String?) -> Bool {
         guard let value = value else { return false }
         return (minLenght()...maxLenght()).contains(value.count)
     }
     
-    func isExtraValid(value: String?) -> Bool {
+    public func isExtraValid(value: String?) -> Bool {
         return true
     }
 }

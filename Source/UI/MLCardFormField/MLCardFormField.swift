@@ -9,7 +9,7 @@
 import UIKit
 import MLUI
 
-final class MLCardFormField: UIView {
+final public class MLCardFormField: UIView {
     // MARK: Privates
     private lazy var accesoryBackgroundColor: UIColor = #colorLiteral(red: 0.9607843137, green: 0.9607843137, blue: 0.9607843137, alpha: 1)
     private lazy var labelTextColor: UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.45)
@@ -34,11 +34,11 @@ final class MLCardFormField: UIView {
     internal var customMask: MLCardFormCustomMask?
 
     // MARK: Publics
-    var property: MLCardFormFieldPropertyProtocol
-    weak var notifierProtocol: MLCardFormFieldNotifierProtocol?
+    public var property: MLCardFormFieldPropertyProtocol
+    public weak var notifierProtocol: MLCardFormFieldNotifierProtocol?
 
     // MARK: Init
-    init(fieldProperty: MLCardFormFieldPropertyProtocol) {
+    public init(fieldProperty: MLCardFormFieldPropertyProtocol) {
         property = fieldProperty
         if let maskPattern = fieldProperty.patternMask() {
             customMask = MLCardFormCustomMask(formattingPattern: maskPattern)
@@ -57,7 +57,7 @@ final class MLCardFormField: UIView {
 // MARK: Public methods.
 extension MLCardFormField {
     @discardableResult
-    func render() -> MLCardFormField {
+    public func render() -> MLCardFormField {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = background
         setupLabel()
@@ -79,7 +79,7 @@ extension MLCardFormField {
         return self
     }
 
-    func getValue() -> String? {
+    public func getValue() -> String? {
         return input.text
     }
     
@@ -178,7 +178,9 @@ private extension MLCardFormField {
         input.font = inputFont
         input.autocapitalizationType = .allCharacters
 
-        setKeyboardToolBar()
+        if property.shouldShowToolBar() {
+            setKeyboardToolBar()
+        }
 
         addSubview(input)
         NSLayoutConstraint.activate([

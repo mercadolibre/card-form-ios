@@ -389,7 +389,7 @@ extension MLCardFormViewController: UICollectionViewDelegateFlowLayout, UICollec
 
 // MARK: MLCardFormFieldNotifierProtocol
 extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
-    func didChangeValue(newValue: String?, from: MLCardFormField) {
+    public func didChangeValue(newValue: String?, from: MLCardFormField) {
         guard let newValue = newValue else { return }
         guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
         
@@ -433,7 +433,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         }
     }
     
-    func didBeginEditing(from: MLCardFormField) {
+    public func didBeginEditing(from: MLCardFormField) {
         guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
         scrollCollectionViewToCardFormField(from)
         
@@ -464,7 +464,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         }
     }
     
-    func shouldNext(from: MLCardFormField) {
+    public func shouldNext(from: MLCardFormField) {
         let returnValue = viewModel.isCardNumberFieldAndIsMissingCardData(cardFormField: from)
         if returnValue.isCardNumberMissingCardData, let currentBin = returnValue.currentBin {
             getCardData(binNumber: currentBin, showProggressAndSnackBar: true)
@@ -487,16 +487,16 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         }
     }
     
-    func shouldBack(from: MLCardFormField) {
+    public func shouldBack(from: MLCardFormField) {
         trackPreviousEvent(from)
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: -1)
     }
     
-    func didTapClear(from: MLCardFormField) {
+    public func didTapClear(from: MLCardFormField) {
         trackClearEvent(from)
     }
     
-    func invalidInput(from: MLCardFormField) {
+    public func invalidInput(from: MLCardFormField) {
         trackInvalidEvent(from)
     }
 }
