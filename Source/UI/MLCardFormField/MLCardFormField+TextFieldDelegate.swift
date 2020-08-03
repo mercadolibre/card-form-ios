@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: Textfield delegate.
 extension MLCardFormField: UITextFieldDelegate {
-    func textField(_ textField: UITextField,
+    public func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
         if let customMask = customMask {
@@ -27,7 +27,23 @@ extension MLCardFormField: UITextFieldDelegate {
         setBottomLineColorAndShowHelp()
         return true
     }
+    
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
+        notifierProtocol?.didBeginEditing(from: self)
+    }
+    
+    public func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        if !String.isNullOrEmpty(input.text) {
+            notifierProtocol?.didTapClear(from: self)
+        }
+        if let customMask = customMask {
+            _ = customMask.formatString(string: "")
+        }
+        return true
+    }
+}
 
+extension MLCardFormField {
     func updateTextField(_ textField: UITextField) {
         guard let inputCharsCount = textField.text?.count else { return }
         var sendValue: String? = textField.text
@@ -50,23 +66,7 @@ extension MLCardFormField: UITextFieldDelegate {
             }
         }
     }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        notifierProtocol?.didBeginEditing(from: self)
-    }
-    
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        if !String.isNullOrEmpty(input.text) {
-            notifierProtocol?.didTapClear(from: self)
-        }
-        if let customMask = customMask {
-            _ = customMask.formatString(string: "")
-        }
-        return true
-    }
-}
 
-extension MLCardFormField {
     func setBottomLineColorAndShowHelp(_ backgroundColor: UIColor? = nil) {
         bottomLine.backgroundColor = backgroundColor ?? highlightColor
         showHelpLabel()
