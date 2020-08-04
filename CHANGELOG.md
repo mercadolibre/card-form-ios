@@ -1,5 +1,9 @@
+# v0.8.9
+🚀MVP Release 0.8.9 🚀
+- Make MLCardFormField Public
+
 # v0.8.8
-🚀MVP Release 0.8.7 🚀
+🚀MVP Release 0.8.8 🚀
 - Change navigationbar title font
 
 # v0.8.7
