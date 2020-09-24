@@ -43,10 +43,10 @@ extension Notification.Name {
     static let reachabilityChanged = Notification.Name("reachabilityChanged")
 }
 
-class Reachability {
+public class Reachability {
 
-    typealias NetworkReachable = (Reachability) -> ()
-    typealias NetworkUnreachable = (Reachability) -> ()
+    public typealias NetworkReachable = (Reachability) -> ()
+    public typealias NetworkUnreachable = (Reachability) -> ()
 
     @available(*, unavailable, renamed: "Connection")
     enum NetworkStatus: CustomStringConvertible {
@@ -74,8 +74,8 @@ class Reachability {
         }
     }
 
-    var whenReachable: NetworkReachable?
-    var whenUnreachable: NetworkUnreachable?
+    public var whenReachable: NetworkReachable?
+    public var whenUnreachable: NetworkUnreachable?
 
     @available(*, deprecated, renamed: "allowsCellularConnection")
     let reachableOnWWAN: Bool = true
@@ -170,7 +170,7 @@ class Reachability {
 extension Reachability {
 
     // MARK: - *** Notifier methods ***
-    func startNotifier() throws {
+    public func startNotifier() throws {
         guard !notifierRunning else { return }
 
         let callback: SCNetworkReachabilityCallBack = { (reachability, flags, info) in
@@ -224,7 +224,7 @@ extension Reachability {
         notifierRunning = true
     }
 
-    func stopNotifier() {
+    public func stopNotifier() {
         defer { notifierRunning = false }
 
         SCNetworkReachabilitySetCallback(reachabilityRef, nil, nil)
