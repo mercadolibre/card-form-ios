@@ -21,7 +21,7 @@ open class MLCardFormBuilder: NSObject {
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
     internal var addStatusBarBackground: Bool?
-    internal var shouldConfigureNavigationBar: Bool?
+    internal let shouldConfigureNavigationBar: Bool?
     internal var animateOnLoad: Bool = false
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
     
@@ -33,13 +33,20 @@ open class MLCardFormBuilder: NSObject {
      - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
+     - parameter configureNavigationBar: Boolean flag specifying if the behavior and aspect of navigation bar should be managed internally. Optional parameter; defaults to true
      */
-    public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(publicKey: String,
+                siteId: String,
+                flowId: String,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                configureNavigationBar: Bool = true)
+    {
         self.publicKey = publicKey
         self.siteId = siteId
         self.flowId = flowId
         self.privateKey = nil
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.shouldConfigureNavigationBar = configureNavigationBar
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -49,13 +56,20 @@ open class MLCardFormBuilder: NSObject {
      - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
+     - parameter configureNavigationBar: Boolean flag specifying if the behavior and aspect of navigation bar should be managed internally. Optional parameter; defaults to true
      */
-    public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(privateKey: String,
+                siteId: String,
+                flowId: String,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                configureNavigationBar: Bool = true)
+    {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.shouldConfigureNavigationBar = configureNavigationBar
         tracker.set(flowId: flowId, siteId: siteId)
     }
 }
