@@ -33,7 +33,6 @@ open class MLCardFormBuilder: NSObject {
      - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
-     - parameter configureNavigationBar: Boolean flag specifying if the behavior and aspect of navigation bar should be managed internally. Optional parameter; defaults to true
      */
     public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
@@ -50,7 +49,6 @@ open class MLCardFormBuilder: NSObject {
      - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
-     - parameter configureNavigationBar: Boolean flag specifying if the behavior and aspect of navigation bar should be managed internally. Optional parameter; defaults to true
      */
     public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
