@@ -21,6 +21,7 @@ open class MLCardFormBuilder: NSObject {
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
     internal var addStatusBarBackground: Bool?
+    internal var shouldConfigureNavigationBar: Bool?
     internal var animateOnLoad: Bool = false
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
     

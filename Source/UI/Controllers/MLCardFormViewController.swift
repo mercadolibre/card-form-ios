@@ -197,11 +197,13 @@ private extension MLCardFormViewController {
     }
     
     func initialSetup() {
-        title = AppBar.Generic.title
-        let (backgroundNavigationColor, textNavigationColor) = viewModel.getNavigationBarCustomColor()
-        super.loadStyles(customNavigationBackgroundColor: backgroundNavigationColor, customNavigationTextColor: textNavigationColor)
-        if viewModel.shouldAddStatusBarBackground() {
-            addStatusBarBackground(color: backgroundNavigationColor)
+        if viewModel.shouldConfigureNavigationBar() {
+            title = AppBar.Generic.title
+            let (backgroundNavigationColor, textNavigationColor) = viewModel.getNavigationBarCustomColor()
+            super.loadStyles(customNavigationBackgroundColor: backgroundNavigationColor, customNavigationTextColor: textNavigationColor)
+            if viewModel.shouldAddStatusBarBackground() {
+                addStatusBarBackground(color: backgroundNavigationColor)
+            }
         }
         setupCardContainer()
         setupProgress()
