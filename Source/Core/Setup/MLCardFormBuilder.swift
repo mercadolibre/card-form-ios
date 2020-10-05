@@ -21,8 +21,8 @@ open class MLCardFormBuilder: NSObject {
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
     internal var addStatusBarBackground: Bool?
-    internal let shouldConfigureNavigationBar: Bool?
     internal var animateOnLoad: Bool = false
+    internal var shouldConfigureNavigation: Bool?
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
     
     // MARK: Initialization
@@ -35,18 +35,12 @@ open class MLCardFormBuilder: NSObject {
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      - parameter configureNavigationBar: Boolean flag specifying if the behavior and aspect of navigation bar should be managed internally. Optional parameter; defaults to true
      */
-    public init(publicKey: String,
-                siteId: String,
-                flowId: String,
-                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
-                configureNavigationBar: Bool = true)
-    {
+    public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
         self.siteId = siteId
         self.flowId = flowId
         self.privateKey = nil
         self.lifeCycleDelegate = lifeCycleDelegate
-        self.shouldConfigureNavigationBar = configureNavigationBar
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -58,18 +52,12 @@ open class MLCardFormBuilder: NSObject {
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      - parameter configureNavigationBar: Boolean flag specifying if the behavior and aspect of navigation bar should be managed internally. Optional parameter; defaults to true
      */
-    public init(privateKey: String,
-                siteId: String,
-                flowId: String,
-                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
-                configureNavigationBar: Bool = true)
-    {
+    public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
-        self.shouldConfigureNavigationBar = configureNavigationBar
         tracker.set(flowId: flowId, siteId: siteId)
     }
 }
@@ -107,6 +95,16 @@ extension MLCardFormBuilder {
     @discardableResult
     open func setShouldAddStatusBarBackground(_ addStatusBarBackground: Bool) -> MLCardFormBuilder {
         self.addStatusBarBackground = addStatusBarBackground
+        return self
+    }
+
+    /**
+     Determinates if MLCardForm ViewController should be in charge of configuring navigation. Default is true.
+     - parameter configureNavigation: `Bool`
+     */
+    @discardableResult
+    open func setShouldConfigureNavigation(_ configureNavigation: Bool) -> MLCardFormBuilder {
+        self.shouldConfigureNavigation = configureNavigation
         return self
     }
 

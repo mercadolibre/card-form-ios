@@ -299,7 +299,7 @@ final class MLCardFormViewModel {
     }
     
     func shouldConfigureNavigationBar() -> Bool {
-        return builder?.shouldConfigureNavigationBar ?? true
+        return builder?.shouldConfigureNavigation ?? true
     }
 
     func shouldAddStatusBarBackground() -> Bool {
