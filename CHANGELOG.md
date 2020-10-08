@@ -1,5 +1,5 @@
 # v0.9.0
-🚀MVP Release 0.9.0 🚀
+🚀 Release 0.9.0 🚀
 - Add navigation bar customization option
 
 # v0.8.9
@@ -61,7 +61,7 @@
 - Revert podspec swift version change
 
 # v0.7.5
-🚀 Release 0.7.5 🚀
+🚀MVP Release 0.7.5 🚀
 - Changed podspec swift version
 
 # v0.7.4
