@@ -1,3 +1,7 @@
+# v0.9.0
+🚀 Release 0.9.0 🚀
+- Add navigation bar customization option
+
 # v0.8.9
 🚀MVP Release 0.8.9 🚀
 - Make MLCardFormField Public

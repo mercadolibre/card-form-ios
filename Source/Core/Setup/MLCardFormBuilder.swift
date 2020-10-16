@@ -22,6 +22,7 @@ open class MLCardFormBuilder: NSObject {
     internal var navigationCustomTextColor: UIColor?
     internal var addStatusBarBackground: Bool?
     internal var animateOnLoad: Bool = false
+    internal var shouldConfigureNavigation: Bool?
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
     
     // MARK: Initialization
@@ -92,6 +93,16 @@ extension MLCardFormBuilder {
     @discardableResult
     open func setShouldAddStatusBarBackground(_ addStatusBarBackground: Bool) -> MLCardFormBuilder {
         self.addStatusBarBackground = addStatusBarBackground
+        return self
+    }
+
+    /**
+     Determinates if MLCardForm ViewController should be in charge of configuring navigation. Default is true.
+     - parameter configureNavigation: `Bool`
+     */
+    @discardableResult
+    open func setShouldConfigureNavigation(_ configureNavigation: Bool) -> MLCardFormBuilder {
+        self.shouldConfigureNavigation = configureNavigation
         return self
     }
 

@@ -298,6 +298,10 @@ final class MLCardFormViewModel {
         return (builder?.navigationCustomBackgroundColor, builder?.navigationCustomTextColor)
     }
     
+    func shouldConfigureNavigationBar() -> Bool {
+        return builder?.shouldConfigureNavigation ?? true
+    }
+
     func shouldAddStatusBarBackground() -> Bool {
         return builder?.addStatusBarBackground ?? true
     }
