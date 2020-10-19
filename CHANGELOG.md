@@ -1,3 +1,7 @@
+# v0.9.1
+🚀 Release 0.9.1 🚀
+- Make Reachability public
+
 # v0.9.0
 🚀 Release 0.9.0 🚀
 - Add navigation bar customization option
