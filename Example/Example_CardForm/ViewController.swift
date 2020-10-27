@@ -20,6 +20,10 @@ class ViewController: UIViewController {
         openCardForm()
     }
     
+    @IBAction func iniciarWebPayTouchUpInside(_ sender: UIButton) {
+        initWebPay()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = "MLCardForm"
@@ -80,6 +84,19 @@ private extension ViewController {
         MLCardFormConfiguratorManager.with(esc: self, tracking: self)
         
         let cardFormVC = MLCardForm(builder: builder).setupController()
+        navigationController?.pushViewController(cardFormVC, animated: true)
+    }
+    
+    func initWebPay() {
+        title = ""
+        let username = "Carlos Mozón"
+        let email = "carlos.monzon@gmail.com"
+        let builder = MLCardFormBuilder(username: username, email: email, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
+        builder.setLanguage("es")
+
+        MLCardFormConfiguratorManager.with(esc: self, tracking: self)
+        
+        let cardFormVC = MLCardForm(builder: builder).setupWebPayController()
         navigationController?.pushViewController(cardFormVC, animated: true)
     }
 }

@@ -35,4 +35,8 @@ extension MLCardForm {
     public func setupController() -> MLCardFormViewController {
         return MLCardFormViewController.setupWithBuilder(builder)
     }
+    
+    public func setupWebPayController() -> MLCardFormWebPayViewController {
+        return MLCardFormWebPayViewController.setupWithBuilder(builder)
+    }
 }

@@ -10,6 +10,7 @@ import Foundation
 final class MLCardFormServiceManager: NSObject {
     let binService: MLCardFormBinService = MLCardFormBinService()
     let addCardService: MLCardFormAddCardService = MLCardFormAddCardService()
+    let webPayService: MLCardFormWebPayService = MLCardFormWebPayService()
     private var reachability: Reachability?
     private var hasInternet: Bool = true
 
@@ -18,6 +19,7 @@ final class MLCardFormServiceManager: NSObject {
         addReachabilityObserver()
         binService.delegate = self
         addCardService.delegate = self
+        webPayService.delegate = self
     }
 
     deinit {
