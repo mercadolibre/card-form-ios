@@ -8,55 +8,8 @@
 import Foundation
 import MLCardDrawer
 
-enum MLCardFormAddCardServiceError: Error {
-    case missingKeys
-    case missingPrivateKey
-}
-
-final class MLCardFormAddCardService {
-    private var publicKey: String?
-    private var privateKey: String?
-    weak var delegate: MLCardFormInternetConnectionProtocol?
-    
-    func update(publicKey: String?, privateKey: String?) {
-        self.publicKey = publicKey
-        self.privateKey = privateKey
-    }
-}
-
-// MARK: QueryParams
-extension MLCardFormAddCardService {
-    enum QueryKeys {
-        case publicKey
-        case accessToken
-
-        var getKey: String {
-            switch self {
-            case .publicKey:
-                return "public_key"
-            case .accessToken:
-                return "access_token"
-            }
-        }
-    }
-    
-    struct KeyParam {
-        let publicKey: String?
-        let accessToken: String?
-        
-        init(publicKey: String? = nil, accessToken: String? = nil) {
-            self.publicKey = publicKey
-            self.accessToken = accessToken
-        }
-    }
-
-    struct AddCardParams {
-        let accessToken: String
-    }
-}
-
-extension MLCardFormAddCardService {
-    func addCardToken(tokenizationData: MLCardFormAddCardService.TokenizationBody, addCardData: MLCardFormAddCardService.AddCardBody, completion: ((Result<MLCardFormTokenizationCardData, Error>) -> ())? = nil) {
+final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
+    func addCardToken(tokenizationData: MLCardFormAddCardService.TokenizationBody, completion: ((Result<MLCardFormTokenizationCardData, Error>) -> ())? = nil) {
         if publicKey == nil && privateKey == nil {
             completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
             return
@@ -127,15 +80,5 @@ private extension MLCardFormAddCardService {
 
     func buildAddCardBody(_ tokenId: String, addCardData: MLCardFormAddCardService.AddCardBody) -> MLCardFormAddCardBody {
         return MLCardFormAddCardBody(cardTokenId: tokenId, paymentMethod: addCardData.paymentMethod, issuer: addCardData.issuer)
-    }
-
-    func debugLog(_ message: Any) {
-        #if DEBUG
-        if let messageStr = message as? String {
-            print("MLCardFormAddCardService: \(messageStr)")
-        } else {
-            print(message)
-        }
-        #endif
     }
 }

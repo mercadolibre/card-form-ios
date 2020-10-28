@@ -72,7 +72,7 @@ extension MLCardFormWebPayViewController: WKNavigationDelegate {
             NSLog("Obtained access token")
             // Cancel navigation - this isn't a real URL
             decisionHandler(.cancel)
-            print(token)
+            finishInscription(token: token)
             return
         }
         // Default: allow navigation
@@ -108,25 +108,61 @@ private extension MLCardFormWebPayViewController {
                     }
                 }
             case .failure(let error):
-                self.hideProgress(completion: { [weak self] in
-                    guard let self = self else { return }
-//                    // Notify listener
-//                    self.lifeCycleDelegate?.didFailAddCard()
-                    // Show error to the user
-                    var title: String?
-                    switch error {
-                    case NetworkLayerError.noInternetConnection:
-                        title = "Revisa tu conexión a internet.".localized
-//                        self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                        UIAccessibility.post(notification: .announcement, argument: title)
-                    default:
-                        title = "Algo salió mal.".localized
-//                        self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                        UIAccessibility.post(notification: .announcement, argument: title)
-                    }
-                })
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideProgress(completion: { [weak self] in
+                        guard let self = self else { return }
+//                        // Notify listener
+//                        self.lifeCycleDelegate?.didFailAddCard()
+                        // Show error to the user
+                        var title: String?
+                        switch error {
+                        case NetworkLayerError.noInternetConnection:
+                            title = "Revisa tu conexión a internet.".localized
+//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            UIAccessibility.post(notification: .announcement, argument: title)
+                        default:
+                            title = "Algo salió mal.".localized
+//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            UIAccessibility.post(notification: .announcement, argument: title)
+                        }
+                    })
+                }
             }
         }
+    }
+    
+    func finishInscription(token: String) {
+        showProgress()
+        viewModel.finishInscription(token: token, completion: { [weak self] (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let inscriptionData):
+                // tokenize data
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideProgress()
+                }
+            case .failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideProgress(completion: { [weak self] in
+                        guard let self = self else { return }
+//                        // Notify listener
+//                        self.lifeCycleDelegate?.didFailAddCard()
+                        // Show error to the user
+                        var title: String?
+                        switch error {
+                        case NetworkLayerError.noInternetConnection:
+                            title = "Revisa tu conexión a internet.".localized
+//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            UIAccessibility.post(notification: .announcement, argument: title)
+                        default:
+                            title = "Algo salió mal.".localized
+//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            UIAccessibility.post(notification: .announcement, argument: title)
+                        }
+                    })
+                }
+            }
+        })
     }
     
     func getToken(request: URLRequest) -> String? {

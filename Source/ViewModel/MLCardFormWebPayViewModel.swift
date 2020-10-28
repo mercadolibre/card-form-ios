@@ -13,9 +13,11 @@ final class MLCardFormWebPayViewModel {
     //weak var viewModelDelegate: MLCardFormViewModelProtocol?
 
     private var builder: MLCardFormBuilder?
+    private var finishInscriptionData: MLCardFormWebPayFinishInscriptionData?
     
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
+        serviceManager.webPayService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
     }
 
     func getNavigationBarCustomColor() -> (backgroundColor: UIColor?, textColor: UIColor?) {
@@ -55,6 +57,36 @@ extension MLCardFormWebPayViewModel {
         })
     }
     
+    func finishInscription(token: String, completion: ((Result<MLCardFormWebPayFinishInscriptionData, Error>) -> ())? = nil) {
+        guard let inscriptionData = getFinishInscriptionData(token: token) else {
+            completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
+            return
+        }
+        serviceManager.webPayService.finishInscription(inscriptionData: inscriptionData, completion: { [weak self] (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
+            switch result {
+            case .success(let inscriptionData):
+                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
+                self?.finishInscriptionData = inscriptionData
+                completion?(.success(inscriptionData))
+            case .failure(let error):
+                let errorMessage = error.localizedDescription
+                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
+                completion?(.failure(error))
+            }
+        })
+    }
+    
+    func addCard(completion: ((Result<String, Error>) -> ())? = nil) {
+        //guard let tokenizationData = getTokenizationData(), let addCardData = getAddCardData() else {
+        guard let tokenizationData = getTokenizationData() else {
+            completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
+            return
+        }
+    }
+}
+
+// MARK: Helpers
+extension MLCardFormWebPayViewModel {
     func buildRequest(inscriptionData: MLCardFormWebPayInscriptionData) -> URLRequest? {
         var myRequest = URLRequest(url: URL(string: inscriptionData.urlWebpay)!)
         myRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
@@ -68,6 +100,39 @@ extension MLCardFormWebPayViewModel {
 // MARK: Privates.
 private extension MLCardFormWebPayViewModel {
     func getInitInscriptionData() -> MLCardFormWebPayService.InitInscriptionBody? {
-        return MLCardFormWebPayService.InitInscriptionBody(username: "chaca", email: "chaca@gmail.com", responseUrl: "https://www.comercio.cl/return_inscription")
+        guard let username = builder?.webPayUsername,
+              let email = builder?.webPayEmail else {
+            return nil
+        }
+        return MLCardFormWebPayService.InitInscriptionBody(username: username, email: email, responseUrl: "https://www.comercio.cl/return_inscription")
     }
+    
+    func getFinishInscriptionData(token: String) -> MLCardFormWebPayService.FinishInscriptionBody? {
+        return MLCardFormWebPayService.FinishInscriptionBody(token: token)
+    }
+    
+    func getTokenizationData() -> MLCardFormWebPayService.TokenizationBody? {
+        guard let username = builder?.webPayUsername else {
+            return nil
+        }
+        let expirationMonth = 12
+        let expirationYear = 2030
+        
+        guard let tbkUser = finishInscriptionData?.tbkUser,
+              let cardNumber = finishInscriptionData?.cardNumber,
+              let bin = finishInscriptionData?.bin else {
+            return nil
+        }
+        let truncCardNumber = cardNumber.replacingCharacters(in: ...cardNumber.startIndex, with: bin)
+        
+        let cardHolder = MLCardFormCardHolder(name: username, identification: nil)
+        return MLCardFormWebPayService.TokenizationBody(cardNumberId: tbkUser, truncCardNumber: truncCardNumber, expirationMonth: expirationMonth, expirationYear: expirationYear, cardholder: cardHolder, device: MLCardFormDevice())
+    }
+
+//    func getAddCardData() -> MLCardFormAddCardService.AddCardBody? {
+//        guard let paymentMethod = binData?.paymentMethod, let issuer = binData?.issuers.first else { return nil }
+//        let addCardPaymentMethod = MLCardFormAddCardPaymentMethod(id: paymentMethod.paymentMethodId, paymentTypeId: paymentMethod.paymentTypeId, name: paymentMethod.name)
+//        let addCardIssuer = MLCardFormAddCardIssuer(id: issuer.id)
+//        return MLCardFormAddCardService.AddCardBody(paymentMethod: addCardPaymentMethod, issuer: addCardIssuer)
+//    }
 }

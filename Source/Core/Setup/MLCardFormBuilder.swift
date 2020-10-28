@@ -65,9 +65,20 @@ open class MLCardFormBuilder: NSObject {
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
-    public init(username: String, email: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
-        self.publicKey = nil
+    public init(publicKey: String, username: String, email: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+        self.publicKey = publicKey
         self.privateKey = nil
+        self.webPayUsername = username
+        self.webPayEmail = email
+        self.siteId = siteId
+        self.flowId = flowId
+        self.lifeCycleDelegate = lifeCycleDelegate
+        tracker.set(flowId: flowId, siteId: siteId)
+    }
+    
+    public init(privateKey: String, username: String, email: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+        self.publicKey = nil
+        self.privateKey = privateKey
         self.webPayUsername = username
         self.webPayEmail = email
         self.siteId = siteId

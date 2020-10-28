@@ -374,7 +374,7 @@ extension MLCardFormViewModel {
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
-        serviceManager.addCardService.addCardToken(tokenizationData: tokenizationData, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
+        serviceManager.addCardService.addCardToken(tokenizationData: tokenizationData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let tokenCardData):
