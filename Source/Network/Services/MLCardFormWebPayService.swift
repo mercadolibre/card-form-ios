@@ -34,11 +34,11 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             completion?(.failure(NetworkLayerError.noInternetConnection))
             return
         }
-        let queryParams = MLCardFormAddCardService.KeyParam(publicKey: publicKey, accessToken: privateKey)
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json")
-//        NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
-//            completion?(result)
-//        }
+        let queryParams = MLCardFormWebPayService.KeyParam(publicKey: publicKey, accessToken: privateKey)
+        let headers = MLCardFormWebPayService.Headers(contentType: "application/json")
+        NetworkLayer.request(router: MLCardFormApiRouter.postWebPayCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
+            completion?(result)
+        }
     }
 }
 
@@ -88,7 +88,7 @@ private extension MLCardFormWebPayService {
         return MLCardFormFinishInscriptionBody(token: inscriptionData.token)
     }
     
-    func buildTokenizationBody(_ tokenizationData: MLCardFormAddCardService.TokenizationBody) -> MLCardFormTokenizationBody {
-        return MLCardFormTokenizationBody(cardNumber: tokenizationData.cardNumber, securityCode: tokenizationData.securityCode, expirationMonth: tokenizationData.expirationMonth, expirationYear: tokenizationData.expirationYear, cardholder: tokenizationData.cardholder, device: tokenizationData.device)
+    func buildTokenizationBody(_ tokenizationData: MLCardFormWebPayService.TokenizationBody) -> MLCardFormWebPayTokenizationBody {
+        return MLCardFormWebPayTokenizationBody(cardNumberId: tokenizationData.cardNumberId, truncCardNumber: tokenizationData.truncCardNumber, expirationMonth: tokenizationData.expirationMonth, expirationYear: tokenizationData.expirationYear, cardholder: tokenizationData.cardholder, device: tokenizationData.device)
     }
 }

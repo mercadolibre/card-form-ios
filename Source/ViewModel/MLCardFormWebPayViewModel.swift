@@ -82,6 +82,20 @@ extension MLCardFormWebPayViewModel {
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
+        serviceManager.webPayService.addCardToken(tokenizationData: tokenizationData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let tokenCardData):
+//                if let esc = tokenCardData.esc {
+//                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: tokenCardData.firstSixDigits, lastFourDigits: tokenCardData.lastFourDigits, esc: esc)
+//                }
+                completion?(.success(""))
+            case .failure(let error):
+                let errorMessage = error.localizedDescription
+                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
+                completion?(.failure(error))
+            }
+        })
     }
 }
 

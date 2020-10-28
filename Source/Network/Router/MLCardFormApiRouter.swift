@@ -15,10 +15,11 @@ enum MLCardFormApiRouter {
     case postCardData(MLCardFormAddCardService.AddCardParams, MLCardFormAddCardService.Headers, MLCardFormAddCardBody)
     case postWebPayInitInscription(MLCardFormWebPayService.Headers, MLCardFormInitInscriptionBody)
     case postWebPayFinishInscription(MLCardFormWebPayService.Headers, MLCardFormFinishInscriptionBody)
+    case postWebPayCardTokenData(MLCardFormWebPayService.KeyParam, MLCardFormWebPayService.Headers, MLCardFormWebPayTokenizationBody)
 
     var scheme: String {
         switch self {
-        case .getCardData, .postCardTokenData, .postCardData:
+        case .getCardData, .postCardTokenData, .postCardData, .postWebPayCardTokenData:
             return "https"
         case .postWebPayInitInscription, .postWebPayFinishInscription:
             return "http"
@@ -27,7 +28,7 @@ enum MLCardFormApiRouter {
 
     var host: String {
         switch self {
-        case .getCardData, .postCardTokenData, .postCardData:
+        case .getCardData, .postCardTokenData, .postCardData, .postWebPayCardTokenData:
             return "api.mercadopago.com"
         case .postWebPayInitInscription, .postWebPayFinishInscription:
             return "api.mp.internal.ml.com"
@@ -38,7 +39,7 @@ enum MLCardFormApiRouter {
         switch self {
         case .getCardData:
             return "/production/px_mobile/v1/card"
-        case .postCardTokenData:
+        case .postCardTokenData, .postWebPayCardTokenData:
             return "/v1/card_tokens"
         case .postCardData:
             return "/production/px_mobile/v1/card"
@@ -61,6 +62,8 @@ enum MLCardFormApiRouter {
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType]
         case .postWebPayInitInscription(let headers, _),
              .postWebPayFinishInscription(let headers, _):
+            return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType]
+        case .postWebPayCardTokenData(_, let headers, _):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType]
         }
     }
@@ -94,6 +97,14 @@ enum MLCardFormApiRouter {
         case .postWebPayInitInscription(_, _),
              .postWebPayFinishInscription(_, _):
             return []
+        case .postWebPayCardTokenData(let queryParams, _, _):
+            var urlQueryItems:[URLQueryItem] = []
+            if let accessToken = queryParams.accessToken {
+                urlQueryItems.append(URLQueryItem(name: MLCardFormWebPayService.QueryKeys.accessToken.getKey, value: accessToken))
+            } else if let publicKey = queryParams.publicKey {
+                urlQueryItems.append(URLQueryItem(name: MLCardFormWebPayService.QueryKeys.publicKey.getKey, value: publicKey))
+            }
+            return urlQueryItems
         }
     }
 
@@ -104,7 +115,8 @@ enum MLCardFormApiRouter {
         case .postCardTokenData,
              .postCardData,
              .postWebPayInitInscription,
-             .postWebPayFinishInscription:
+             .postWebPayFinishInscription,
+             .postWebPayCardTokenData:
             return "POST"
         }
     }
@@ -118,6 +130,8 @@ enum MLCardFormApiRouter {
         case .postWebPayInitInscription(_, let body):
             return encode(body)
         case .postWebPayFinishInscription(_, let body):
+            return encode(body)
+        case .postWebPayCardTokenData(_, _, let body):
             return encode(body)
         default:
             return nil

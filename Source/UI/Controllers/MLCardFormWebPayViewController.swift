@@ -138,9 +138,11 @@ private extension MLCardFormWebPayViewController {
             switch result {
             case .success(let inscriptionData):
                 // tokenize data
-                DispatchQueue.main.async { [weak self] in
-                    self?.hideProgress()
-                }
+                self.viewModel.addCard(completion: { (result: Result<String, Error>) in
+s                    DispatchQueue.main.async { [weak self] in
+                        self?.hideProgress()
+                    }
+                })
             case .failure(let error):
                 DispatchQueue.main.async { [weak self] in
                     self?.hideProgress(completion: { [weak self] in

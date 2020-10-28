@@ -10,10 +10,10 @@ import Foundation
 struct MLCardFormTokenizationCardData: Codable {
     let id: String
     let publicKey: String?
-    let firstSixDigits: String
+    let firstSixDigits: String?
     let expirationMonth: Int
     let expirationYear: Int
-    let lastFourDigits: String
+    let lastFourDigits: String?
     let cardholder: MLCardFormCardHolder?
     let status: String?
     let dateCreated: String
@@ -22,7 +22,7 @@ struct MLCardFormTokenizationCardData: Codable {
     let luhnValidation: Bool
     let liveMode: Bool
     let requireEsc: Bool
-    let cardNumberLength: Int
-    let securityCodeLength: Int
+    let cardNumberLength: Int?
+    let securityCodeLength: Int?
     let esc: String?
 }

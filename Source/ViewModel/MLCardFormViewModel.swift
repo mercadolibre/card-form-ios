@@ -378,8 +378,10 @@ extension MLCardFormViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let tokenCardData):
-                if let esc = tokenCardData.esc {
-                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: tokenCardData.firstSixDigits, lastFourDigits: tokenCardData.lastFourDigits, esc: esc)
+                if let esc = tokenCardData.esc,
+                   let firstSixDigits = tokenCardData.firstSixDigits,
+                   let lastFourDigits = tokenCardData.lastFourDigits {
+                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: firstSixDigits, lastFourDigits: lastFourDigits, esc: esc)
                 }
                 self.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
                     guard let self = self else { return }
