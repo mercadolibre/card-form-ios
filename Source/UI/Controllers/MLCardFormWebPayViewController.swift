@@ -14,8 +14,6 @@ open class MLCardFormWebPayViewController: MLCardFormBaseViewController {
     // MARK: Constants
     internal let viewModel: MLCardFormWebPayViewModel = MLCardFormWebPayViewModel()
     // MARK: Private Vars
-    let REDIRECT_HOST = "www.comercio.cl"
-    let REDIRECT_PATH = "/return_inscription"
     private var urlWebpay: String?
     private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
     
@@ -68,7 +66,7 @@ internal extension MLCardFormWebPayViewController {
 /** :nodoc: */
 extension MLCardFormWebPayViewController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
-        if let token = getToken(request: navigationAction.request) {
+        if let token = viewModel.getToken(request: navigationAction.request) {
             NSLog("Obtained access token")
             // Cancel navigation - this isn't a real URL
             decisionHandler(.cancel)
@@ -133,16 +131,13 @@ private extension MLCardFormWebPayViewController {
     
     func finishInscription(token: String) {
         showProgress()
-        viewModel.finishInscription(token: token, completion: { [weak self] (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
+        viewModel.finishInscription(token: token, completion: { [weak self] (result: Result<Void, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let inscriptionData):
-                // tokenize data
-                self.viewModel.addCard(completion: { (result: Result<String, Error>) in
-s                    DispatchQueue.main.async { [weak self] in
-                        self?.hideProgress()
-                    }
-                })
+            case .success(_):
+                DispatchQueue.main.async { [weak self] in
+                    self?.hideProgress()
+                }
             case .failure(let error):
                 DispatchQueue.main.async { [weak self] in
                     self?.hideProgress(completion: { [weak self] in
@@ -165,27 +160,6 @@ s                    DispatchQueue.main.async { [weak self] in
                 }
             }
         })
-    }
-    
-    func getToken(request: URLRequest) -> String? {
-        if let host = request.url?.host,
-           let path = request.url?.path,
-           let httpBody = request.httpBody,
-           host == REDIRECT_HOST,
-           path == REDIRECT_PATH {
-            let stringBody = String(decoding: httpBody, as: UTF8.self)
-            let bodyParams = stringBody.components(separatedBy: "&").map( { $0.components(separatedBy: "=") }).reduce(into: [String:String]()) { dict, pair in
-                if pair.count == 2 {
-                    dict[pair[0]] = pair[1]
-                }
-            }
-            if let key = bodyParams.keys.first(where: { $0.uppercased().contains("TBK_TOKEN") }),
-               let result = bodyParams[key] {
-                NSLog("Obtained access token")
-                return result
-            }
-        }
-        return nil
     }
     
     func initialSetup() {
