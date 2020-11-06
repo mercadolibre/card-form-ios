@@ -107,23 +107,18 @@ private extension MLCardFormWebPayViewController {
                 }
             case .failure(let error):
                 DispatchQueue.main.async { [weak self] in
-                    self?.hideProgress(completion: { [weak self] in
-                        guard let self = self else { return }
-//                        // Notify listener
-//                        self.lifeCycleDelegate?.didFailAddCard()
-                        // Show error to the user
-                        var title: String?
-                        switch error {
-                        case NetworkLayerError.noInternetConnection:
-                            title = "Revisa tu conexión a internet.".localized
-//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                            UIAccessibility.post(notification: .announcement, argument: title)
-                        default:
-                            title = "Algo salió mal.".localized
-//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                            UIAccessibility.post(notification: .announcement, argument: title)
-                        }
-                    })
+                    // Show error to the user
+                    var text: String?
+                    switch error {
+                    case NetworkLayerError.noInternetConnection:
+                        text = "Revisa tu conexión a internet.".localized
+                        UIAccessibility.post(notification: .announcement, argument: text)
+                        self?.loadingVC.setType(type: .noNetworkError)
+                    default:
+                        text = "Algo salió mal.".localized
+                        UIAccessibility.post(notification: .announcement, argument: text)
+                        self?.loadingVC.setType(type: .error)
+                    }
                 }
             }
         }
@@ -135,28 +130,24 @@ private extension MLCardFormWebPayViewController {
             guard let self = self else { return }
             switch result {
             case .success(_):
-                DispatchQueue.main.async { [weak self] in
-                    self?.hideProgress()
-                }
+                // Notify listener
+                self.lifeCycleDelegate?.didAddCard(cardID: "")
             case .failure(let error):
+                // Notify listener
+                self.lifeCycleDelegate?.didFailAddCard()
                 DispatchQueue.main.async { [weak self] in
-                    self?.hideProgress(completion: { [weak self] in
-                        guard let self = self else { return }
-//                        // Notify listener
-//                        self.lifeCycleDelegate?.didFailAddCard()
-                        // Show error to the user
-                        var title: String?
-                        switch error {
-                        case NetworkLayerError.noInternetConnection:
-                            title = "Revisa tu conexión a internet.".localized
-//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                            UIAccessibility.post(notification: .announcement, argument: title)
-                        default:
-                            title = "Algo salió mal.".localized
-//                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                            UIAccessibility.post(notification: .announcement, argument: title)
-                        }
-                    })
+                    // Show error to the user
+                    var text: String?
+                    switch error {
+                    case NetworkLayerError.noInternetConnection:
+                        text = "Revisa tu conexión a internet.".localized
+                        UIAccessibility.post(notification: .announcement, argument: text)
+                        self?.loadingVC.setType(type: .noNetworkError)
+                    default:
+                        text = "Algo salió mal.".localized
+                        UIAccessibility.post(notification: .announcement, argument: text)
+                        self?.loadingVC.setType(type: .error)
+                    }
                 }
             }
         })

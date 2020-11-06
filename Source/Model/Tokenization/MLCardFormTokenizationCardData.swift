@@ -16,12 +16,12 @@ struct MLCardFormTokenizationCardData: Codable {
     let lastFourDigits: String?
     let cardholder: MLCardFormCardHolder?
     let status: String?
-    let dateCreated: String
+    let dateCreated: String?
     let dateLastUpdated: String?
     let dateDue: String?
-    let luhnValidation: Bool
+    let luhnValidation: Bool?
     let liveMode: Bool
-    let requireEsc: Bool
+    let requireEsc: Bool?
     let cardNumberLength: Int?
     let securityCodeLength: Int?
     let esc: String?

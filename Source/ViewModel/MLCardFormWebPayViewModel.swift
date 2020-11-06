@@ -16,6 +16,7 @@ final class MLCardFormWebPayViewModel {
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
         serviceManager.webPayService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
+        serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
     }
 
     func getNavigationBarCustomColor() -> (backgroundColor: UIColor?, textColor: UIColor?) {
@@ -48,7 +49,7 @@ extension MLCardFormWebPayViewModel {
                 //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
                 completion?(.success(initInscriptionData))
             case .failure(let error):
-                let errorMessage = error.localizedDescription
+                //let errorMessage = error.localizedDescription
                 //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
                 completion?(.failure(error))
             }
@@ -67,13 +68,13 @@ extension MLCardFormWebPayViewModel {
                     case .success(_):
                         completion?(.success(Void()))
                     case .failure(let error):
-                        let errorMessage = error.localizedDescription
+                        //let errorMessage = error.localizedDescription
                         //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
                         completion?(.failure(error))
                     }
                 })
             case .failure(let error):
-                let errorMessage = error.localizedDescription
+                //let errorMessage = error.localizedDescription
                 //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
                 completion?(.failure(error))
             }
@@ -85,13 +86,27 @@ extension MLCardFormWebPayViewModel {
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
-        serviceManager.webPayService.addCardToken(tokenizationData: tokenizationData, completion: { (result: Result<MLCardFormTokenizationCardData, Error>) in
+        serviceManager.webPayService.addCardToken(tokenizationData: tokenizationData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
             switch result {
             case .success(let tokenCardData):
                 // tokenCardData will be used to save card
-                completion?(.success(""))
+                self?.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { (result: Result<MLCardFormAddCardData, Error>) in
+                    switch result {
+                    case .success(let addCardData):
+//                        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
+                        completion?(.success(addCardData.getId()))
+                    case .failure(let error):
+                        if case MLCardFormAddCardServiceError.missingPrivateKey = error {
+                            completion?(.success(""))
+                        } else {
+//                            let errorMessage = error.localizedDescription
+//                            MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_data", "error_message": errorMessage])
+                            completion?(.failure(error))
+                        }
+                    }
+                })
             case .failure(let error):
-                let errorMessage = error.localizedDescription
+                //let errorMessage = error.localizedDescription
                 //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
                 completion?(.failure(error))
             }
@@ -152,20 +167,24 @@ private extension MLCardFormWebPayViewModel {
         let expirationYear = 2030
         
         guard let tbkUser = finishInscriptionData?.tbkUser,
-              let cardNumber = finishInscriptionData?.cardNumber,
-              let bin = finishInscriptionData?.bin else {
+              let cardNumber = finishInscriptionData?.cardNumber.replacingOccurrences(of: "X", with: ""),
+              let bin = finishInscriptionData?.bin,
+              let cardNumberLength = finishInscriptionData?.cardNumberLength else {
             return nil
         }
-        let truncCardNumber = cardNumber.replacingCharacters(in: ...cardNumber.startIndex, with: bin)
+        let count = cardNumberLength - (bin.count + cardNumber.count)
+        let stringPadding = String(repeating: "X", count: count)
+        let truncCardNumber = "\(bin)\(stringPadding)\(cardNumber)"
         
-        let cardHolder = MLCardFormCardHolder(name: username, identification: nil)
+        let tempIdentification = MLCardFormIdentification(type: "RUT", number: "15385640-0")
+
+        let cardHolder = MLCardFormCardHolder(name: username, identification: tempIdentification)
         return MLCardFormWebPayTokenizationBody(cardNumberId: tbkUser, truncCardNumber: truncCardNumber, expirationMonth: expirationMonth, expirationYear: expirationYear, cardholder: cardHolder, device: MLCardFormDevice())
     }
 
     func getAddCardData() -> MLCardFormAddCardService.AddCardBody? {
-        let issuer = MLCardFormIssuer(name: "", id: 1, image: nil, imageUrl: nil)
-        let addCardPaymentMethod = MLCardFormAddCardPaymentMethod(id: "", paymentTypeId: "", name: "")
-        let addCardIssuer = MLCardFormAddCardIssuer(id: issuer.id)
+        let addCardPaymentMethod = MLCardFormAddCardPaymentMethod(id: "redcompra", paymentTypeId: "debit_card", name: "")
+        let addCardIssuer = MLCardFormAddCardIssuer(id: 1048)
         return MLCardFormAddCardService.AddCardBody(paymentMethod: addCardPaymentMethod, issuer: addCardIssuer)
     }
 }

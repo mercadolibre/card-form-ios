@@ -9,22 +9,6 @@ import UIKit
 
 internal class MLCardFormLoadingViewControllerBase: UIViewController {
     private var isShowing: Bool = false
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
-    }
-
-    internal func setupUI() {
-        view.backgroundColor = .clear
-        setupOverlay()
-    }
-
-    private func setupOverlay() {
-        let overlay = UIView(frame: view.frame)
-        overlay.backgroundColor = #colorLiteral(red: 0.1555326879, green: 0.1569747925, blue: 0.1605674028, alpha: 0.75)
-        view.addSubview(overlay)
-    }
 }
 
 // MARK: Publics
