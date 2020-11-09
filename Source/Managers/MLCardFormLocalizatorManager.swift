@@ -27,7 +27,7 @@ extension MLCardFormLocalizatorManager {
 private extension MLCardFormLocalizatorManager {
     func getCustomLanguagePath() -> String? {
         let typeExtension: String = "lproj"
-        let bundle = Bundle(for: MLCardFormLocalizatorManager.self)
+        let bundle = MLCardFormBundle.bundle()
         let currentLanguage = getLanguage()
         if let path = bundle.path(forResource: currentLanguage, ofType: typeExtension) {
               return path
