@@ -38,7 +38,7 @@ open class MLCardFormBaseViewController: UIViewController {
 
     private func setupBackButton(textColor: UIColor? = nil) {
         let backButton = UIBarButtonItem()
-        let back = UIImage(named: "back", in: Bundle(for: type(of: self)), compatibleWith: nil)
+        let back = UIImage(named: "back", in: MLCardFormBundle.bundle(), compatibleWith: nil)
         backButton.image = back
         backButton.style = .plain
         backButton.target = self
