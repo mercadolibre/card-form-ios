@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "MLCardForm"
-  s.version          = "0.9.1"
+  s.version          = "0.9.2"
   s.summary          = "MLCardForm for iOS"
   s.homepage         = "https://www.mercadolibre.com"
   s.license          = { :type => "MIT", :file => "LICENSE" }
@@ -10,10 +10,12 @@ Pod::Spec.new do |s|
   s.platform         = :ios, '10.0'
   s.requires_arc     = true
   s.default_subspec = 'Default'
+  s.static_framework = true
 
   s.subspec 'Default' do |default|
     default.source_files = ['Source/**/**/**/*.{h,m,swift}']
-    default.resources = "Source/Resources/*.xcassets", "Source/UI/**/*.xib", "Source/Translations/**/**.{strings}"
+    default.resources = ['Source/Resources/*.xcassets', 'Source/UI/**/*.xib']
+    default.resource_bundles = { 'MLCardFormResources' => ['Source/Translations/**/**.{strings}'] }
     s.dependency 'MLUI', '~> 5.0'
     s.dependency 'MLCardDrawer', '~> 1.0'
   end

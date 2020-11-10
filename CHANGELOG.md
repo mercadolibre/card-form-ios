@@ -1,3 +1,7 @@
+# v0.9.2
+🚀 Release 0.9.2 🚀
+- Make lib static
+
 # v0.9.1
 🚀 Release 0.9.1 🚀
 - Make Reachability public
