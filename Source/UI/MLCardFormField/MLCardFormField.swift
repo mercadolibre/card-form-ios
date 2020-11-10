@@ -166,7 +166,7 @@ private extension MLCardFormField {
         }
         
         if property.shouldShowTick() {
-            let tick = UIImage(named: "tick", in: Bundle(for: type(of: self)), compatibleWith: nil)
+            let tick = UIImage(named: "tick", in: MLCardFormBundle.bundle(), compatibleWith: nil)
             input.rightView = UIImageView(image: tick)
             input.rightViewMode = .never
         }
@@ -198,7 +198,7 @@ private extension MLCardFormField {
             setupPickerInputView()
             // If field is a picker and doesn't show tick, show down_arrow
             if !property.shouldShowTick() {
-                let arrow_down = UIImage(named: "arrow_down", in: Bundle(for: type(of: self)), compatibleWith: nil)
+                let arrow_down = UIImage(named: "arrow_down", in: MLCardFormBundle.bundle(), compatibleWith: nil)
                 input.rightView = UIImageView(image: arrow_down)
                 input.rightViewMode = .always
             }

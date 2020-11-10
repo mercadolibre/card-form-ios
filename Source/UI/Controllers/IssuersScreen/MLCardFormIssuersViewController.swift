@@ -108,7 +108,7 @@ private extension MLCardFormIssuersViewController {
     }
 
     func setupShadowViews(aboveOf bottomView: UIView) {
-        let topShadowView = UIImageView(image: UIImage(named: "gradient_top", in: Bundle(for: MLCardFormIssuersViewController.self), compatibleWith: nil))
+        let topShadowView = UIImageView(image: UIImage(named: "gradient_top", in: MLCardFormBundle.bundle(), compatibleWith: nil))
         topShadowView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topShadowView)
         NSLayoutConstraint.activate([
@@ -117,7 +117,7 @@ private extension MLCardFormIssuersViewController {
             topShadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topShadowView.heightAnchor.constraint(equalToConstant: shadowViewHeight)
         ])
-        let bottomShadowView = UIImageView(image: UIImage(named: "gradient_bottom", in: Bundle(for: MLCardFormIssuersViewController.self), compatibleWith: nil))
+        let bottomShadowView = UIImageView(image: UIImage(named: "gradient_bottom", in: MLCardFormBundle.bundle(), compatibleWith: nil))
         bottomShadowView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(bottomShadowView)
         NSLayoutConstraint.activate([
