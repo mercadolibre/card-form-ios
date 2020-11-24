@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
     default.resources = ['Source/UI/**/*.xib']
     default.resource_bundles = { 'MLCardFormResources' => ['Source/Resources/*.xcassets', 'Source/Translations/**/**.{strings}'] }
     s.dependency 'MLUI', '~> 5.0'
+    s.dependency 'AndesUI', '~> 3.0'
     s.dependency 'MLCardDrawer', '~> 1.0'
   end
 end

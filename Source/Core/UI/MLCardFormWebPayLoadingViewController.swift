@@ -6,13 +6,40 @@
 //
 
 import UIKit
+import AndesUI
+
+enum MLCardFormWebPayLoadingViewButtonAction {
+    case retry
+    case cancel
+}
+
+enum MLCardFormWebPayLoadingViewType {
+    case loading
+    case success
+    case error
+    case noNetworkError
+}
+
+enum MLCardFormWebPayLoadingViewDirection {
+    case ml_wp
+    case wp_ml
+}
+
+protocol MLCardFormWebPayLoadingViewDelegate: AnyObject {
+    func onWebPayLoadingViewButtonTapped(action: MLCardFormWebPayLoadingViewButtonAction, direction: MLCardFormWebPayLoadingViewDirection)
+}
 
 final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControllerBase {
+    weak var delegate: MLCardFormWebPayLoadingViewDelegate?
+    
     private var viewType: MLCardFormWebPayLoadingViewType = .loading
     private var viewDirection: MLCardFormWebPayLoadingViewDirection = .ml_wp
     
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
+    private let retryButton = AndesButton(text: "", hierarchy: .loud, size: .large)
+    private let cancelButton = AndesButton(text: "", hierarchy: .quiet, size: .large)
+    private let buttonHeight: CGFloat = 48
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +51,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
         view.subviews.forEach { $0.removeFromSuperview() }
         setupTitleLabel()
         setupDescriptionLabel()
+        setupButtons()
     }
     
     private func setupTitleLabel() {
@@ -48,6 +76,35 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
         ])
+    }
+    
+    private func setupButtons() {
+        retryButton.text = "Intentar nuevamente".localized
+        view.addSubview(retryButton)
+        retryButton.addTarget(self, action: #selector(retryAction), for: .touchUpInside)
+        
+        cancelButton.text = "Elegir otro medio".localized
+        view.addSubview(cancelButton)
+        cancelButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            retryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UI.Margin.L_MARGIN),
+            retryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UI.Margin.L_MARGIN),
+            retryButton.heightAnchor.constraint(equalToConstant: buttonHeight),
+            retryButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -UI.Margin.M_MARGIN),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UI.Margin.L_MARGIN),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UI.Margin.L_MARGIN),
+            cancelButton.heightAnchor.constraint(equalToConstant: buttonHeight),
+            cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UI.Margin.L_MARGIN)
+        ])
+    }
+    
+    @objc func retryAction(sender: AndesButton!) {
+        delegate?.onWebPayLoadingViewButtonTapped(action: .retry, direction: viewDirection)
+    }
+    
+    @objc func cancelAction(sender: AndesButton!) {
+        delegate?.onWebPayLoadingViewButtonTapped(action: .cancel, direction: viewDirection)
     }
     
     private func setupLabel(label: UILabel) {
@@ -85,20 +142,17 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
 
 // MARK: Publics
 extension MLCardFormWebPayLoadingViewController {
-    enum MLCardFormWebPayLoadingViewType: Error {
-        case loading
-        case success
-        case error
-        case noNetworkError
-    }
-    
-    enum MLCardFormWebPayLoadingViewDirection: Error {
-        case ml_wp
-        case wp_ml
-    }
-    
     func setType(type: MLCardFormWebPayLoadingViewType) {
         viewType = type
+        updateTextLabels()
+    }
+    
+    func setDirection(direction: MLCardFormWebPayLoadingViewDirection) {
+        viewDirection = direction
+        updateTextLabels()
+    }
+    
+    private func updateTextLabels() {
         setTitleText()
         setDescriptionText()
     }

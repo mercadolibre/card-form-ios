@@ -15,8 +15,6 @@ open class MLCardFormBuilder: NSObject {
     internal let publicKey: String?
     internal let lifeCycleDelegate: MLCardFormLifeCycleDelegate
     internal let privateKey: String?
-    internal let webPayUsername: String?
-    internal let webPayEmail: String?
     internal let flowId: String
     internal let siteId: String
     internal var excludedPaymentTypes: [String]?
@@ -39,8 +37,6 @@ open class MLCardFormBuilder: NSObject {
     public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
         self.privateKey = nil
-        self.webPayUsername = nil
-        self.webPayEmail = nil
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
@@ -57,30 +53,6 @@ open class MLCardFormBuilder: NSObject {
     public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
         self.privateKey = privateKey
-        self.webPayUsername = nil
-        self.webPayEmail = nil
-        self.siteId = siteId
-        self.flowId = flowId
-        self.lifeCycleDelegate = lifeCycleDelegate
-        tracker.set(flowId: flowId, siteId: siteId)
-    }
-    
-    public init(publicKey: String, username: String, email: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
-        self.publicKey = publicKey
-        self.privateKey = nil
-        self.webPayUsername = username
-        self.webPayEmail = email
-        self.siteId = siteId
-        self.flowId = flowId
-        self.lifeCycleDelegate = lifeCycleDelegate
-        tracker.set(flowId: flowId, siteId: siteId)
-    }
-    
-    public init(privateKey: String, username: String, email: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
-        self.publicKey = nil
-        self.privateKey = privateKey
-        self.webPayUsername = username
-        self.webPayEmail = email
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate

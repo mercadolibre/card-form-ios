@@ -92,7 +92,7 @@ extension MLCardFormWebPayViewController: WKNavigationDelegate {
 // MARK:  Privates.
 private extension MLCardFormWebPayViewController {
     func initInscription() {
-        showProgress()
+        showProgress(direction: .ml_wp)
         urlWebpay = nil
         viewModel.initInscription { [weak self] (result: Result<MLCardFormWebPayInscriptionData, Error>) in
             guard let self = self else { return }
@@ -125,7 +125,7 @@ private extension MLCardFormWebPayViewController {
     }
     
     func finishInscription(token: String) {
-        showProgress()
+        showProgress(direction: .wp_ml)
         viewModel.finishInscription(token: token, completion: { [weak self] (result: Result<Void, Error>) in
             guard let self = self else { return }
             switch result {
@@ -162,6 +162,7 @@ private extension MLCardFormWebPayViewController {
                 addStatusBarBackground(color: backgroundNavigationColor)
             }
         }
+        loadingVC.delegate = self
         //viewModel.viewModelDelegate = self
         setupUI()
     }
@@ -179,11 +180,28 @@ private extension MLCardFormWebPayViewController {
 
 // MARK: Progress methods.
 private extension MLCardFormWebPayViewController {
-    func showProgress() {
+    func showProgress(direction: MLCardFormWebPayLoadingViewDirection) {
+        loadingVC.setDirection(direction: direction)
         loadingVC.showFrom(self)
     }
     
     func hideProgress(completion: (() -> Void)? = nil) {
         loadingVC.hide(completion: completion)
+    }
+}
+
+extension MLCardFormWebPayViewController: MLCardFormWebPayLoadingViewDelegate {
+    func onWebPayLoadingViewButtonTapped(action: MLCardFormWebPayLoadingViewButtonAction, direction: MLCardFormWebPayLoadingViewDirection) {
+        switch action {
+        case .retry:
+            switch direction {
+            case .ml_wp:
+                initInscription()
+            case .wp_ml:
+                finishInscription(token: "")
+            }
+        case .cancel:
+            dismissLoadingAndPop()
+        }
     }
 }
