@@ -39,11 +39,7 @@ final class MLCardFormWebPayViewModel {
 // MARK: Services
 extension MLCardFormWebPayViewModel {
     func initInscription(completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
-        guard let initInscriptionData = getInitInscriptionData() else {
-            completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
-            return
-        }
-        serviceManager.webPayService.initInscription(inscriptionData: initInscriptionData, completion: { (result: Result<MLCardFormWebPayInscriptionData, Error>) in
+        serviceManager.webPayService.initInscription(completion: { (result: Result<MLCardFormWebPayInscriptionData, Error>) in
             switch result {
             case .success(let initInscriptionData):
                 //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
@@ -120,7 +116,7 @@ extension MLCardFormWebPayViewModel {
         var myRequest = URLRequest(url: URL(string: inscriptionData.urlWebpay)!)
         myRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         myRequest.httpMethod = "POST"
-        let bodyData = "TBK_TOKEN=\(inscriptionData.token)"
+        let bodyData = "TBK_TOKEN=\(inscriptionData.tbkToken)"
         myRequest.httpBody = bodyData.data(using: .utf8)
         return myRequest
     }
@@ -151,18 +147,8 @@ extension MLCardFormWebPayViewModel {
 
 // MARK: Privates.
 private extension MLCardFormWebPayViewModel {
-    func getInitInscriptionData() -> MLCardFormInitInscriptionBody? {
-        guard let username = builder?.webPayUsername,
-              let email = builder?.webPayEmail else {
-            return nil
-        }
-        return MLCardFormInitInscriptionBody(username: username, email: email, responseUrl: "https://www.comercio.cl/return_inscription")
-    }
-    
     func getTokenizationData() -> MLCardFormWebPayTokenizationBody? {
-        guard let username = builder?.webPayUsername else {
-            return nil
-        }
+        let username = "test user"
         let expirationMonth = 12
         let expirationYear = 2030
         
@@ -176,7 +162,7 @@ private extension MLCardFormWebPayViewModel {
         let stringPadding = String(repeating: "X", count: count)
         let truncCardNumber = "\(bin)\(stringPadding)\(cardNumber)"
         
-        let tempIdentification = MLCardFormIdentification(type: "RUT", number: "15385640-0")
+        let tempIdentification = MLCardFormIdentification(type: "RUT", number: "76110613-9")
 
         let cardHolder = MLCardFormCardHolder(name: username, identification: tempIdentification)
         return MLCardFormWebPayTokenizationBody(cardNumberId: tbkUser, truncCardNumber: truncCardNumber, expirationMonth: expirationMonth, expirationYear: expirationYear, cardholder: cardHolder, device: MLCardFormDevice())

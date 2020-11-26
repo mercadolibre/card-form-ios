@@ -8,14 +8,10 @@
 import Foundation
 
 struct MLCardFormWebPayInscriptionData: Codable {
-    let token: String
+    let tbkToken: String
     let urlWebpay: String
-    let errorMessage: String
-    // New properties from wrapper
-//    let tkbToken: String
-//    let urlWebpay: String
-//    let redirectUrl: String
-//    let user: MLCardFormWebPayUserData
+    let redirectUrl: String
+    let user: MLCardFormWebPayUserData
 }
 
 struct MLCardFormWebPayUserData: Codable {

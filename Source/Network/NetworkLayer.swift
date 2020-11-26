@@ -9,6 +9,7 @@
 import Foundation
 
 enum NetworkLayerError: Error {
+    case url
     case dataTask
     case data
     case response
@@ -57,7 +58,10 @@ struct NetworkLayer {
         components.path = router.path
         components.queryItems = router.parameters
 
-        guard let url = components.url else { return }
+        guard let url = components.url else {
+            completion(.failure(NetworkLayerError.url))
+            return
+        }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = router.method
 

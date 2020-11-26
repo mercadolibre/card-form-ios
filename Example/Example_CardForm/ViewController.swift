@@ -90,10 +90,8 @@ private extension ViewController {
     func initWebPay() {
         title = ""
         //let publicKey = ""
-        let privateKey = ""
-        let username = "Carlos Mozón"
-        let email = "carlos.monzon@gmail.com"
-        let builder = MLCardFormBuilder(privateKey: privateKey, username: username, email: email, siteId: "MLC", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
+        let privateKey = "TEST-1528604137606087-111019-cf995bea4ffa8aace44c402c4d13536c-635351073"
+        let builder = MLCardFormBuilder(privateKey: privateKey, siteId: "MLC", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
         builder.setLanguage("es")
 
         MLCardFormConfiguratorManager.with(esc: self, tracking: self)

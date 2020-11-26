@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MLUI
 import AndesUI
 
 enum MLCardFormWebPayLoadingViewButtonAction {
@@ -35,10 +36,15 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private var viewType: MLCardFormWebPayLoadingViewType = .loading
     private var viewDirection: MLCardFormWebPayLoadingViewDirection = .ml_wp
     
+    private let leftImageView = UIImageView()
+    private let spinner = MLSpinner()
+    private let centerImageView = UIImageView()
+    private let rightImageView = UIImageView()
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let retryButton = AndesButton(text: "", hierarchy: .loud, size: .large)
     private let cancelButton = AndesButton(text: "", hierarchy: .quiet, size: .large)
+    private let iconSize: CGFloat = 48
     private let buttonHeight: CGFloat = 48
     
     override func viewDidLoad() {
@@ -51,7 +57,45 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
         view.subviews.forEach { $0.removeFromSuperview() }
         setupTitleLabel()
         setupDescriptionLabel()
+        setupLoadingIcons()
         setupButtons()
+    }
+    
+    private func setupLoadingIcons() {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(containerView)
+        leftImageView.translatesAutoresizingMaskIntoConstraints = false
+        centerImageView.translatesAutoresizingMaskIntoConstraints = false
+        rightImageView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(leftImageView)
+        containerView.addSubview(centerImageView)
+        containerView.addSubview(rightImageView)
+        
+        NSLayoutConstraint.activate([
+            containerView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -16),
+            containerView.heightAnchor.constraint(equalToConstant: iconSize),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            
+            leftImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            leftImageView.heightAnchor.constraint(equalToConstant: iconSize),
+            leftImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            leftImageView.trailingAnchor.constraint(equalTo: centerImageView.leadingAnchor, constant: -16),
+            
+            centerImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            centerImageView.heightAnchor.constraint(equalToConstant: iconSize),
+            centerImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            centerImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            
+            rightImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            rightImageView.heightAnchor.constraint(equalToConstant: iconSize),
+            rightImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            rightImageView.leadingAnchor.constraint(equalTo: centerImageView.trailingAnchor, constant: 16)
+        ])
+        AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_24", success: { image in
+            centerImageView.image = image
+        })
     }
     
     private func setupTitleLabel() {

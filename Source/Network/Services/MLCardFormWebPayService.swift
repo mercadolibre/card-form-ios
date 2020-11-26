@@ -8,9 +8,19 @@
 import Foundation
 
 final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
-    func initInscription(inscriptionData: MLCardFormInitInscriptionBody, completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
+    func initInscription(completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
+        guard let accessToken = privateKey else {
+            completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
+            return
+        }
+
+        if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
+            completion?(.failure(NetworkLayerError.noInternetConnection))
+            return
+        }
+        let queryParams = MLCardFormWebPayService.AddCardParams(accessToken: accessToken)
         let headers = buildJSONHeaders()
-        NetworkLayer.request(router: MLCardFormApiRouter.postWebPayInitInscription(headers, inscriptionData)) {
+        NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(queryParams, headers)) {
             (result: Result<MLCardFormWebPayInscriptionData, Error>) in
             completion?(result)
         }
@@ -46,22 +56,26 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
 extension MLCardFormWebPayService {
     enum HeadersKeys {
         case contentType
+        case xpublic
 
         var getKey: String {
             switch self {
             case .contentType:
                 return "content-type"
+            case .xpublic:
+                return "X-Public"
             }
         }
     }
 
     struct Headers {
         let contentType: String
+        let xpublic: String
     }
 }
 
 private extension MLCardFormWebPayService {
     func buildJSONHeaders() -> MLCardFormWebPayService.Headers {
-        return MLCardFormWebPayService.Headers(contentType: "application/json")
+        return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true")
     }
 }
