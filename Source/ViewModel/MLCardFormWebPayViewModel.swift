@@ -11,6 +11,7 @@ final class MLCardFormWebPayViewModel {
     private let serviceManager: MLCardFormServiceManager = MLCardFormServiceManager()
     
     private var builder: MLCardFormBuilder?
+    private var initInscriptionData: MLCardFormWebPayInscriptionData?
     private var finishInscriptionData: MLCardFormWebPayFinishInscriptionData?
     
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
@@ -39,14 +40,14 @@ final class MLCardFormWebPayViewModel {
 // MARK: Services
 extension MLCardFormWebPayViewModel {
     func initInscription(completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
-        serviceManager.webPayService.initInscription(completion: { (result: Result<MLCardFormWebPayInscriptionData, Error>) in
+        serviceManager.webPayService.initInscription(completion: { [weak self] (result: Result<MLCardFormWebPayInscriptionData, Error>) in
             switch result {
             case .success(let initInscriptionData):
-                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
+                self?.initInscriptionData = initInscriptionData
                 completion?(.success(initInscriptionData))
             case .failure(let error):
-                //let errorMessage = error.localizedDescription
-                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
+                let errorMessage = error.localizedDescription
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "init_inscription", "error_message": errorMessage])
                 completion?(.failure(error))
             }
         })
@@ -57,21 +58,18 @@ extension MLCardFormWebPayViewModel {
         serviceManager.webPayService.finishInscription(inscriptionData: inscriptionData, completion: { [weak self] (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
             switch result {
             case .success(let inscriptionData):
-                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
                 self?.finishInscriptionData = inscriptionData
                 self?.addCard(completion: { (result: Result<String, Error>) in
                     switch result {
                     case .success(_):
                         completion?(.success(Void()))
                     case .failure(let error):
-                        //let errorMessage = error.localizedDescription
-                        //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
                         completion?(.failure(error))
                     }
                 })
             case .failure(let error):
-                //let errorMessage = error.localizedDescription
-                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
+                let errorMessage = error.localizedDescription
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "finish_inscription", "error_message": errorMessage])
                 completion?(.failure(error))
             }
         })
@@ -89,21 +87,29 @@ extension MLCardFormWebPayViewModel {
                 self?.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { (result: Result<MLCardFormAddCardData, Error>) in
                     switch result {
                     case .success(let addCardData):
-//                        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
+                        let bin = tokenCardData.firstSixDigits ?? ""
+                        let issuer = 1048
+                        let paymentMethodId = "redcompra"
+                        let paymentTypeId = "debit_card"
+                        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success",
+                                                                    properties: ["bin": bin,
+                                                                                 "issuer": issuer,
+                                                                                 "payment_method_id": paymentMethodId,
+                                                                                 "payment_type_id": paymentTypeId])
                         completion?(.success(addCardData.getId()))
                     case .failure(let error):
                         if case MLCardFormAddCardServiceError.missingPrivateKey = error {
                             completion?(.success(""))
                         } else {
-//                            let errorMessage = error.localizedDescription
-//                            MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_data", "error_message": errorMessage])
+                            let errorMessage = error.localizedDescription
+                            MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_data", "error_message": errorMessage])
                             completion?(.failure(error))
                         }
                     }
                 })
             case .failure(let error):
-                //let errorMessage = error.localizedDescription
-                //MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
+                let errorMessage = error.localizedDescription
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_token", "error_message": errorMessage])
                 completion?(.failure(error))
             }
         })

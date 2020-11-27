@@ -8,7 +8,7 @@
 import Foundation
 import WebKit
 
-open class MLCardFormWebPayViewController: MLCardFormBaseViewController {
+public final class MLCardFormWebPayViewController: MLCardFormBaseViewController {
     // Loading
     private let loadingVC = MLCardFormWebPayLoadingViewController()
     // MARK: Constants
@@ -20,26 +20,31 @@ open class MLCardFormWebPayViewController: MLCardFormBaseViewController {
     lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        //webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
         return webView
     }()
 
-    open override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
-        
-        //trackScreen()
     }
     
     /// :nodoc
-    open override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         initInscription()
     }
     
-    open func dismissLoadingAndPop(completion: (() -> Void)? = nil) {
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if self.isMovingFromParent {
+            trackBackEvent()
+        }
+    }
+    
+    public func dismissLoadingAndPop(completion: (() -> Void)? = nil) {
         hideProgress(completion: { [weak self] in
             self?.navigationController?.popViewController(animated: true)
             if let completion = completion { completion() }
@@ -56,11 +61,6 @@ internal extension MLCardFormWebPayViewController {
         return controller
     }
 }
-
-//// MARK: WKWebView methods.
-///** :nodoc: */
-//extension MLCardFormWebPayViewController: WKUIDelegate {
-//}
 
 // MARK: WKWebView methods.
 /** :nodoc: */
@@ -80,6 +80,7 @@ extension MLCardFormWebPayViewController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let url = webView.url?.absoluteString,
            url == urlWebpay {
+            trackWebviewScreen(url: url)
             hideProgress()
         }
     }
