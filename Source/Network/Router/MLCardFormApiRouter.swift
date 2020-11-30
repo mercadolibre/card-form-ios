@@ -10,57 +10,42 @@ import Foundation
 
 enum MLCardFormApiRouter {
 
-    case getCardData(MLCardFormBinService.QueryParams, MLCardFormBinService.Headers)
+    case postCardBinData(MLCardFormBinService.KeyParam, MLCardFormBinService.Headers, MLCardFormAddCardBinBody)
     case postCardTokenData(MLCardFormAddCardService.KeyParam, MLCardFormAddCardService.Headers, MLCardFormTokenizationBody)
     case postCardData(MLCardFormAddCardService.AddCardParams, MLCardFormAddCardService.Headers, MLCardFormAddCardBody)
-
+    
     var scheme: String {
         return "https"
     }
 
     var host: String {
         switch self {
-        case .getCardData, .postCardTokenData, .postCardData:
+        case .postCardTokenData, .postCardData, .postCardBinData:
             return "api.mercadopago.com"
         }
     }
 
     var path: String {
         switch self {
-        case .getCardData:
-            return "/production/px_mobile/v1/card"
         case .postCardTokenData:
             return "/v1/card_tokens"
-        case .postCardData:
+        case .postCardData,
+             .postCardBinData:
             return "/production/px_mobile/v1/card"
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .getCardData(_ , let headers):
-            return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
-                    MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
-                    MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
-                    MLCardFormBinService.HeadersKeys.xProductId.getKey: headers.xProductId]
         case .postCardTokenData(_, let headers, _), .postCardData(_, let headers, _):
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType]
+        case .postCardBinData(_, let headers, _):
+            return [MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType]
         }
     }
 
     var parameters: [URLQueryItem] {
         switch self {
-        case .getCardData(let queryParams, _):
-            var urlQueryItems = [
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.bin.getKey, value: queryParams.bin),
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.siteId.getKey, value: queryParams.siteId),
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.platform.getKey, value: queryParams.platform),
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.odr.getKey, value: String(queryParams.odr))
-            ]
-            if let excludedPaymentTypes = queryParams.excludedPaymentTypes {
-                urlQueryItems.append(URLQueryItem(name: MLCardFormBinService.QueryKeys.excludedPaymentTypes.getKey, value: excludedPaymentTypes))
-            }
-            return urlQueryItems
         case.postCardTokenData(let queryParams, _, _):
             var urlQueryItems:[URLQueryItem] = []
             if let accessToken = queryParams.accessToken {
@@ -74,14 +59,18 @@ enum MLCardFormApiRouter {
                 URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken),
             ]
             return urlQueryItems
+        case .postCardBinData(let queryParams, _, _):
+            let urlQueryItems = [
+                URLQueryItem(name: MLCardFormBinService.QueryKeys.accessToken.getKey, value: queryParams.accessToken),
+            ]
+            return urlQueryItems
         }
     }
 
     var method: String {
         switch self {
-        case .getCardData:
-            return "GET"
         case .postCardTokenData,
+             .postCardBinData,
              .postCardData:
             return "POST"
         }
@@ -93,8 +82,8 @@ enum MLCardFormApiRouter {
             return encode(tokenizationBody)
         case .postCardData(_, _, let addCardBody):
             return encode(addCardBody)
-        default:
-            return nil
+        case .postCardBinData(_, _, let addCardBinBody):
+            return encode(addCardBinBody)
         }
     }
 }

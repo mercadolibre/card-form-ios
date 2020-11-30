@@ -59,7 +59,7 @@ final class MLCardFormViewModel {
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
         serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey)
-        serviceManager.binService.update(siteId: builder.siteId, excludedPaymentTypes: builder.excludedPaymentTypes, flowId: builder.flowId)
+        serviceManager.binService.update(privateKey: builder.privateKey, flowId: builder.flowId, extraData: builder.extraData)
     }
     
     func setupDefaultCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
@@ -135,7 +135,7 @@ final class MLCardFormViewModel {
             cardHandlerToUpdate.update(cardUI: cardUI)
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: nil)
             
-            binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [])
+            binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [], bin: nil)
             if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
                 cardFormFields = [
                     [MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))],
@@ -340,7 +340,7 @@ extension MLCardFormViewModel {
 // MARK: Services
 extension MLCardFormViewModel {
     func getCardData(binNumber: String, completion: ((Result<String, Error>) -> ())? = nil) {
-        serviceManager.binService.getCardData(binNumber: binNumber, completion: { [weak self] (result: Result<MLCardFormBinData, Error>) in
+        serviceManager.binService.getCardBinData(binNumber: binNumber, completion: { [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let cardFormBinData):

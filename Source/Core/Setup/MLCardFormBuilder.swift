@@ -24,6 +24,7 @@ open class MLCardFormBuilder: NSObject {
     internal var animateOnLoad: Bool = false
     internal var shouldConfigureNavigation: Bool?
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
+    internal var extraData: [AnyHashable: Any]?
     
     // MARK: Initialization
     
@@ -34,12 +35,13 @@ open class MLCardFormBuilder: NSObject {
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate, extraData: [AnyHashable: Any]? = nil) {
         self.publicKey = publicKey
         self.siteId = siteId
         self.flowId = flowId
         self.privateKey = nil
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.extraData = extraData
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -50,12 +52,13 @@ open class MLCardFormBuilder: NSObject {
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate, extraData: [AnyHashable: Any]? = nil) {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.extraData = extraData
         tracker.set(flowId: flowId, siteId: siteId)
     }
 }

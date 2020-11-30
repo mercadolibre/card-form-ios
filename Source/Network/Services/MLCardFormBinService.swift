@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum MLCardFormBinServiceError: Error {
+    case missingPrivateKey
+    case missingParameters
+}
+
 final class MLCardFormBinService {
     private enum AppIdentifier: String {
         case meli = "ML"
@@ -19,16 +24,16 @@ final class MLCardFormBinService {
 
     weak var delegate: MLCardFormInternetConnectionProtocol?
     
-    private var siteId: String?
     private var flowId: String?
-    private var excludedPaymentTypes: [String]?
+    private var extraData: [AnyHashable: Any]?
     private let queue = OperationQueue()
     private var lastBin: String?
     private var lastResponse: MLCardFormBinData?
+    private var privateKey: String?
     
-    func update(siteId: String?, excludedPaymentTypes: [String]?, flowId: String?) {
-        self.siteId = siteId
-        self.excludedPaymentTypes = excludedPaymentTypes
+    func update(privateKey: String?, flowId: String?, extraData: [AnyHashable: Any]?) {
+        self.privateKey = privateKey
+        self.extraData = extraData
         self.flowId = flowId
     }
     
@@ -51,74 +56,51 @@ final class MLCardFormBinService {
 // MARK: Headers & Query Params
 extension MLCardFormBinService {
     enum HeadersKeys {
-        case userAgent
-        case xDensity
-        case acceptLanguage
-        case xProductId
+        case contentType
 
         var getKey: String {
             switch self {
-            case .userAgent:
-                return "user-agent"
-            case .xDensity:
-                return "x-density"
-            case .acceptLanguage:
-                return "accept-language"
-            case .xProductId:
-                return "x-product-id"
+            case .contentType:
+                return "content-type"
             }
         }
     }
 
     struct Headers {
-        let userAgent: String
-        let xDensity: String
-        let acceptLanguage: String
-        let xProductId: String
+        let contentType: String
     }
-
+    
     enum QueryKeys {
-        case bin
-        case siteId
-        case platform
-        case excludedPaymentTypes
-        case odr
+        case accessToken
 
         var getKey: String {
             switch self {
-            case .bin:
-                return "bin"
-            case .siteId:
-                return "site_id"
-            case .platform:
-                return "platform"
-            case .excludedPaymentTypes:
-                return "excluded_payment_types"
-            case .odr:
-                return "odr"
+            case .accessToken:
+                return "access_token"
             }
         }
     }
 
-    struct QueryParams {
-        let bin: String
-        let siteId: String
-        let platform: String
-        let excludedPaymentTypes: String?
-        let odr: Bool
+    struct KeyParam {
+        let accessToken: String?
     }
 }
 
 // MARK: Public methods.
 extension MLCardFormBinService {
-    func getCardData(binNumber: String, completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
-        guard let siteId = siteId else {
-            let error = NSError(domain:"", code:0, userInfo:nil)
-            completion?(.failure(error))
+    func getCardBinData(binNumber: String, completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
+        queue.cancelAllOperations()
+        
+        guard let privateKey = privateKey else {
+            completion?(.failure(MLCardFormBinServiceError.missingPrivateKey))
             return
         }
-        let excludedPaymentTypesJoined = excludedPaymentTypes?.joined(separator: ",")
-        queue.cancelAllOperations()
+        
+        guard let extraData = extraData else {
+            debugLog("Missing parameters for requesting bin")
+            completion?(.failure(MLCardFormBinServiceError.missingParameters))
+            return
+        }
 
         if let lastResponse = lastResponse, let lastBin = lastBin, lastBin == binNumber {
             debugLog("Bin data From memory cache")
@@ -132,15 +114,16 @@ extension MLCardFormBinService {
         }
 
         debugLog("Bin data New call: Operation -> \(binNumber)")
-        let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: getPlatform(), excludedPaymentTypes: excludedPaymentTypesJoined, odr: true)
-        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId())
+        
+        let queryParams = MLCardFormBinService.KeyParam(accessToken: privateKey)
+        let headers = MLCardFormBinService.Headers(contentType: "application/json")
         let operation = BlockOperation(block: {
-            NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)) { [weak self] (result: Result<MLCardFormBinData, Error>) in
+            NetworkLayer.request(router: MLCardFormApiRouter.postCardBinData(queryParams, headers, self.buildBinRequestBody())) { [weak self] (result: Result<MLCardFormBinData, Error>) in
                 guard let self = self else { return }
                 switch result {
                 case .success(let cardFormBinData):
                     MLCardFormConfiguratorManager.updateConfig(escEnabled: cardFormBinData.escEnabled)
-                    self.lastBin = queryParams.bin
+                    self.lastBin = cardFormBinData.bin
                     self.lastResponse = cardFormBinData
                 case .failure(let error):
                     self.debugLog(error)
@@ -149,7 +132,7 @@ extension MLCardFormBinService {
             }
         })
 
-        operation.name = queryParams.bin
+        operation.name = binNumber
         operation.completionBlock = { [weak self] in
             if let name = operation.name {
                 self?.debugLog("Operation is completed -> \(name)")
@@ -173,5 +156,9 @@ private extension MLCardFormBinService {
             print(message)
         }
         #endif
+    }
+    
+    func buildBinRequestBody() -> MLCardFormAddCardBinBody {
+        return MLCardFormAddCardBinBody(flowId: getFlowId(), extraDataDict: extraData!)
     }
 }
