@@ -96,7 +96,7 @@ extension MLCardFormBinService {
             return
         }
         
-        guard let extraData = extraData else {
+        guard let _ = extraData else {
             debugLog("Missing parameters for requesting bin")
             completion?(.failure(MLCardFormBinServiceError.missingParameters))
             return
