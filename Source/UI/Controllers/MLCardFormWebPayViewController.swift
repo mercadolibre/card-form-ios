@@ -103,6 +103,7 @@ private extension MLCardFormWebPayViewController {
                 if let request = self.viewModel.buildRequest(inscriptionData: inscriptionData) {
                     self.urlWebpay = inscriptionData.urlWebpay
                     DispatchQueue.main.async { [weak self] in
+                        self?.loadingVC.setType(type: .success)
                         self?.webView.load(request)
                     }
                 }
@@ -182,7 +183,7 @@ private extension MLCardFormWebPayViewController {
 // MARK: Progress methods.
 private extension MLCardFormWebPayViewController {
     func showProgress(direction: MLCardFormWebPayLoadingViewDirection) {
-        loadingVC.setDirection(direction: direction)
+        loadingVC.setTypeAndDirection(type: .loading, direction: direction)
         loadingVC.showFrom(self)
     }
     

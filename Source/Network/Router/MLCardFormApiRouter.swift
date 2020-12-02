@@ -44,9 +44,9 @@ enum MLCardFormApiRouter {
         case .postWebPayCardTokenData:
             return "/gateway/staging/card_tokens"
         case .postCardData:
-            return "/alpha/px_mobile/v1/card" //"/production/px_mobile/v1/card"
+            return "/gamma/px_mobile/v1/card" //"/production/px_mobile/v1/card"
         case .getWebPayInitInscription:
-            return "/gamma/px_mobile/v1/card_webpay/inscription/init" //"/g2/staging/integration/transbank-webpay-oneclick/inscription"
+            return "/gamma/px_mobile/v1/card_webpay/inscription/init"
         case .postWebPayFinishInscription:
             return "/g2/staging/integration/transbank-webpay-oneclick/finish_inscription"
         }

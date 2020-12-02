@@ -46,8 +46,7 @@ extension MLCardFormWebPayViewModel {
                 self?.initInscriptionData = initInscriptionData
                 completion?(.success(initInscriptionData))
             case .failure(let error):
-                let errorMessage = error.localizedDescription
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "init_inscription", "error_message": errorMessage])
+                self?.trackError(step: "init_inscription", message: error.localizedDescription)
                 completion?(.failure(error))
             }
         })
@@ -68,8 +67,7 @@ extension MLCardFormWebPayViewModel {
                     }
                 })
             case .failure(let error):
-                let errorMessage = error.localizedDescription
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "finish_inscription", "error_message": errorMessage])
+                self?.trackError(step: "finish_inscription", message: error.localizedDescription)
                 completion?(.failure(error))
             }
         })
@@ -84,32 +82,22 @@ extension MLCardFormWebPayViewModel {
             switch result {
             case .success(let tokenCardData):
                 // tokenCardData will be used to save card
-                self?.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { (result: Result<MLCardFormAddCardData, Error>) in
+                self?.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
                     switch result {
                     case .success(let addCardData):
-                        let bin = tokenCardData.firstSixDigits ?? ""
-                        let issuer = 1048
-                        let paymentMethodId = "redcompra"
-                        let paymentTypeId = "debit_card"
-                        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success",
-                                                                    properties: ["bin": bin,
-                                                                                 "issuer": issuer,
-                                                                                 "payment_method_id": paymentMethodId,
-                                                                                 "payment_type_id": paymentTypeId])
+                        self?.trackSuccess()
                         completion?(.success(addCardData.getId()))
                     case .failure(let error):
                         if case MLCardFormAddCardServiceError.missingPrivateKey = error {
                             completion?(.success(""))
                         } else {
-                            let errorMessage = error.localizedDescription
-                            MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_data", "error_message": errorMessage])
+                            self?.trackError(step: "save_card_data", message: error.localizedDescription)
                             completion?(.failure(error))
                         }
                     }
                 })
             case .failure(let error):
-                let errorMessage = error.localizedDescription
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_token", "error_message": errorMessage])
+                self?.trackError(step: "save_card_token", message: error.localizedDescription)
                 completion?(.failure(error))
             }
         })
@@ -128,8 +116,13 @@ extension MLCardFormWebPayViewModel {
     }
     
     func getToken(request: URLRequest) -> String? {
-        let REDIRECT_HOST = "www.comercio.cl"
-        let REDIRECT_PATH = "/return_inscription"
+        guard let urlString = initInscriptionData?.redirectUrl,
+              let url = NSURL(string: urlString) else {
+            return nil
+        }
+        
+        let REDIRECT_HOST = url.host
+        let REDIRECT_PATH = url.path
         if let host = request.url?.host,
            let path = request.url?.path,
            let httpBody = request.httpBody,
@@ -154,29 +147,56 @@ extension MLCardFormWebPayViewModel {
 // MARK: Privates.
 private extension MLCardFormWebPayViewModel {
     func getTokenizationData() -> MLCardFormWebPayTokenizationBody? {
-        let username = "test user"
-        let expirationMonth = 12
-        let expirationYear = 2030
-        
-        guard let tbkUser = finishInscriptionData?.tbkUser,
-              let cardNumber = finishInscriptionData?.cardNumber.replacingOccurrences(of: "X", with: ""),
-              let bin = finishInscriptionData?.bin,
-              let cardNumberLength = finishInscriptionData?.cardNumberLength else {
+        let cardHolderName = "\(initInscriptionData?.user.firstName ?? "") \(initInscriptionData?.user.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let identificationType = initInscriptionData?.user.identifier.type,
+              let identificationNumber = initInscriptionData?.user.identifier.number,
+              let expirationMonth = finishInscriptionData?.card.expirationMonth,
+              let expirationYear = finishInscriptionData?.card.expirationYear,
+              let cardNumberId = finishInscriptionData?.card.id,
+              let cardNumber = finishInscriptionData?.card.number.replacingOccurrences(of: "X", with: ""),
+              let bin = finishInscriptionData?.card.firstSixDigits,
+              let cardNumberLength = finishInscriptionData?.card.length else {
             return nil
         }
         let count = cardNumberLength - (bin.count + cardNumber.count)
         let stringPadding = String(repeating: "X", count: count)
         let truncCardNumber = "\(bin)\(stringPadding)\(cardNumber)"
         
-        let tempIdentification = MLCardFormIdentification(type: "RUT", number: "76110613-9")
+        let tempIdentification = MLCardFormIdentification(type: identificationType, number: identificationNumber)
 
-        let cardHolder = MLCardFormCardHolder(name: username, identification: tempIdentification)
-        return MLCardFormWebPayTokenizationBody(cardNumberId: tbkUser, truncCardNumber: truncCardNumber, expirationMonth: expirationMonth, expirationYear: expirationYear, cardholder: cardHolder, device: MLCardFormDevice())
+        let cardHolder = MLCardFormCardHolder(name: cardHolderName, identification: tempIdentification)
+        return MLCardFormWebPayTokenizationBody(cardNumberId: cardNumberId, truncCardNumber: truncCardNumber, expirationMonth: expirationMonth, expirationYear: expirationYear, cardholder: cardHolder, device: MLCardFormDevice())
     }
 
     func getAddCardData() -> MLCardFormAddCardService.AddCardBody? {
-        let addCardPaymentMethod = MLCardFormAddCardPaymentMethod(id: "redcompra", paymentTypeId: "debit_card", name: "")
-        let addCardIssuer = MLCardFormAddCardIssuer(id: 1048)
+        guard let paymentMethodId = finishInscriptionData?.card.paymentMethod.id,
+              let paymentTypeId = finishInscriptionData?.card.paymentMethod.paymentTypeId,
+              let name = finishInscriptionData?.card.paymentMethod.name,
+              let issuerId = finishInscriptionData?.card.issuer.id else {
+            return nil
+        }
+        
+        let addCardPaymentMethod = MLCardFormAddCardPaymentMethod(id: paymentMethodId, paymentTypeId: paymentTypeId, name: name)
+        let addCardIssuer = MLCardFormAddCardIssuer(id: issuerId)
         return MLCardFormAddCardService.AddCardBody(paymentMethod: addCardPaymentMethod, issuer: addCardIssuer)
+    }
+}
+
+// MARK: Privates.
+private extension MLCardFormWebPayViewModel {
+    func trackError(step: String, message: String) {
+        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": step, "error_message": message])
+    }
+    
+    func trackSuccess() {
+        let bin = finishInscriptionData?.card.firstSixDigits ?? ""
+        let issuer = finishInscriptionData?.card.issuer.id ?? 0
+        let paymentMethodId = finishInscriptionData?.card.paymentMethod.id ?? ""
+        let paymentTypeId = finishInscriptionData?.card.paymentMethod.paymentTypeId ?? ""
+        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success",
+                                                    properties: ["bin": bin,
+                                                                 "issuer": issuer,
+                                                                 "payment_method_id": paymentMethodId,
+                                                                 "payment_type_id": paymentTypeId])
     }
 }

@@ -36,6 +36,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private var viewType: MLCardFormWebPayLoadingViewType = .loading
     private var viewDirection: MLCardFormWebPayLoadingViewDirection = .ml_wp
     
+    private let closeButton = AndesButton(text: "", hierarchy: .transparent, size: .large)
     private let leftImageView = UIImageView()
     private let spinner = MLSpinner()
     private let centerImageView = UIImageView()
@@ -55,10 +56,32 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private func setupUI() {
         view.backgroundColor = .white
         view.subviews.forEach { $0.removeFromSuperview() }
+        setupCloseButton()
         setupTitleLabel()
         setupDescriptionLabel()
+        setupSpinner()
         setupLoadingIcons()
         setupButtons()
+    }
+    
+    private func setupCloseButton() {
+        AndesIconsProvider.loadIcon(name: "andes_ui_close_16", success: { image in
+            closeButton.setLargeSizeWithIcon(AndesButtonIcon(icon: image, orientation: .left))
+        })
+        view.addSubview(closeButton)
+        closeButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 39),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            leftImageView.widthAnchor.constraint(equalToConstant: iconSize),
+            leftImageView.heightAnchor.constraint(equalToConstant: iconSize)
+        ])
+    }
+    
+    private func setupSpinner() {
+        let color = MLStyleSheetManager.styleSheet.secondaryColor
+        let spinnerConfig = MLSpinnerConfig(size: .big, primaryColor: color, secondaryColor: color)
+        spinner.setUpWith(spinnerConfig)
     }
     
     private func setupLoadingIcons() {
@@ -68,9 +91,13 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
         leftImageView.translatesAutoresizingMaskIntoConstraints = false
         centerImageView.translatesAutoresizingMaskIntoConstraints = false
         rightImageView.translatesAutoresizingMaskIntoConstraints = false
+        leftImageView.contentMode = .scaleAspectFit
+        centerImageView.contentMode = .center
+        rightImageView.contentMode = .scaleAspectFit
         containerView.addSubview(leftImageView)
         containerView.addSubview(centerImageView)
         containerView.addSubview(rightImageView)
+        containerView.addSubview(spinner)
         
         NSLayoutConstraint.activate([
             containerView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -16),
@@ -88,14 +115,21 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
             centerImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             centerImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             
+            spinner.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            
             rightImageView.widthAnchor.constraint(equalToConstant: iconSize),
             rightImageView.heightAnchor.constraint(equalToConstant: iconSize),
             rightImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             rightImageView.leadingAnchor.constraint(equalTo: centerImageView.trailingAnchor, constant: 16)
         ])
-        AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_24", success: { image in
+        AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_16", success: { image in
             centerImageView.image = image
         })
+        let webpayImage = UIImage(named: "webpay", in: MLCardFormBundle.bundle(), compatibleWith: nil)
+        rightImageView.image = webpayImage
+        
+        spinner.show()
     }
     
     private func setupTitleLabel() {
@@ -127,7 +161,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
         view.addSubview(retryButton)
         retryButton.addTarget(self, action: #selector(retryAction), for: .touchUpInside)
         
-        cancelButton.text = "Elegir otro medio".localized
+        cancelButton.text = "Volver".localized
         view.addSubview(cancelButton)
         cancelButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
         
@@ -135,7 +169,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
             retryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UI.Margin.L_MARGIN),
             retryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UI.Margin.L_MARGIN),
             retryButton.heightAnchor.constraint(equalToConstant: buttonHeight),
-            retryButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -UI.Margin.M_MARGIN),
+            retryButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -8),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UI.Margin.L_MARGIN),
             cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UI.Margin.L_MARGIN),
             cancelButton.heightAnchor.constraint(equalToConstant: buttonHeight),
@@ -159,10 +193,32 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
         label.textColor = UI.Colors.labelColor
     }
     
+    private func updateUI() {
+        updateImages()
+        setTitleText()
+        setDescriptionText()
+        updateButtons()
+    }
+
+    private func updateButtons() {
+        switch viewType {
+        case .loading,
+             .success:
+            closeButton.isHidden = true
+            retryButton.isHidden = true
+            cancelButton.isHidden = true
+        case .error,
+             .noNetworkError:
+            closeButton.isHidden = false
+            retryButton.isHidden = false
+            cancelButton.isHidden = false
+        }
+    }
+    
     private func getTitleText() -> String {
         switch viewType {
         case .loading:
-            return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "Estamos procesando la informacion".localized
+            return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "Te estamos llevando de vuelta a Mercado Pago".localized
         case .success:
             return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "¡Agregaste una nueva tarjeta!".localized
         case .error:
@@ -175,32 +231,73 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private func getDescriptionText() -> String {
         switch viewType {
         case .loading:
-            return (viewDirection == .ml_wp) ? "En tu proxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.".localized : "Te estamos llevando de vuelta a Mercado Pago".localized
+            return (viewDirection == .ml_wp) ? "En tu próxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.".localized : "En tu próxima compra podrás pagar usando la misma tarjeta de forma rápida y segura.".localized
         case .success:
             return (viewDirection == .ml_wp) ? "En tu proxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.".localized : "Te estamos llevando de vuelta a Mercado Pago".localized
         case .error, .noNetworkError:
             return (viewDirection == .ml_wp) ? "Los sentimos. Por favor intenta nuevamente o elige otro medio de pago.".localized : "Los sentimos. Por favor intenta nuevamente o elige otro medio de pago.".localized
         }
     }
+    
+    private func updateImages() {
+        let mpImage = UIImage(named: "logo_mp", in: MLCardFormBundle.bundle(), compatibleWith: nil)
+        let webpayImage = UIImage(named: "webpay", in: MLCardFormBundle.bundle(), compatibleWith: nil)
+        switch viewDirection {
+        case .ml_wp:
+            leftImageView.image = mpImage
+            rightImageView.image = webpayImage
+        case .wp_ml:
+            leftImageView.image = webpayImage
+            rightImageView.image = mpImage
+        }
+
+        switch viewType {
+        case .loading:
+            spinner.show()
+            AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_16", success: { image in
+                centerImageView.image = image
+            })
+        case .success:
+            spinner.hide()
+            let image = UIImage(named: "success", in: MLCardFormBundle.bundle(), compatibleWith: nil)
+            updateCenterImage(image: image)
+        case .error,
+             .noNetworkError:
+            spinner.hide()
+            let image = UIImage(named: "error", in: MLCardFormBundle.bundle(), compatibleWith: nil)
+            updateCenterImage(image: image)
+        }
+    }
+    
+    private func updateCenterImage(image: UIImage?) {
+        UIView.transition(with: centerImageView,
+                          duration: 0.5,
+                          options: .transitionCrossDissolve,
+                          animations: { [weak self] in
+                            guard let self = self else { return }
+                            self.centerImageView.image = image
+                          })
+    }
 }
 
 // MARK: Publics
 extension MLCardFormWebPayLoadingViewController {
+    func setTypeAndDirection(type: MLCardFormWebPayLoadingViewType, direction: MLCardFormWebPayLoadingViewDirection) {
+        viewType = type
+        viewDirection = direction
+        updateUI()
+    }
+    
     func setType(type: MLCardFormWebPayLoadingViewType) {
         viewType = type
-        updateTextLabels()
+        updateUI()
     }
     
     func setDirection(direction: MLCardFormWebPayLoadingViewDirection) {
         viewDirection = direction
-        updateTextLabels()
+        updateUI()
     }
-    
-    private func updateTextLabels() {
-        setTitleText()
-        setDescriptionText()
-    }
-    
+
     func setTitleText(_ text: String? = nil) {
         guard let text = text else {
             titleLabel.text = getTitleText()
@@ -208,7 +305,7 @@ extension MLCardFormWebPayLoadingViewController {
         }
         titleLabel.text = text
     }
-    
+
     func setDescriptionText(_ text: String? = nil) {
         guard let text = text else {
             descriptionLabel.text = getDescriptionText()
