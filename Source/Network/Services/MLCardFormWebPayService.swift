@@ -27,8 +27,14 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
     }
     
     func finishInscription(inscriptionData: MLCardFormFinishInscriptionBody, completion: ((Result<MLCardFormWebPayFinishInscriptionData, Error>) -> ())? = nil) {
+        guard let accessToken = privateKey else {
+            completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
+            return
+        }
+
+        let queryParams = MLCardFormWebPayService.AddCardParams(accessToken: accessToken)
         let headers = buildJSONHeaders()
-        NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(headers, inscriptionData)) {
+        NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(queryParams, headers, inscriptionData)) {
             (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
             completion?(result)
         }

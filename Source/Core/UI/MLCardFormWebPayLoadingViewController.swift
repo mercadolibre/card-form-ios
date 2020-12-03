@@ -224,7 +224,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private func getTitleText() -> String {
         switch viewType {
         case .loading:
-            return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "Te estamos llevando de vuelta a {0}".localized.replacingOccurrences(of: "", with: (isMeli) ? "Mercado Libre".localized : "Mercado Pago".localized)
+            return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "Te estamos llevando de vuelta a {0}".localized.replacingOccurrences(of: "{0}", with: (isMeli) ? "Mercado Libre".localized : "Mercado Pago".localized)
         case .success:
             return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "¡Agregaste una nueva tarjeta!".localized
         case .error:
@@ -247,15 +247,15 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     }
     
     private func updateImages() {
-        let mpImage = UIImage(named: "logo_mp", in: MLCardFormBundle.bundle(), compatibleWith: nil)
+        let logoImage = UIImage(named: isMeli ? "logo_meli" : "logo_mp", in: MLCardFormBundle.bundle(), compatibleWith: nil)
         let webpayImage = UIImage(named: "webpay", in: MLCardFormBundle.bundle(), compatibleWith: nil)
         switch viewDirection {
         case .ml_wp:
-            leftImageView.image = mpImage
+            leftImageView.image = logoImage
             rightImageView.image = webpayImage
         case .wp_ml:
             leftImageView.image = webpayImage
-            rightImageView.image = mpImage
+            rightImageView.image = logoImage
         }
 
         switch viewType {
