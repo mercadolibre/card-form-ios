@@ -36,7 +36,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private var viewType: MLCardFormWebPayLoadingViewType = .loading
     private var viewDirection: MLCardFormWebPayLoadingViewDirection = .ml_wp
     
-    private let closeButton = AndesButton(text: "", hierarchy: .transparent, size: .large)
+    private let closeButton = UIButton()
     private let leftImageView = UIImageView()
     private let spinner = MLSpinner()
     private let centerImageView = UIImageView()
@@ -47,6 +47,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private let cancelButton = AndesButton(text: "", hierarchy: .quiet, size: .large)
     private let iconSize: CGFloat = 48
     private let buttonHeight: CGFloat = 48
+    private let isMeli = MLCardFormIdentifier().isMeli()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,15 +67,22 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     
     private func setupCloseButton() {
         AndesIconsProvider.loadIcon(name: "andes_ui_close_16", success: { image in
-            closeButton.setLargeSizeWithIcon(AndesButtonIcon(icon: image, orientation: .left))
+            if let image = image.grayscale() {
+                closeButton.setImage(image, for: .normal)
+            }
         })
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.imageView?.contentMode = .center
+        closeButton.contentVerticalAlignment = .fill
+        closeButton.contentHorizontalAlignment = .fill
         view.addSubview(closeButton)
         closeButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
+        
         NSLayoutConstraint.activate([
+            closeButton.heightAnchor.constraint(equalToConstant: iconSize),
+            closeButton.widthAnchor.constraint(equalToConstant: iconSize),
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 39),
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            leftImageView.widthAnchor.constraint(equalToConstant: iconSize),
-            leftImageView.heightAnchor.constraint(equalToConstant: iconSize)
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
     }
     
@@ -123,9 +131,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
             rightImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             rightImageView.leadingAnchor.constraint(equalTo: centerImageView.trailingAnchor, constant: 16)
         ])
-        AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_16", success: { image in
-            centerImageView.image = image
-        })
+        AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_16", placeItInto: centerImageView)
         let webpayImage = UIImage(named: "webpay", in: MLCardFormBundle.bundle(), compatibleWith: nil)
         rightImageView.image = webpayImage
         
@@ -218,11 +224,11 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     private func getTitleText() -> String {
         switch viewType {
         case .loading:
-            return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "Te estamos llevando de vuelta a Mercado Pago".localized
+            return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "Te estamos llevando de vuelta a {0}".localized.replacingOccurrences(of: "", with: (isMeli) ? "Mercado Libre".localized : "Mercado Pago".localized)
         case .success:
             return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "¡Agregaste una nueva tarjeta!".localized
         case .error:
-            return (viewDirection == .ml_wp) ? "Ocurrió un error con Webpay".localized : "Ocurrió un error procesando la informacion".localized
+            return "Ocurrió un error".localized
         case .noNetworkError:
             return "Revisa tu conexión a internet.".localized
         }
@@ -230,12 +236,13 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     
     private func getDescriptionText() -> String {
         switch viewType {
-        case .loading:
-            return (viewDirection == .ml_wp) ? "En tu próxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.".localized : "En tu próxima compra podrás pagar usando la misma tarjeta de forma rápida y segura.".localized
-        case .success:
-            return (viewDirection == .ml_wp) ? "En tu proxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.".localized : "Te estamos llevando de vuelta a Mercado Pago".localized
-        case .error, .noNetworkError:
-            return (viewDirection == .ml_wp) ? "Los sentimos. Por favor intenta nuevamente o elige otro medio de pago.".localized : "Los sentimos. Por favor intenta nuevamente o elige otro medio de pago.".localized
+        case .loading,
+             .success:
+            return "En tu próxima compra podrás pagar usando la misma tarjeta sin tener que volver a cargarla.".localized
+        case .error:
+            return "Lo sentimos, no pudimos cargar tu tarjeta. \nPor favor intenta nuevamente.".localized
+        case .noNetworkError:
+            return ""
         }
     }
     
@@ -254,9 +261,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
         switch viewType {
         case .loading:
             spinner.show()
-            AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_16", success: { image in
-                centerImageView.image = image
-            })
+            AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_16", placeItInto: centerImageView)
         case .success:
             spinner.hide()
             let image = UIImage(named: "success", in: MLCardFormBundle.bundle(), compatibleWith: nil)

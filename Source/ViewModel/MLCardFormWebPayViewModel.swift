@@ -13,6 +13,7 @@ final class MLCardFormWebPayViewModel {
     private var builder: MLCardFormBuilder?
     private var initInscriptionData: MLCardFormWebPayInscriptionData?
     private var finishInscriptionData: MLCardFormWebPayFinishInscriptionData?
+    private var tbkToken: String?
     
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
@@ -40,6 +41,8 @@ final class MLCardFormWebPayViewModel {
 // MARK: Services
 extension MLCardFormWebPayViewModel {
     func initInscription(completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
+        finishInscriptionData = nil
+        tbkToken = nil
         serviceManager.webPayService.initInscription(completion: { [weak self] (result: Result<MLCardFormWebPayInscriptionData, Error>) in
             switch result {
             case .success(let initInscriptionData):
@@ -52,8 +55,13 @@ extension MLCardFormWebPayViewModel {
         })
     }
     
-    func finishInscription(token: String, completion: ((Result<Void, Error>) -> ())? = nil) {
-        let inscriptionData = MLCardFormFinishInscriptionBody(token: token)
+    func finishInscription(completion: ((Result<Void, Error>) -> ())? = nil) {
+        guard let tbkToken = tbkToken else {
+            trackError(step: "finish_inscription", message: "Missing token")
+            completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
+            return
+        }
+        let inscriptionData = MLCardFormFinishInscriptionBody(token: tbkToken)
         serviceManager.webPayService.finishInscription(inscriptionData: inscriptionData, completion: { [weak self] (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
             switch result {
             case .success(let inscriptionData):
@@ -75,6 +83,7 @@ extension MLCardFormWebPayViewModel {
     
     func addCard(completion: ((Result<String, Error>) -> ())? = nil) {
         guard let tokenizationData = getTokenizationData(), let addCardData = getAddCardData() else {
+            trackError(step: "finish_inscription", message: "Missing tokenizationData")
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
@@ -137,6 +146,7 @@ extension MLCardFormWebPayViewModel {
             if let key = bodyParams.keys.first(where: { $0.uppercased().contains("TBK_TOKEN") }),
                let result = bodyParams[key] {
                 NSLog("Obtained access token")
+                tbkToken = result
                 return result
             }
         }
@@ -150,12 +160,12 @@ private extension MLCardFormWebPayViewModel {
         let cardHolderName = "\(initInscriptionData?.user.firstName ?? "") \(initInscriptionData?.user.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
         guard let identificationType = initInscriptionData?.user.identifier.type,
               let identificationNumber = initInscriptionData?.user.identifier.number,
-              let expirationMonth = finishInscriptionData?.card.expirationMonth,
-              let expirationYear = finishInscriptionData?.card.expirationYear,
-              let cardNumberId = finishInscriptionData?.card.id,
-              let cardNumber = finishInscriptionData?.card.number.replacingOccurrences(of: "X", with: ""),
-              let bin = finishInscriptionData?.card.firstSixDigits,
-              let cardNumberLength = finishInscriptionData?.card.length else {
+              let expirationMonth = finishInscriptionData?.expirationMonth,
+              let expirationYear = finishInscriptionData?.expirationYear,
+              let cardNumberId = finishInscriptionData?.id,
+              let cardNumber = finishInscriptionData?.number.replacingOccurrences(of: "X", with: ""),
+              let bin = finishInscriptionData?.firstSixDigits,
+              let cardNumberLength = finishInscriptionData?.length else {
             return nil
         }
         let count = cardNumberLength - (bin.count + cardNumber.count)
@@ -169,10 +179,10 @@ private extension MLCardFormWebPayViewModel {
     }
 
     func getAddCardData() -> MLCardFormAddCardService.AddCardBody? {
-        guard let paymentMethodId = finishInscriptionData?.card.paymentMethod.id,
-              let paymentTypeId = finishInscriptionData?.card.paymentMethod.paymentTypeId,
-              let name = finishInscriptionData?.card.paymentMethod.name,
-              let issuerId = finishInscriptionData?.card.issuer.id else {
+        guard let paymentMethodId = finishInscriptionData?.paymentMethod.id,
+              let paymentTypeId = finishInscriptionData?.paymentMethod.paymentTypeId,
+              let name = finishInscriptionData?.paymentMethod.name,
+              let issuerId = finishInscriptionData?.issuer.id else {
             return nil
         }
         
@@ -189,10 +199,10 @@ private extension MLCardFormWebPayViewModel {
     }
     
     func trackSuccess() {
-        let bin = finishInscriptionData?.card.firstSixDigits ?? ""
-        let issuer = finishInscriptionData?.card.issuer.id ?? 0
-        let paymentMethodId = finishInscriptionData?.card.paymentMethod.id ?? ""
-        let paymentTypeId = finishInscriptionData?.card.paymentMethod.paymentTypeId ?? ""
+        let bin = finishInscriptionData?.firstSixDigits ?? ""
+        let issuer = finishInscriptionData?.issuer.id ?? 0
+        let paymentMethodId = finishInscriptionData?.paymentMethod.id ?? ""
+        let paymentTypeId = finishInscriptionData?.paymentMethod.paymentTypeId ?? ""
         MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success",
                                                     properties: ["bin": bin,
                                                                  "issuer": issuer,

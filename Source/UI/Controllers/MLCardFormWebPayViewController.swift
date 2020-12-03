@@ -70,7 +70,9 @@ extension MLCardFormWebPayViewController: WKNavigationDelegate {
             NSLog("Obtained access token")
             // Cancel navigation - this isn't a real URL
             decisionHandler(.cancel)
-            finishInscription(token: token)
+            // Clear current webview contents, so they don't show up while dismissing
+            clearWebview()
+            finishInscription()
             return
         }
         // Default: allow navigation
@@ -126,12 +128,13 @@ private extension MLCardFormWebPayViewController {
         }
     }
     
-    func finishInscription(token: String) {
+    func finishInscription() {
         showProgress(direction: .wp_ml)
-        viewModel.finishInscription(token: token, completion: { [weak self] (result: Result<Void, Error>) in
+        viewModel.finishInscription{ [weak self] (result: Result<Void, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(_):
+                self.loadingVC.setType(type: .success)
                 // Notify listener
                 self.lifeCycleDelegate?.didAddCard(cardID: "")
             case .failure(let error):
@@ -152,7 +155,7 @@ private extension MLCardFormWebPayViewController {
                     }
                 }
             }
-        })
+        }
     }
     
     func initialSetup() {
@@ -178,6 +181,14 @@ private extension MLCardFormWebPayViewController {
                                      webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                                      webView.rightAnchor.constraint(equalTo: view.rightAnchor)])
     }
+    
+    func clearWebview() {
+        if let url = URL(string:"about:blank") {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: { [weak self] in
+                self?.webView.load(URLRequest(url: url))
+            })
+        }
+    }
 }
 
 // MARK: Progress methods.
@@ -200,7 +211,7 @@ extension MLCardFormWebPayViewController: MLCardFormWebPayLoadingViewDelegate {
             case .ml_wp:
                 initInscription()
             case .wp_ml:
-                finishInscription(token: "")
+                finishInscription()
             }
         case .cancel:
             dismissLoadingAndPop()

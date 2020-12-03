@@ -8,10 +8,6 @@
 import Foundation
 
 struct MLCardFormWebPayFinishInscriptionData: Codable {
-    let card: MLCardFormWebPayCard
-}
-
-struct MLCardFormWebPayCard: Codable {
     let id: String
     let firstSixDigits: String
     let number: String
