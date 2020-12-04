@@ -40,11 +40,17 @@ class ViewController: UIViewController {
 
 extension ViewController: MLCardFormLifeCycleDelegate {
     func didAddCard(cardID: String) {
-        if let navigationController = navigationController,
-            let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormViewController }) as? MLCardFormViewController {
-            cardFormViewController.dismissLoadingAndPop(completion: { 
-                print("Se cerro el VC")
-            })
+        if let navigationController = navigationController {
+            if let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormViewController }) as? MLCardFormViewController {
+                cardFormViewController.dismissLoadingAndPop(completion: {
+                    print("Se cerro el VC MLCardFormViewController. Card ID: \(cardID)")
+                })
+            }
+            if let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormWebPayViewController }) as? MLCardFormWebPayViewController {
+                cardFormViewController.dismissLoadingAndPop(completion: {
+                    print("Se cerro el VC MLCardFormWebPayViewController. Card ID: \(cardID)")
+                })
+            }
         }
     }
     

@@ -45,10 +45,16 @@ public final class MLCardFormWebPayViewController: MLCardFormBaseViewController 
     }
     
     public func dismissLoadingAndPop(completion: (() -> Void)? = nil) {
-        hideProgress(completion: { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
-            if let completion = completion { completion() }
+        webView.removeFromSuperview()
+        CATransaction.begin()
+        navigationController?.popViewController(animated: true)
+        CATransaction.setCompletionBlock({ [weak self] in
+            self?.hideProgress(completion: {
+                if let completion = completion { completion() }
+            })
+        
         })
+        CATransaction.commit()
     }
 }
 
@@ -66,8 +72,7 @@ internal extension MLCardFormWebPayViewController {
 /** :nodoc: */
 extension MLCardFormWebPayViewController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
-        if let token = viewModel.getToken(request: navigationAction.request) {
-            NSLog("Obtained access token")
+        if viewModel.getToken(request: navigationAction.request) {
             // Cancel navigation - this isn't a real URL
             decisionHandler(.cancel)
             // Clear current webview contents, so they don't show up while dismissing
@@ -130,17 +135,18 @@ private extension MLCardFormWebPayViewController {
     
     func finishInscription() {
         showProgress(direction: .wp_ml)
-        viewModel.finishInscription{ [weak self] (result: Result<Void, Error>) in
-            guard let self = self else { return }
+        viewModel.finishInscription{ (result: Result<String, Error>) in
             switch result {
-            case .success(_):
-                self.loadingVC.setType(type: .success)
-                // Notify listener
-                self.lifeCycleDelegate?.didAddCard(cardID: "")
-            case .failure(let error):
-                // Notify listener
-                self.lifeCycleDelegate?.didFailAddCard()
+            case .success(let cardID):
                 DispatchQueue.main.async { [weak self] in
+                    self?.loadingVC.setType(type: .success)
+                    // Notify listener
+                    self?.lifeCycleDelegate?.didAddCard(cardID: cardID)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    // Notify listener
+                    self?.lifeCycleDelegate?.didFailAddCard()
                     // Show error to the user
                     var text: String?
                     switch error {

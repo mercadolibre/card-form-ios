@@ -116,7 +116,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
             leftImageView.widthAnchor.constraint(equalToConstant: iconSize),
             leftImageView.heightAnchor.constraint(equalToConstant: iconSize),
             leftImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            leftImageView.trailingAnchor.constraint(equalTo: centerImageView.leadingAnchor, constant: -16),
+            leftImageView.trailingAnchor.constraint(equalTo: centerImageView.leadingAnchor, constant: -22), //-16
             
             centerImageView.widthAnchor.constraint(equalToConstant: iconSize),
             centerImageView.heightAnchor.constraint(equalToConstant: iconSize),
@@ -129,7 +129,7 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
             rightImageView.widthAnchor.constraint(equalToConstant: iconSize),
             rightImageView.heightAnchor.constraint(equalToConstant: iconSize),
             rightImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            rightImageView.leadingAnchor.constraint(equalTo: centerImageView.trailingAnchor, constant: 16)
+            rightImageView.leadingAnchor.constraint(equalTo: centerImageView.trailingAnchor, constant: 22) //16
         ])
         AndesIconsProvider.loadIcon(name: "andes_ui_arrow_right_16", placeItInto: centerImageView)
         let webpayImage = UIImage(named: "webpay", in: MLCardFormBundle.bundle(), compatibleWith: nil)

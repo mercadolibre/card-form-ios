@@ -55,7 +55,7 @@ extension MLCardFormWebPayViewModel {
         })
     }
     
-    func finishInscription(completion: ((Result<Void, Error>) -> ())? = nil) {
+    func finishInscription(completion: ((Result<String, Error>) -> ())? = nil) {
         guard let tbkToken = tbkToken else {
             trackError(step: "finish_inscription", message: "Missing token")
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
@@ -68,8 +68,8 @@ extension MLCardFormWebPayViewModel {
                 self?.finishInscriptionData = inscriptionData
                 self?.addCard(completion: { (result: Result<String, Error>) in
                     switch result {
-                    case .success(_):
-                        completion?(.success(Void()))
+                    case .success(let cardId):
+                        completion?(.success(cardId))
                     case .failure(let error):
                         completion?(.failure(error))
                     }
@@ -124,10 +124,10 @@ extension MLCardFormWebPayViewModel {
         return myRequest
     }
     
-    func getToken(request: URLRequest) -> String? {
+    func getToken(request: URLRequest) -> Bool {
         guard let urlString = initInscriptionData?.redirectUrl,
               let url = NSURL(string: urlString) else {
-            return nil
+            return false
         }
         
         let REDIRECT_HOST = url.host
@@ -147,10 +147,10 @@ extension MLCardFormWebPayViewModel {
                let result = bodyParams[key] {
                 NSLog("Obtained access token")
                 tbkToken = result
-                return result
+                return true
             }
         }
-        return nil
+        return false
     }
 }
 
