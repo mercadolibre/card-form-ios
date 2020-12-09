@@ -13,7 +13,7 @@ final class MLCardFormWebPayViewModel {
     private var builder: MLCardFormBuilder?
     private var initInscriptionData: MLCardFormWebPayInscriptionData?
     private var finishInscriptionData: MLCardFormWebPayFinishInscriptionData?
-    private var tbkToken: String?
+    //private var tbkToken: String?
     
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
@@ -41,8 +41,9 @@ final class MLCardFormWebPayViewModel {
 // MARK: Services
 extension MLCardFormWebPayViewModel {
     func initInscription(completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
+        initInscriptionData = nil
         finishInscriptionData = nil
-        tbkToken = nil
+        //tbkToken = nil
         serviceManager.webPayService.initInscription(completion: { [weak self] (result: Result<MLCardFormWebPayInscriptionData, Error>) in
             switch result {
             case .success(let initInscriptionData):
@@ -56,7 +57,7 @@ extension MLCardFormWebPayViewModel {
     }
     
     func finishInscription(completion: ((Result<String, Error>) -> ())? = nil) {
-        guard let tbkToken = tbkToken else {
+        guard let tbkToken = initInscriptionData?.tbkToken else {
             trackError(step: "finish_inscription", message: "Missing token")
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
@@ -134,21 +135,23 @@ extension MLCardFormWebPayViewModel {
         let REDIRECT_PATH = url.path
         if let host = request.url?.host,
            let path = request.url?.path,
-           let httpBody = request.httpBody,
            host == REDIRECT_HOST,
            path == REDIRECT_PATH {
-            let stringBody = String(decoding: httpBody, as: UTF8.self)
-            let bodyParams = stringBody.components(separatedBy: "&").map( { $0.components(separatedBy: "=") }).reduce(into: [String:String]()) { dict, pair in
-                if pair.count == 2 {
-                    dict[pair[0]] = pair[1]
-                }
-            }
-            if let key = bodyParams.keys.first(where: { $0.uppercased().contains("TBK_TOKEN") }),
-               let result = bodyParams[key] {
-                NSLog("Obtained access token")
-                tbkToken = result
-                return true
-            }
+            return true
+//            guard let httpBody = request.httpBody else { return false }
+//
+//            let stringBody = String(decoding: httpBody, as: UTF8.self)
+//            let bodyParams = stringBody.components(separatedBy: "&").map( { $0.components(separatedBy: "=") }).reduce(into: [String:String]()) { dict, pair in
+//                if pair.count == 2 {
+//                    dict[pair[0]] = pair[1]
+//                }
+//            }
+//            if let key = bodyParams.keys.first(where: { $0.uppercased().contains("TBK_TOKEN") }),
+//               let result = bodyParams[key] {
+//                NSLog("Obtained access token")
+//                tbkToken = result
+//                return true
+//            }
         }
         return false
     }

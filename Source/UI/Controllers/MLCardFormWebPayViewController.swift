@@ -91,10 +91,6 @@ extension MLCardFormWebPayViewController: WKNavigationDelegate {
             hideProgress()
         }
     }
-
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        
-    }
 }
 
 // MARK:  Privates.
@@ -174,7 +170,6 @@ private extension MLCardFormWebPayViewController {
             }
         }
         loadingVC.delegate = self
-        //viewModel.viewModelDelegate = self
         setupUI()
     }
     
@@ -182,7 +177,7 @@ private extension MLCardFormWebPayViewController {
         self.view.backgroundColor = .white
         self.view.addSubview(webView)
             
-        NSLayoutConstraint.activate([webView.topAnchor.constraint(equalTo: view.topAnchor),
+        NSLayoutConstraint.activate([webView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
                                      webView.leftAnchor.constraint(equalTo: view.leftAnchor),
                                      webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                                      webView.rightAnchor.constraint(equalTo: view.rightAnchor)])
