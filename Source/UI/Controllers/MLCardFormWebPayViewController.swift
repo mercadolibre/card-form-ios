@@ -14,7 +14,6 @@ public final class MLCardFormWebPayViewController: MLCardFormBaseViewController 
     // MARK: Constants
     internal let viewModel: MLCardFormWebPayViewModel = MLCardFormWebPayViewModel()
     // MARK: Private Vars
-    private var urlWebpay: String?
     private weak var lifeCycleDelegate: MLCardFormLifeCycleDelegate?
     
     lazy var webView: WKWebView = {
@@ -85,9 +84,8 @@ extension MLCardFormWebPayViewController: WKNavigationDelegate {
     }
 
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if let url = webView.url?.absoluteString,
-           url == urlWebpay {
-            trackWebviewScreen(url: url)
+        if let urlString = viewModel.validateURLWebpay(url: webView.url) {
+            trackWebviewScreen(url: urlString)
             hideProgress()
         }
     }
@@ -97,14 +95,12 @@ extension MLCardFormWebPayViewController: WKNavigationDelegate {
 private extension MLCardFormWebPayViewController {
     func initInscription() {
         showProgress(direction: .ml_wp)
-        urlWebpay = nil
         viewModel.initInscription { [weak self] (result: Result<MLCardFormWebPayInscriptionData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let inscriptionData):
                 // open webview
                 if let request = self.viewModel.buildRequest(inscriptionData: inscriptionData) {
-                    self.urlWebpay = inscriptionData.urlWebpay
                     DispatchQueue.main.async { [weak self] in
                         self?.loadingVC.setType(type: .success)
                         self?.webView.load(request)

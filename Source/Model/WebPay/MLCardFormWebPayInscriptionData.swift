@@ -18,11 +18,11 @@ struct MLCardFormWebPayUserData: Codable {
     let firstName: String
     let lastName: String
     let nickname: String
-    let identifier: MLCardFormWebPayUserIdentifierData
+    let identifier: MLCardFormWebPayUserIdentifierData?
     let email: String
 }
 
 struct MLCardFormWebPayUserIdentifierData: Codable {
-    let number: String
-    let type: String
+    let number: String?
+    let type: String?
 }

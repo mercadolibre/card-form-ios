@@ -12,10 +12,10 @@ enum MLCardFormApiRouter {
 
     case getCardData(MLCardFormBinService.QueryParams, MLCardFormBinService.Headers)
     case postCardTokenData(MLCardFormAddCardService.KeyParam, MLCardFormAddCardService.Headers, MLCardFormTokenizationBody)
-    case postCardData(MLCardFormAddCardService.AddCardParams, MLCardFormAddCardService.Headers, MLCardFormAddCardBody)
-    case getWebPayInitInscription(MLCardFormWebPayService.AddCardParams, MLCardFormWebPayService.Headers)
-    case postWebPayFinishInscription(MLCardFormWebPayService.AddCardParams, MLCardFormWebPayService.Headers, MLCardFormFinishInscriptionBody)
-    case postWebPayCardTokenData(MLCardFormWebPayService.KeyParam, MLCardFormWebPayService.Headers, MLCardFormWebPayTokenizationBody)
+    case postCardData(MLCardFormAddCardService.AccessTokenParam, MLCardFormAddCardService.Headers, MLCardFormAddCardBody)
+    case getWebPayInitInscription(MLCardFormWebPayService.AccessTokenParam, MLCardFormWebPayService.Headers)
+    case postWebPayFinishInscription(MLCardFormWebPayService.AccessTokenParam, MLCardFormWebPayService.Headers, MLCardFormFinishInscriptionBody)
+    case postWebPayCardTokenData(MLCardFormWebPayService.AccessTokenParam, MLCardFormWebPayService.Headers, MLCardFormWebPayTokenizationBody)
 
     var scheme: String {
         switch self {
@@ -41,14 +41,14 @@ enum MLCardFormApiRouter {
             return "/production/px_mobile/v1/card"
         case .postCardTokenData:
             return "/v1/card_tokens"
-        case .postWebPayCardTokenData:
-            return "/gateway/staging/card_tokens"
         case .postCardData:
             return "/gamma/px_mobile/v1/card" //"/production/px_mobile/v1/card"
         case .getWebPayInitInscription:
             return "/gamma/px_mobile/v1/card_webpay/inscription/init"
         case .postWebPayFinishInscription:
             return "/gamma/px_mobile/v1/card_webpay/inscription/finish"
+        case .postWebPayCardTokenData:
+            return "/gateway/staging/card_tokens"
         }
     }
     
@@ -100,18 +100,11 @@ enum MLCardFormApiRouter {
             ]
             return urlQueryItems
         case .getWebPayInitInscription(let queryParams, _),
-             .postWebPayFinishInscription(let queryParams, _, _):
+             .postWebPayFinishInscription(let queryParams, _, _),
+             .postWebPayCardTokenData(let queryParams, _, _):
             let urlQueryItems = [
                 URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken),
             ]
-            return urlQueryItems
-        case .postWebPayCardTokenData(let queryParams, _, _):
-            var urlQueryItems:[URLQueryItem] = []
-            if let accessToken = queryParams.accessToken {
-                urlQueryItems.append(URLQueryItem(name: MLCardFormWebPayService.QueryKeys.accessToken.getKey, value: accessToken))
-            } else if let publicKey = queryParams.publicKey {
-                urlQueryItems.append(URLQueryItem(name: MLCardFormWebPayService.QueryKeys.publicKey.getKey, value: publicKey))
-            }
             return urlQueryItems
         }
     }

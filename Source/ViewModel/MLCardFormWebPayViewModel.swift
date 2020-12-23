@@ -155,14 +155,31 @@ extension MLCardFormWebPayViewModel {
         }
         return false
     }
+    
+    func validateURLWebpay(url: URL?) -> String? {
+        guard let urlString = initInscriptionData?.urlWebpay,
+              let urlWebpay = NSURL(string: urlString) else {
+            return nil
+        }
+
+        let WEBPAY_HOST = urlWebpay.host
+        let WEBPAY_PATH = urlWebpay.path
+        if let host = url?.host,
+           let path = url?.path,
+           host == WEBPAY_HOST,
+           path == WEBPAY_PATH {
+            return urlString
+        }
+        return nil
+    }
 }
 
 // MARK: Privates.
 private extension MLCardFormWebPayViewModel {
     func getTokenizationData() -> MLCardFormWebPayTokenizationBody? {
         let cardHolderName = "\(initInscriptionData?.user.firstName ?? "") \(initInscriptionData?.user.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let identificationType = initInscriptionData?.user.identifier.type,
-              let identificationNumber = initInscriptionData?.user.identifier.number,
+        guard let identificationType = initInscriptionData?.user.identifier?.type,
+              let identificationNumber = initInscriptionData?.user.identifier?.number,
               let expirationMonth = finishInscriptionData?.expirationMonth,
               let expirationYear = finishInscriptionData?.expirationYear,
               let cardNumberId = finishInscriptionData?.id,
@@ -174,7 +191,7 @@ private extension MLCardFormWebPayViewModel {
         let count = cardNumberLength - (bin.count + cardNumber.count)
         let stringPadding = String(repeating: "X", count: count)
         let truncCardNumber = "\(bin)\(stringPadding)\(cardNumber)"
-        
+
         let tempIdentification = MLCardFormIdentification(type: identificationType, number: identificationNumber)
 
         let cardHolder = MLCardFormCardHolder(name: cardHolderName, identification: tempIdentification)

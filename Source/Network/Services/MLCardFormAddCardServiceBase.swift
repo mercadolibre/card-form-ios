@@ -49,7 +49,7 @@ extension MLCardFormAddCardServiceBase {
         }
     }
 
-    struct AddCardParams {
+    struct AccessTokenParam {
         let accessToken: String
     }
 }

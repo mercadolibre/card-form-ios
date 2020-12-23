@@ -31,9 +31,9 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
-        let queryParams = MLCardFormAddCardService.AddCardParams(accessToken: privateKey)
+        let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
         let headers = MLCardFormAddCardService.Headers(contentType: "application/json")
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(queryParams, headers, buildAddCardBody(tokenId, addCardData: addCardData))) {
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(accessTokenParam, headers, buildAddCardBody(tokenId, addCardData: addCardData))) {
             (result: Result<MLCardFormAddCardData, Error>) in
             completion?(result)
         }

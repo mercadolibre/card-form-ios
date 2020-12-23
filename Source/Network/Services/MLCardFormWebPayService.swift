@@ -8,8 +8,8 @@
 import Foundation
 
 final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
-    func initInscription(completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
-        guard let accessToken = privateKey else {
+    private func getATParamAndCheckConnection(completion: ((Result<MLCardFormWebPayService.AccessTokenParam, Error>) -> ())? = nil) {
+        guard let privateKey = privateKey else {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
@@ -18,43 +18,56 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             completion?(.failure(NetworkLayerError.noInternetConnection))
             return
         }
-        let queryParams = MLCardFormWebPayService.AddCardParams(accessToken: accessToken)
-        let headers = buildJSONHeaders()
-        NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(queryParams, headers)) {
-            (result: Result<MLCardFormWebPayInscriptionData, Error>) in
-            completion?(result)
-        }
+        
+        let accessTokenParam = MLCardFormWebPayService.AccessTokenParam(accessToken: privateKey)
+        completion?(.success(accessTokenParam))
+    }
+    
+    func initInscription(completion: ((Result<MLCardFormWebPayInscriptionData, Error>) -> ())? = nil) {
+        getATParamAndCheckConnection(completion: { [weak self] (result: Result<MLCardFormAddCardServiceBase.AccessTokenParam, Error>) in
+            switch result {
+            case .success(let accessTokenParam):
+                guard let self = self else { return }
+                let headers = self.buildJSONHeaders()
+                NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(accessTokenParam, headers)) {
+                    (result: Result<MLCardFormWebPayInscriptionData, Error>) in
+                    completion?(result)
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        })
     }
     
     func finishInscription(inscriptionData: MLCardFormFinishInscriptionBody, completion: ((Result<MLCardFormWebPayFinishInscriptionData, Error>) -> ())? = nil) {
-        guard let accessToken = privateKey else {
-            completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
-            return
-        }
-
-        let queryParams = MLCardFormWebPayService.AddCardParams(accessToken: accessToken)
-        let headers = buildJSONHeaders()
-        NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(queryParams, headers, inscriptionData)) {
-            (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
-            completion?(result)
-        }
+        getATParamAndCheckConnection(completion: { [weak self] (result: Result<MLCardFormAddCardServiceBase.AccessTokenParam, Error>) in
+            switch result {
+            case .success(let accessTokenParam):
+                guard let self = self else { return }
+                let headers = self.buildJSONHeaders()
+                NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(accessTokenParam, headers, inscriptionData)) {
+                    (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
+                    completion?(result)
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        })
     }
     
     func addCardToken(tokenizationData: MLCardFormWebPayTokenizationBody, completion: ((Result<MLCardFormTokenizationCardData, Error>) -> ())? = nil) {
-        if publicKey == nil && privateKey == nil {
-            completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
-            return
-        }
-
-        if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
-            completion?(.failure(NetworkLayerError.noInternetConnection))
-            return
-        }
-        let queryParams = MLCardFormWebPayService.KeyParam(publicKey: publicKey, accessToken: privateKey)
-        let headers = buildJSONHeaders()
-        NetworkLayer.request(router: MLCardFormApiRouter.postWebPayCardTokenData(queryParams, headers, tokenizationData)) { (result: Result<MLCardFormTokenizationCardData, Error>) in
-            completion?(result)
-        }
+        getATParamAndCheckConnection(completion: { [weak self] (result: Result<MLCardFormAddCardServiceBase.AccessTokenParam, Error>) in
+            switch result {
+            case .success(let accessTokenParam):
+                guard let self = self else { return }
+                let headers = self.buildJSONHeaders()
+                NetworkLayer.request(router: MLCardFormApiRouter.postWebPayCardTokenData(accessTokenParam, headers, tokenizationData)) { (result: Result<MLCardFormTokenizationCardData, Error>) in
+                    completion?(result)
+                }
+            case .failure(let error):
+                completion?(.failure(error))
+            }
+        })
     }
 }
 
