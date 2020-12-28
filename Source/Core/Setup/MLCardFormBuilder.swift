@@ -58,6 +58,10 @@ open class MLCardFormBuilder: NSObject {
         self.lifeCycleDelegate = lifeCycleDelegate
         tracker.set(flowId: flowId, siteId: siteId)
     }
+    
+    public func getSiteId() -> String {
+        return siteId
+    }
 }
 
 // MARK: - Setters/Builders

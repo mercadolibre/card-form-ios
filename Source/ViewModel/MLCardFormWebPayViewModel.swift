@@ -57,12 +57,11 @@ extension MLCardFormWebPayViewModel {
     }
     
     func finishInscription(completion: ((Result<String, Error>) -> ())? = nil) {
-        guard let tbkToken = initInscriptionData?.tbkToken else {
-            trackError(step: "finish_inscription", message: "Missing token")
+        guard let inscriptionData = getInscriptionData() else {
+            trackError(step: "finish_inscription", message: "Missing inscriptionData")
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
-        let inscriptionData = MLCardFormFinishInscriptionBody(token: tbkToken)
         serviceManager.webPayService.finishInscription(inscriptionData: inscriptionData, completion: { [weak self] (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
             switch result {
             case .success(let inscriptionData):
@@ -83,31 +82,19 @@ extension MLCardFormWebPayViewModel {
     }
     
     func addCard(completion: ((Result<String, Error>) -> ())? = nil) {
-        guard let tokenizationData = getTokenizationData(), let addCardData = getAddCardData() else {
-            trackError(step: "finish_inscription", message: "Missing tokenizationData")
+        guard let tokenId = finishInscriptionData?.cardTokenId,
+              let addCardData = getAddCardData() else {
+            trackError(step: "finish_inscription", message: "Missing addCardData")
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
-        serviceManager.webPayService.addCardToken(tokenizationData: tokenizationData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
+        serviceManager.addCardService.saveCard(tokenId: tokenId, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
             switch result {
-            case .success(let tokenCardData):
-                // tokenCardData will be used to save card
-                self?.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
-                    switch result {
-                    case .success(let addCardData):
-                        self?.trackSuccess()
-                        completion?(.success(addCardData.getId()))
-                    case .failure(let error):
-                        if case MLCardFormAddCardServiceError.missingPrivateKey = error {
-                            completion?(.success(""))
-                        } else {
-                            self?.trackError(step: "save_card_data", message: error.localizedDescription)
-                            completion?(.failure(error))
-                        }
-                    }
-                })
+            case .success(let addCardData):
+                self?.trackSuccess()
+                completion?(.success(addCardData.getId()))
             case .failure(let error):
-                self?.trackError(step: "save_card_token", message: error.localizedDescription)
+                self?.trackError(step: "save_card_data", message: error.localizedDescription)
                 completion?(.failure(error))
             }
         })
@@ -176,26 +163,15 @@ extension MLCardFormWebPayViewModel {
 
 // MARK: Privates.
 private extension MLCardFormWebPayViewModel {
-    func getTokenizationData() -> MLCardFormWebPayTokenizationBody? {
-        let cardHolderName = "\(initInscriptionData?.user.firstName ?? "") \(initInscriptionData?.user.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let identificationType = initInscriptionData?.user.identifier?.type,
-              let identificationNumber = initInscriptionData?.user.identifier?.number,
-              let expirationMonth = finishInscriptionData?.expirationMonth,
-              let expirationYear = finishInscriptionData?.expirationYear,
-              let cardNumberId = finishInscriptionData?.id,
-              let cardNumber = finishInscriptionData?.number.replacingOccurrences(of: "X", with: ""),
-              let bin = finishInscriptionData?.firstSixDigits,
-              let cardNumberLength = finishInscriptionData?.length else {
+    //func getTokenizationData() -> MLCardFormWebPayTokenizationBody? {
+    func getInscriptionData() -> MLCardFormFinishInscriptionBody? {
+        guard let tbkToken = initInscriptionData?.tbkToken,
+              let siteId = builder?.getSiteId() else {
             return nil
         }
-        let count = cardNumberLength - (bin.count + cardNumber.count)
-        let stringPadding = String(repeating: "X", count: count)
-        let truncCardNumber = "\(bin)\(stringPadding)\(cardNumber)"
-
-        let tempIdentification = MLCardFormIdentification(type: identificationType, number: identificationNumber)
-
-        let cardHolder = MLCardFormCardHolder(name: cardHolderName, identification: tempIdentification)
-        return MLCardFormWebPayTokenizationBody(cardNumberId: cardNumberId, truncCardNumber: truncCardNumber, expirationMonth: expirationMonth, expirationYear: expirationYear, cardholder: cardHolder, device: MLCardFormDevice())
+        let cardHolderName = "\(initInscriptionData?.user.firstName ?? "") \(initInscriptionData?.user.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+        let cardHolder = MLCardFormWebPayCardHolderData(name: cardHolderName, identification: initInscriptionData?.user.identifier)
+        return MLCardFormFinishInscriptionBody(siteId: siteId, cardholder: cardHolder, token: tbkToken)
     }
 
     func getAddCardData() -> MLCardFormAddCardService.AddCardBody? {

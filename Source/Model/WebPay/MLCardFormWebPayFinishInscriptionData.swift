@@ -8,12 +8,8 @@
 import Foundation
 
 struct MLCardFormWebPayFinishInscriptionData: Codable {
-    let id: String
+    let cardTokenId: String
     let firstSixDigits: String
-    let number: String
-    let expirationYear: Int
-    let expirationMonth: Int
-    let length: Int
     let issuer: MLCardFormWebPayIssuer
     let paymentMethod: MLCardFormWebPayPaymentMethod
 }

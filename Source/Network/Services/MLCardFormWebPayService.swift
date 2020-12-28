@@ -54,21 +54,6 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             }
         })
     }
-    
-    func addCardToken(tokenizationData: MLCardFormWebPayTokenizationBody, completion: ((Result<MLCardFormTokenizationCardData, Error>) -> ())? = nil) {
-        getATParamAndCheckConnection(completion: { [weak self] (result: Result<MLCardFormAddCardServiceBase.AccessTokenParam, Error>) in
-            switch result {
-            case .success(let accessTokenParam):
-                guard let self = self else { return }
-                let headers = self.buildJSONHeaders()
-                NetworkLayer.request(router: MLCardFormApiRouter.postWebPayCardTokenData(accessTokenParam, headers, tokenizationData)) { (result: Result<MLCardFormTokenizationCardData, Error>) in
-                    completion?(result)
-                }
-            case .failure(let error):
-                completion?(.failure(error))
-            }
-        })
-    }
 }
 
 // MARK: HTTP Headers

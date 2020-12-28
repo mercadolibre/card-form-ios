@@ -8,5 +8,12 @@
 import Foundation
 
 struct MLCardFormFinishInscriptionBody: Codable {
+    let siteId: String
+    let cardholder: MLCardFormWebPayCardHolderData
     let token: String
+}
+
+struct MLCardFormWebPayCardHolderData: Codable {
+    let name: String
+    let identification: MLCardFormWebPayUserIdentifierData?
 }
