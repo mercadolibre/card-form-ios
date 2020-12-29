@@ -41,14 +41,14 @@ enum MLCardFormApiRouter {
         case .postCardTokenData:
             return "/v1/card_tokens"
         case .postCardData:
-            return "/gamma/px_mobile/v1/card" //"/production/px_mobile/v1/card"
+            return "/production/px_mobile/v1/card"
         case .getWebPayInitInscription:
-            return "/gamma/px_mobile/v1/card_webpay/inscription/init"
+            return "/production/px_mobile/v1/card_webpay/inscription/init"
         case .postWebPayFinishInscription:
-            return "/gamma/px_mobile/v1/card_webpay/inscription/finish"
+            return "/production/px_mobile/v1/card_webpay/inscription/finish"
         }
     }
-    
+
     var headers: [String : String]? {
         switch self {
         case .getCardData(_ , let headers):
