@@ -18,19 +18,15 @@ enum MLCardFormApiRouter {
 
     var scheme: String {
         switch self {
-        case .getCardData, .postCardTokenData, .postCardData:
+        case .getCardData, .postCardTokenData, .postCardData, .getWebPayInitInscription, .postWebPayFinishInscription:
             return "https"
-        case .getWebPayInitInscription, .postWebPayFinishInscription:
-            return "http"
         }
     }
 
     var host: String {
         switch self {
-        case .getCardData, .postCardTokenData, .postCardData:
+        case .getCardData, .postCardTokenData, .postCardData, .getWebPayInitInscription, .postWebPayFinishInscription:
             return "api.mercadopago.com"
-        case .getWebPayInitInscription, .postWebPayFinishInscription:
-            return "api.mp.internal.ml.com"
         }
     }
 
