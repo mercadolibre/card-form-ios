@@ -223,10 +223,9 @@ final class MLCardFormWebPayLoadingViewController: MLCardFormLoadingViewControll
     
     private func getTitleText() -> String {
         switch viewType {
-        case .loading:
+        case .loading,
+             .success:
             return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "Te estamos llevando de vuelta a {0}".localized.replacingOccurrences(of: "{0}", with: (isMeli) ? "Mercado Libre".localized : "Mercado Pago".localized)
-        case .success:
-            return (viewDirection == .ml_wp) ? "Te estamos llevando al sitio de Webpay".localized : "¡Agregaste una nueva tarjeta!".localized
         case .error:
             return "Ocurrió un error".localized
         case .noNetworkError:
