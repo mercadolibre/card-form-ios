@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		033F19BC52CCF93385839799 /* Pods-Example_CardForm.mds.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.mds.xcconfig"; path = "../../Pods/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.mds.xcconfig"; sourceTree = "<group>"; };
 		CEF9472F235F3C530010055B /* Example_CardForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example_CardForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEF94732235F3C530010055B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEF94734235F3C530010055B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -24,8 +25,8 @@
 		CEF9473C235F3C580010055B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CEF9473E235F3C580010055B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F322723F6B22ACCFD3A3BF55 /* Pods_Example_CardForm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example_CardForm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F78793CD367858DC8DEF8330 /* Pods-Example_CardForm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.debug.xcconfig"; path = "Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.debug.xcconfig"; sourceTree = "<group>"; };
-		FBEC61F4071C9294435F5E9F /* Pods-Example_CardForm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.release.xcconfig"; path = "Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.release.xcconfig"; sourceTree = "<group>"; };
+		F78793CD367858DC8DEF8330 /* Pods-Example_CardForm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.debug.xcconfig"; sourceTree = "<group>"; };
+		FBEC61F4071C9294435F5E9F /* Pods-Example_CardForm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +46,7 @@
 			children = (
 				F78793CD367858DC8DEF8330 /* Pods-Example_CardForm.debug.xcconfig */,
 				FBEC61F4071C9294435F5E9F /* Pods-Example_CardForm.release.xcconfig */,
+				033F19BC52CCF93385839799 /* Pods-Example_CardForm.mds.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -460,7 +462,7 @@
 		};
 		F9AB403E2589442700D7D478 /* MDS */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FBEC61F4071C9294435F5E9F /* Pods-Example_CardForm.release.xcconfig */;
+			baseConfigurationReference = 033F19BC52CCF93385839799 /* Pods-Example_CardForm.mds.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
