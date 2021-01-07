@@ -9,6 +9,7 @@
 import Foundation
 
 enum NetworkLayerError: Error {
+    case url
     case dataTask
     case data
     case response
@@ -57,7 +58,10 @@ struct NetworkLayer {
         components.path = router.path
         components.queryItems = router.parameters
 
-        guard let url = components.url else { return }
+        guard let url = components.url else {
+            completion(.failure(NetworkLayerError.url))
+            return
+        }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = router.method
 
@@ -70,6 +74,10 @@ struct NetworkLayer {
         }
 
         let session = URLSession(configuration: .default)
+        
+        #if DEBUG
+        print("\nHTTP request: \(urlRequest.url?.absoluteString ?? "")\nParams: \(router.body?.prettyPrintedJSONString ?? "")\n")
+        #endif
 
         let dataTask = session.dataTask(with: urlRequest) { data, response, error in
             guard error == nil else {
@@ -84,6 +92,9 @@ struct NetworkLayer {
                 completion(.failure(NetworkLayerError.response))
                 return
             }
+            #if DEBUG
+            print("\nHTTP response: \(response.url?.absoluteString ?? "")\nParams: \(data.prettyPrintedJSONString ?? "")\n")
+            #endif
             guard (200...299).contains(response.statusCode) else {
                 var message = ""
                 do {
@@ -133,5 +144,15 @@ struct NetworkLayer {
                 }
             }).resume()
         }
+    }
+}
+
+extension Data {
+    var prettyPrintedJSONString: NSString? { /// NSString gives us a nice sanitized debugDescription
+        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
+              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+              let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return nil }
+
+        return prettyPrintedString
     }
 }

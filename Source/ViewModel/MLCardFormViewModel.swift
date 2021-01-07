@@ -374,18 +374,28 @@ extension MLCardFormViewModel {
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
         }
-        serviceManager.addCardService.addCardToken(tokenizationData: tokenizationData, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
+        serviceManager.addCardService.addCardToken(tokenizationData: tokenizationData, completion: { [weak self] (result: Result<MLCardFormTokenizationCardData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let tokenCardData):
-                if let esc = tokenCardData.esc {
-                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: tokenCardData.firstSixDigits, lastFourDigits: tokenCardData.lastFourDigits, esc: esc)
+                if let esc = tokenCardData.esc,
+                   let firstSixDigits = tokenCardData.firstSixDigits,
+                   let lastFourDigits = tokenCardData.lastFourDigits {
+                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: firstSixDigits, lastFourDigits: lastFourDigits, esc: esc)
                 }
                 self.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
                     guard let self = self else { return }
                     switch result {
                     case .success(let addCardData):
-                        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success")
+                        let bin = tokenCardData.firstSixDigits ?? ""
+                        let issuer = self.binData?.issuers.first?.id ?? 0
+                        let paymentMethodId = self.binData?.paymentMethod.paymentMethodId ?? ""
+                        let paymentTypeId = self.binData?.paymentMethod.paymentTypeId ?? ""
+                        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success",
+                                                                    properties: ["bin": bin,
+                                                                                 "issuer": issuer,
+                                                                                 "payment_method_id": paymentMethodId,
+                                                                                 "payment_type_id": paymentTypeId])
                         self.saveDataForReuse()
                         completion?(.success(addCardData.getId()))
                     case .failure(let error):
@@ -400,7 +410,7 @@ extension MLCardFormViewModel {
                 })
             case .failure(let error):
                 let errorMessage = error.localizedDescription
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "bin_number", "save_card_token": errorMessage])
+                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_token", "error_message": errorMessage])
                 completion?(.failure(error))
             }
         })

@@ -24,7 +24,6 @@ open class MLCardForm: NSObject {
     public init(builder: MLCardFormBuilder) {
         self.builder = builder
         MLCardFormTracker.sharedInstance.startNewSession()
-        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/init")
     }
 }
 // MARK: Publics
@@ -33,6 +32,12 @@ extension MLCardForm {
      Setup MLCardForm settings and return main ViewController. Push this ViewController in your navigation stack.
      */
     public func setupController() -> MLCardFormViewController {
+        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/init", properties: ["type": "traditional"])
         return MLCardFormViewController.setupWithBuilder(builder)
+    }
+    
+    public func setupWebPayController() -> MLCardFormWebPayViewController {
+        MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/init", properties: ["type": "web_view"])
+        return MLCardFormWebPayViewController.setupWithBuilder(builder)
     }
 }

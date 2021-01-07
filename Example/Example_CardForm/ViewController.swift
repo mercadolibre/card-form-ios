@@ -20,6 +20,10 @@ class ViewController: UIViewController {
         openCardForm()
     }
     
+    @IBAction func iniciarWebPayTouchUpInside(_ sender: UIButton) {
+        initWebPay()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = "MLCardForm"
@@ -36,11 +40,17 @@ class ViewController: UIViewController {
 
 extension ViewController: MLCardFormLifeCycleDelegate {
     func didAddCard(cardID: String) {
-        if let navigationController = navigationController,
-            let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormViewController }) as? MLCardFormViewController {
-            cardFormViewController.dismissLoadingAndPop(completion: { 
-                print("Se cerro el VC")
-            })
+        if let navigationController = navigationController {
+            if let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormViewController }) as? MLCardFormViewController {
+                cardFormViewController.dismissLoadingAndPop(completion: {
+                    print("Se cerro el VC MLCardFormViewController. Card ID: \(cardID)")
+                })
+            }
+            if let cardFormViewController = navigationController.viewControllers.first(where: { $0 is MLCardFormWebPayViewController }) as? MLCardFormWebPayViewController {
+                cardFormViewController.dismissLoadingAndPop(completion: {
+                    print("Se cerro el VC MLCardFormWebPayViewController. Card ID: \(cardID)")
+                })
+            }
         }
     }
     
@@ -80,6 +90,19 @@ private extension ViewController {
         MLCardFormConfiguratorManager.with(esc: self, tracking: self)
         
         let cardFormVC = MLCardForm(builder: builder).setupController()
+        navigationController?.pushViewController(cardFormVC, animated: true)
+    }
+    
+    func initWebPay() {
+        title = ""
+        //let publicKey = ""
+        let privateKey = "TEST-1528604137606087-111019-cf995bea4ffa8aace44c402c4d13536c-635351073"
+        let builder = MLCardFormBuilder(privateKey: privateKey, siteId: "MLC", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
+        builder.setLanguage("es")
+
+        MLCardFormConfiguratorManager.with(esc: self, tracking: self)
+        
+        let cardFormVC = MLCardForm(builder: builder).setupWebPayController()
         navigationController?.pushViewController(cardFormVC, animated: true)
     }
 }

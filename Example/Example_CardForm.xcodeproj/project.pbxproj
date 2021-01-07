@@ -7,17 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7DDF8A075BC1FD9B039504B6 /* Pods_Example_CardForm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F322723F6B22ACCFD3A3BF55 /* Pods_Example_CardForm.framework */; };
 		CEF94733235F3C530010055B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF94732235F3C530010055B /* AppDelegate.swift */; };
 		CEF94735235F3C530010055B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF94734235F3C530010055B /* ViewController.swift */; };
 		CEF94738235F3C530010055B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEF94736235F3C530010055B /* Main.storyboard */; };
 		CEF9473A235F3C580010055B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEF94739235F3C580010055B /* Assets.xcassets */; };
 		CEF9473D235F3C580010055B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEF9473B235F3C580010055B /* LaunchScreen.storyboard */; };
-		E8C063D1B75311D13A309384 /* Pods_Example_CardForm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C32E2FD4FD983E4D94A7D618 /* Pods_Example_CardForm.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6748B61C2A780FD96BAE2CE3 /* Pods-Example_CardForm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.debug.xcconfig"; path = "Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.debug.xcconfig"; sourceTree = "<group>"; };
-		C32E2FD4FD983E4D94A7D618 /* Pods_Example_CardForm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example_CardForm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		033F19BC52CCF93385839799 /* Pods-Example_CardForm.mds.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.mds.xcconfig"; path = "../../Pods/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.mds.xcconfig"; sourceTree = "<group>"; };
 		CEF9472F235F3C530010055B /* Example_CardForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example_CardForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEF94732235F3C530010055B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEF94734235F3C530010055B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -25,7 +24,9 @@
 		CEF94739235F3C580010055B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CEF9473C235F3C580010055B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CEF9473E235F3C580010055B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DF6C60C6FDAC96D3931944FD /* Pods-Example_CardForm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.release.xcconfig"; path = "Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.release.xcconfig"; sourceTree = "<group>"; };
+		F322723F6B22ACCFD3A3BF55 /* Pods_Example_CardForm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example_CardForm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F78793CD367858DC8DEF8330 /* Pods-Example_CardForm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.debug.xcconfig"; sourceTree = "<group>"; };
+		FBEC61F4071C9294435F5E9F /* Pods-Example_CardForm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example_CardForm.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8C063D1B75311D13A309384 /* Pods_Example_CardForm.framework in Frameworks */,
+				7DDF8A075BC1FD9B039504B6 /* Pods_Example_CardForm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,10 +44,19 @@
 		4E1EF308A83D39BB0077C614 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6748B61C2A780FD96BAE2CE3 /* Pods-Example_CardForm.debug.xcconfig */,
-				DF6C60C6FDAC96D3931944FD /* Pods-Example_CardForm.release.xcconfig */,
+				F78793CD367858DC8DEF8330 /* Pods-Example_CardForm.debug.xcconfig */,
+				FBEC61F4071C9294435F5E9F /* Pods-Example_CardForm.release.xcconfig */,
+				033F19BC52CCF93385839799 /* Pods-Example_CardForm.mds.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		B3D80C60D35341C32F2148CF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F322723F6B22ACCFD3A3BF55 /* Pods_Example_CardForm.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CEF94726235F3C530010055B = {
@@ -55,7 +65,7 @@
 				CEF94731235F3C530010055B /* Example_CardForm */,
 				CEF94730235F3C530010055B /* Products */,
 				4E1EF308A83D39BB0077C614 /* Pods */,
-				DDBE6BBF94F514958E335BFF /* Frameworks */,
+				B3D80C60D35341C32F2148CF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,14 +90,6 @@
 			path = Example_CardForm;
 			sourceTree = "<group>";
 		};
-		DDBE6BBF94F514958E335BFF /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				C32E2FD4FD983E4D94A7D618 /* Pods_Example_CardForm.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -95,12 +97,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CEF94741235F3C580010055B /* Build configuration list for PBXNativeTarget "Example_CardForm" */;
 			buildPhases = (
-				AC87D105BC19042FEF767597 /* [CP] Check Pods Manifest.lock */,
+				5B74A7F70772144D8B2F2CA8 /* [CP] Check Pods Manifest.lock */,
 				CEF9472B235F3C530010055B /* Sources */,
 				CEF9472C235F3C530010055B /* Frameworks */,
 				CEF9472D235F3C530010055B /* Resources */,
-				E81F4C633E77EAF9DDD9BFD8 /* [CP] Embed Pods Frameworks */,
-				F0E07F43B069AA259A74060E /* [CP] Copy Pods Resources */,
+				2FC36153D9398C1467C4B512 /* [CP] Embed Pods Frameworks */,
+				3474EB6E97CC496EB9305E85 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -158,7 +160,41 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		AC87D105BC19042FEF767597 /* [CP] Check Pods Manifest.lock */ = {
+		2FC36153D9398C1467C4B512 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3474EB6E97CC496EB9305E85 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5B74A7F70772144D8B2F2CA8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -178,40 +214,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E81F4C633E77EAF9DDD9BFD8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F0E07F43B069AA259A74060E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example_CardForm/Pods-Example_CardForm-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -368,7 +370,7 @@
 		};
 		CEF94742235F3C580010055B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6748B61C2A780FD96BAE2CE3 /* Pods-Example_CardForm.debug.xcconfig */;
+			baseConfigurationReference = F78793CD367858DC8DEF8330 /* Pods-Example_CardForm.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -377,7 +379,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mercadolibre.Example-CardForm";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mercadolibre.CardForm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -386,7 +388,7 @@
 		};
 		CEF94743235F3C580010055B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DF6C60C6FDAC96D3931944FD /* Pods-Example_CardForm.release.xcconfig */;
+			baseConfigurationReference = FBEC61F4071C9294435F5E9F /* Pods-Example_CardForm.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -395,12 +397,86 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mercadolibre.Example-CardForm";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mercadolibre.CardForm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
+		};
+		F9AB403D2589442700D7D478 /* MDS */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = MDS;
+		};
+		F9AB403E2589442700D7D478 /* MDS */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 033F19BC52CCF93385839799 /* Pods-Example_CardForm.mds.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Example_CardForm/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mercadolibre.CardForm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = MDS;
 		};
 /* End XCBuildConfiguration section */
 
@@ -410,6 +486,7 @@
 			buildConfigurations = (
 				CEF9473F235F3C580010055B /* Debug */,
 				CEF94740235F3C580010055B /* Release */,
+				F9AB403D2589442700D7D478 /* MDS */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -419,6 +496,7 @@
 			buildConfigurations = (
 				CEF94742235F3C580010055B /* Debug */,
 				CEF94743235F3C580010055B /* Release */,
+				F9AB403E2589442700D7D478 /* MDS */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

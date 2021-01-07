@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="kbV-03-9ge">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="kbV-03-9ge">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +23,7 @@
                                     <constraint firstAttribute="height" constant="155" id="Vub-KI-qM9"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CqS-II-Fb8">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CqS-II-Fb8">
                                 <rect key="frame" x="20" y="457" width="374" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="avo-pr-wZV"/>
@@ -36,16 +34,30 @@
                                     <action selector="nuevaTarjetaTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lNo-Uk-CvZ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aPv-hg-niF">
+                                <rect key="frame" x="20" y="501" width="374" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="ML4-hh-XXO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="WebPay"/>
+                                <connections>
+                                    <action selector="iniciarWebPayTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ATH-G5-blC"/>
+                                </connections>
+                            </button>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Ze-YW-xcx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="118" id="AR4-Rs-FoH"/>
+                            <constraint firstItem="aPv-hg-niF" firstAttribute="leading" secondItem="CqS-II-Fb8" secondAttribute="leading" id="EsP-zI-Ybv"/>
+                            <constraint firstItem="aPv-hg-niF" firstAttribute="top" secondItem="CqS-II-Fb8" secondAttribute="bottom" constant="8" symbolic="YES" id="HUe-pW-nVO"/>
                             <constraint firstItem="6Ze-YW-xcx" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="gt3-fs-hqd"/>
                             <constraint firstItem="CqS-II-Fb8" firstAttribute="top" secondItem="6Ze-YW-xcx" secondAttribute="bottom" constant="96" id="oEa-p8-3XL"/>
+                            <constraint firstItem="aPv-hg-niF" firstAttribute="trailing" secondItem="CqS-II-Fb8" secondAttribute="trailing" id="u3B-TU-4Lg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CqS-II-Fb8" secondAttribute="trailing" constant="20" id="yfb-KR-vBA"/>
                             <constraint firstItem="CqS-II-Fb8" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="zf4-Bo-wxk"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="MLCardForm" id="9Uo-ZP-V9C"/>
                 </viewController>

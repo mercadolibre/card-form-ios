@@ -36,9 +36,9 @@ open class MLCardFormBuilder: NSObject {
      */
     public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
+        self.privateKey = nil
         self.siteId = siteId
         self.flowId = flowId
-        self.privateKey = nil
         self.lifeCycleDelegate = lifeCycleDelegate
         tracker.set(flowId: flowId, siteId: siteId)
     }
@@ -57,6 +57,10 @@ open class MLCardFormBuilder: NSObject {
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
         tracker.set(flowId: flowId, siteId: siteId)
+    }
+    
+    public func getSiteId() -> String {
+        return siteId
     }
 }
 
