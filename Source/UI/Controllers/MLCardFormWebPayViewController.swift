@@ -27,12 +27,12 @@ public final class MLCardFormWebPayViewController: MLCardFormBaseViewController 
     public override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
+        initInscription()
     }
     
     /// :nodoc
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        initInscription()
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
