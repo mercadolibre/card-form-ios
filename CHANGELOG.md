@@ -1,3 +1,11 @@
+# v0.9.6
+🚀 Release 0.9.6 🚀
+- Changed cookie policy for webpay
+
+# v0.9.5
+🚀 Release 0.9.5 🚀
+- Fixed webpay fingeprint scan issue
+
 # v0.9.3
 🚀 Release 0.9.3 🚀
 - Add Webpay for MLC
