@@ -11,6 +11,6 @@ struct MLOtherTexts: Codable {
     let cardFormTitle: String
     
     enum CodingKeys: String, CodingKey {
-        case cardFormTitle = "card_form_title"
+        case cardFormTitle
     }
 }

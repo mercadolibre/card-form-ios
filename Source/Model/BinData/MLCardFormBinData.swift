@@ -17,7 +17,7 @@ struct MLCardFormBinData: Codable {
     let issuers: [MLCardFormIssuer]
     let fieldsSetting: [MLCardFormFieldSetting]
     let identificationTypes: [MLCardFormIdentificationType]
-    let otherTexts: MLOtherTexts?
+    let otherTexts: MLOtherTexts
     
     // Filter issuers when imageUrl is nil or empty
     var filteredIssuers: [MLCardFormIssuer] {
@@ -41,7 +41,7 @@ struct MLCardFormBinData: Codable {
         case issuers
         case fieldsSetting
         case identificationTypes
-        case otherTexts = "other_texts"
+        case otherTexts
     }
     
     func changeIssuer(issuer: MLCardFormIssuer) -> MLCardFormBinData {
