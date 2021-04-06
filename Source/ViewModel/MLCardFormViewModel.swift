@@ -135,7 +135,7 @@ final class MLCardFormViewModel {
             cardHandlerToUpdate.update(cardUI: cardUI)
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: nil)
             
-            binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [], otherTexts: MLOtherTexts(cardFormTitle: "New Card"))
+            binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [], otherTexts: MLOtherTexts(cardFormTitle: ""))
             if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
                 cardFormFields = [
                     [MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))],
