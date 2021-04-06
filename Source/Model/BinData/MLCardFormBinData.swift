@@ -45,6 +45,17 @@ struct MLCardFormBinData: Codable {
     }
     
     func changeIssuer(issuer: MLCardFormIssuer) -> MLCardFormBinData {
-        return MLCardFormBinData(escEnabled: self.escEnabled, enabled: self.enabled, errorMessage: self.errorMessage, paymentMethod: self.paymentMethod, cardUI: self.cardUI, additionalSteps: self.additionalSteps, issuers: [issuer], fieldsSetting: self.fieldsSetting, identificationTypes: self.identificationTypes, otherTexts: self.otherTexts)
+        return MLCardFormBinData(
+            escEnabled: self.escEnabled,
+            enabled: self.enabled,
+            errorMessage: self.errorMessage,
+            paymentMethod: self.paymentMethod,
+            cardUI: self.cardUI,
+            additionalSteps: self.additionalSteps,
+            issuers: [issuer],
+            fieldsSetting: self.fieldsSetting,
+            identificationTypes: self.identificationTypes,
+            otherTexts: self.otherTexts
+        )
     }
 }

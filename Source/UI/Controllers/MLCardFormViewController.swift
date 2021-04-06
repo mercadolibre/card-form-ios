@@ -525,7 +525,10 @@ extension MLCardFormViewController: IssuerSelectedProtocol {
 
 // MARK: MLCardFormViewModelProtocol
 extension MLCardFormViewController: MLCardFormViewModelProtocol {
-
+    func updateTitle(title: String?) {
+        self.title = title
+    }
+    
     func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }

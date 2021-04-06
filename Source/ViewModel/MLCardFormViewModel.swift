@@ -347,6 +347,7 @@ extension MLCardFormViewModel {
                 MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/bin_number/recognized")
                 self.lastFetchedBinNumber = binNumber
                 self.binData = cardFormBinData
+                self.viewModelDelegate?.updateTitle(title: cardFormBinData.otherTexts.cardFormTitle)
                 self.updateHandlers()
                 completion?(.success(binNumber))
             case .failure(let error):
