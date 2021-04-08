@@ -12,4 +12,5 @@ protocol MLCardFormViewModelProtocol: NSObjectProtocol {
     func shouldUpdateCard(cardUI: CardUI, accessibilityData: AccessibilityData?)
     func shouldUpdateFields(remoteSettings: [MLCardFormFieldSetting]?)
     func shouldUpdateAppBarTitle(paymentTypeId: String?)
+    func updateTitle(title: String?)
 }

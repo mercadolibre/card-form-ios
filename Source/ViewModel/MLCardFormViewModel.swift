@@ -135,7 +135,7 @@ final class MLCardFormViewModel {
             cardHandlerToUpdate.update(cardUI: cardUI)
             viewModelDelegate?.shouldUpdateCard(cardUI: cardUIHandler, accessibilityData: nil)
             
-            binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [])
+            binData = MLCardFormBinData(escEnabled: false, enabled: true, errorMessage: nil, paymentMethod: paymentMethod, cardUI: cardUI, additionalSteps: [], issuers: [], fieldsSetting: [], identificationTypes: [], otherTexts: MLOtherTexts(cardFormTitle: ""))
             if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
                 cardFormFields = [
                     [MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))],
@@ -347,6 +347,7 @@ extension MLCardFormViewModel {
                 MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/bin_number/recognized")
                 self.lastFetchedBinNumber = binNumber
                 self.binData = cardFormBinData
+                self.viewModelDelegate?.updateTitle(title: cardFormBinData.otherTexts.cardFormTitle)
                 self.updateHandlers()
                 completion?(.success(binNumber))
             case .failure(let error):

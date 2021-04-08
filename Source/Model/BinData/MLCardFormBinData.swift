@@ -17,6 +17,7 @@ struct MLCardFormBinData: Codable {
     let issuers: [MLCardFormIssuer]
     let fieldsSetting: [MLCardFormFieldSetting]
     let identificationTypes: [MLCardFormIdentificationType]
+    let otherTexts: MLOtherTexts
     
     // Filter issuers when imageUrl is nil or empty
     var filteredIssuers: [MLCardFormIssuer] {
@@ -40,9 +41,21 @@ struct MLCardFormBinData: Codable {
         case issuers
         case fieldsSetting
         case identificationTypes
+        case otherTexts
     }
     
     func changeIssuer(issuer: MLCardFormIssuer) -> MLCardFormBinData {
-        return MLCardFormBinData(escEnabled: self.escEnabled, enabled: self.enabled, errorMessage: self.errorMessage, paymentMethod: self.paymentMethod, cardUI: self.cardUI, additionalSteps: self.additionalSteps, issuers: [issuer], fieldsSetting: self.fieldsSetting, identificationTypes: self.identificationTypes)
+        return MLCardFormBinData(
+            escEnabled: self.escEnabled,
+            enabled: self.enabled,
+            errorMessage: self.errorMessage,
+            paymentMethod: self.paymentMethod,
+            cardUI: self.cardUI,
+            additionalSteps: self.additionalSteps,
+            issuers: [issuer],
+            fieldsSetting: self.fieldsSetting,
+            identificationTypes: self.identificationTypes,
+            otherTexts: self.otherTexts
+        )
     }
 }
