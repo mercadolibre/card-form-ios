@@ -17,6 +17,7 @@ open class MLCardFormBuilder: NSObject {
     internal let privateKey: String?
     internal let flowId: String
     internal let siteId: String
+    internal let cardInfoMarketplace: MLCardFormCardInformationMarketplace?
     internal var excludedPaymentTypes: [String]?
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
@@ -34,12 +35,17 @@ open class MLCardFormBuilder: NSObject {
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(publicKey: String,
+                siteId: String,
+                flowId: String,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                cardInfoMarketplace:MLCardFormCardInformationMarketplace? = nil) {
         self.publicKey = publicKey
         self.privateKey = nil
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.cardInfoMarketplace = cardInfoMarketplace
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -50,12 +56,17 @@ open class MLCardFormBuilder: NSObject {
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(privateKey: String,
+                siteId: String,
+                flowId: String,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                cardInfoMarketplace:MLCardFormCardInformationMarketplace? = nil) {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.cardInfoMarketplace = cardInfoMarketplace
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
