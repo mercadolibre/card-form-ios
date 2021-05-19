@@ -19,15 +19,15 @@ public struct MLCardFormCardInformationMarketplace: Codable {
     let odr: Bool
     let items: Array<ItemForCardInfoMarketplace>
     
-    init(flowId: String,
-         vertical: String,
-         flowType: String,
-         bin: String,
-         callerId: String,
-         clientId: String,
-         siteId: String,
-         odr: Bool,
-         items: Array<ItemForCardInfoMarketplace>) {
+    public init(flowId: String,
+                vertical: String,
+                flowType: String,
+                bin: String,
+                callerId: String,
+                clientId: String,
+                siteId: String,
+                odr: Bool,
+                items: Array<ItemForCardInfoMarketplace>) {
         self.flowId = flowId
         self.vertical = vertical
         self.flowType = flowType
@@ -42,7 +42,7 @@ public struct MLCardFormCardInformationMarketplace: Codable {
 
 public struct ItemForCardInfoMarketplace: Codable {
     let id:String
-    init(id:String) {
+    public init(id:String) {
         self.id = id
     }
 }
