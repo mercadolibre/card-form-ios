@@ -19,6 +19,17 @@ public struct MLCardFormCardInformationMarketplace: Codable {
     let odr: Bool
     let items: Array<ItemForCardInfoMarketplace>
     
+    /// init
+    /// - Parameters:
+    ///   - flowId: Your flow identifier. Using for tracking and traffic segmentation.
+    ///   - vertical: Your vertical identifier. Using for tracking and traffic segmentation.
+    ///   - flowType: Your flow type. Using for tracking and traffic segmentation.
+    ///   - bin: First six numbers of the card (it must be sent empty and they are entered automatically)
+    ///   - callerId: caller Id  used in service
+    ///   - clientId: client Id  used in service
+    ///   - siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
+    ///   - odr: Indicate whether to get ODR icon
+    ///   - items: List of items that are being used in the checkout flow
     public init(flowId: String,
                 vertical: String,
                 flowType: String,

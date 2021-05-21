@@ -60,6 +60,7 @@ extension MLCardFormBinService {
         case xDensity
         case acceptLanguage
         case xProductId
+        case contentType
 
         var getKey: String {
             switch self {
@@ -71,6 +72,8 @@ extension MLCardFormBinService {
                 return "accept-language"
             case .xProductId:
                 return "x-product-id"
+            case .contentType:
+                return "content-type"
             }
         }
     }
@@ -80,6 +83,7 @@ extension MLCardFormBinService {
         let xDensity: String
         let acceptLanguage: String
         let xProductId: String
+        let contentType:String?
     }
 
     enum QueryKeys {
@@ -137,17 +141,14 @@ extension MLCardFormBinService {
         }
 
         debugLog("Bin data New call: Operation -> \(binNumber)")
-        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId())
         let operation = BlockOperation(block: {
             if  self.getFlowId().contains("chekout-on") ?? false, var cardInfo = self.cardInfoMarketplace {
                 cardInfo.bin = binNumber
                 self.getCardDataMarketplace(cardInfo: cardInfo,
-                                            headers: headers,
                                             completion: completion)
             } else {
                 let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: self.getPlatform(), excludedPaymentTypes: excludedPaymentTypesJoined, odr: true)
                 self.getCardData(queryParams: queryParams,
-                                 headers: headers,
                                  completion: completion)
             }
         })
@@ -166,9 +167,9 @@ extension MLCardFormBinService {
 private extension MLCardFormBinService {
     
     func getCardData (queryParams: MLCardFormBinService.QueryParams,
-                      headers:Headers,
                       completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
 
+        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId(), contentType: nil)
         NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers))
         { [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
@@ -182,12 +183,16 @@ private extension MLCardFormBinService {
             }
             completion?(result)
         }
-        
     }
     
     func getCardDataMarketplace (cardInfo: MLCardFormCardInformationMarketplace,
-                                 headers:Headers,
                                  completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
+
+        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4",
+                                                   xDensity: "xxxhdpi",
+                                                   acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
+                                                   xProductId: getFlowId(),
+                                                   contentType: "application/json")
 
         NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))
         {  [weak self] (result: Result<MLCardFormBinData, Error>) in

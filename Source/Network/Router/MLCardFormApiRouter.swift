@@ -51,11 +51,17 @@ enum MLCardFormApiRouter {
 
     var headers: [String : String]? {
         switch self {
-        case .getCardData(_ , let headers), .getCardDataFromMarketplace(_, let headers):
+        case .getCardData(_ , let headers):
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xProductId.getKey: headers.xProductId]
+        case .getCardDataFromMarketplace(_, let headers):
+            return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
+                    MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
+                    MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
+                    MLCardFormBinService.HeadersKeys.xProductId.getKey: headers.xProductId,
+                    MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? ""]
         case .postCardTokenData(_, let headers, _),
              .postCardData(_, let headers, _):
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType]
