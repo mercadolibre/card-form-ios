@@ -17,6 +17,7 @@ open class MLCardFormBuilder: NSObject {
     internal let privateKey: String?
     internal let flowId: String
     internal let siteId: String
+    internal let cardInfoMarketplace: MLCardFormCardInformationMarketplace?
     internal var excludedPaymentTypes: [String]?
     internal var navigationCustomBackgroundColor: UIColor?
     internal var navigationCustomTextColor: UIColor?
@@ -34,12 +35,33 @@ open class MLCardFormBuilder: NSObject {
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(publicKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(publicKey: String,
+                siteId: String,
+                flowId: String,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
         self.privateKey = nil
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.cardInfoMarketplace = nil
+        tracker.set(flowId: flowId, siteId: siteId)
+    }
+    
+    /// Mandatory init.
+    /// - Parameters:
+    ///   - publicKey: Merchant public key / collector public key
+    ///   - cardInformation: Information related to the card and the transaction you will carry out with it.
+    ///   - lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
+    public init(publicKey: String,
+                cardInformation:MLCardFormCardInformationMarketplace,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+        self.publicKey = publicKey
+        self.privateKey = nil
+        self.siteId = cardInformation.siteId
+        self.flowId = cardInformation.flowId
+        self.lifeCycleDelegate = lifeCycleDelegate
+        self.cardInfoMarketplace = cardInformation
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -50,12 +72,33 @@ open class MLCardFormBuilder: NSObject {
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
-    public init(privateKey: String, siteId: String, flowId: String, lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+    public init(privateKey: String,
+                siteId: String,
+                flowId: String,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
+        self.cardInfoMarketplace = nil
+        tracker.set(flowId: flowId, siteId: siteId)
+    }
+    
+    /// Mandatory init.
+    /// - Parameters:
+    ///   - privateKey: Logged access token - user key
+    ///   - cardInformation: Information related to the card and the transaction you will carry out with it.
+    ///   - lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
+    public init(privateKey: String,
+                cardInformation:MLCardFormCardInformationMarketplace,
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+        self.publicKey = nil
+        self.privateKey = privateKey
+        self.siteId = cardInformation.siteId
+        self.flowId = cardInformation.flowId
+        self.lifeCycleDelegate = lifeCycleDelegate
+        self.cardInfoMarketplace = cardInformation
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
