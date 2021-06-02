@@ -70,6 +70,12 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
             if let completion = completion { completion() }
         })
     }
+    
+    open func dismissLoading(completion: (() -> Void)? = nil) {
+        hideProgress(completion: { [weak self] in
+            if let completion = completion { completion() }
+        })
+    }
 }
 
 // MARK: Public API.
