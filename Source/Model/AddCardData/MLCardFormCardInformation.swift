@@ -12,11 +12,13 @@ import Foundation
     var cardId: String = ""
     var paymentType: String = ""
     var bin: String = ""
+    var lastFourDigits: String = ""
     
-    init(cardId: String, paymentType: String, bin:String){
+    init(cardId: String, paymentType: String, bin:String, lastFourDigits:String){
         self.cardId = cardId
         self.paymentType = paymentType
         self.bin = bin
+        self.lastFourDigits = lastFourDigits
     }
     
     override init() {}
@@ -31,5 +33,9 @@ import Foundation
     
     public func getPaymentType() -> String {
         return paymentType
+    }
+    
+    public func getLastFourDigits() -> String {
+        return lastFourDigits
     }
 }

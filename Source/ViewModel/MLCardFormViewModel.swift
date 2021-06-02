@@ -398,7 +398,8 @@ extension MLCardFormViewModel {
                                                                                  "payment_method_id": paymentMethodId,
                                                                                  "payment_type_id": paymentTypeId])
                         self.saveDataForReuse()
-                        var cardInformation = MLCardFormCardInformation(cardId: addCardData.getId(), paymentType: paymentTypeId, bin: bin)
+                        let lastFourDigits = tokenCardData.lastFourDigits ?? ""
+                        var cardInformation = MLCardFormCardInformation(cardId: addCardData.getId(), paymentType: paymentTypeId, bin: bin, lastFourDigits: lastFourDigits)
                         completion?(.success(cardInformation))
                     case .failure(let error):
                         if case
