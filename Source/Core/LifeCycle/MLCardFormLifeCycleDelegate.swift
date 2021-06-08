@@ -15,6 +15,13 @@ import Foundation
      A new credit card has been added sucesfully.
      */
     @objc func didAddCard(cardID: String)
+    
+    /**
+     A new credit card has been added sucesfully.
+     Returns card information
+     */
+    @objc optional func didAddCardInformation(cardInformation: MLCardFormCardInformation)
+    
     /**
      There was an error adding a new credit card.
      */
@@ -25,4 +32,5 @@ extension MLCardFormLifeCycleDelegate {
     func didFailAddCard() {
         //this is a empty implementation to allow this method to be optional
     }
+   
 }

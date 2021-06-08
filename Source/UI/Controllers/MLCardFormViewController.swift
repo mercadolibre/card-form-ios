@@ -170,14 +170,17 @@ private extension MLCardFormViewController {
     
     func addCard() {
         showProgress()
-        viewModel.addCard(completion: { (result: Result<String, Error>) in
+        viewModel.addCard(completion: { (result: Result<MLCardFormCardInformation, Error>) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 var title: String?
                 switch result {
-                case .success(let cardID):
+                case .success(let cardInformation):
+                    
                     // Notify listener
-                    self.lifeCycleDelegate?.didAddCard(cardID: cardID)
+                    self.lifeCycleDelegate?.didAddCardInformation?(cardInformation: cardInformation)
+                    self.lifeCycleDelegate?.didAddCard(cardID: cardInformation.getCardId())
+                  
                 case .failure(let error):
                     self.hideProgress(completion: { [weak self] in
                         guard let self = self else { return }

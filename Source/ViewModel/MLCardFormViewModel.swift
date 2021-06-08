@@ -370,7 +370,7 @@ extension MLCardFormViewModel {
         })
     }
 
-    func addCard(completion: ((Result<String, Error>) -> ())? = nil) {
+    func addCard(completion: ((Result<MLCardFormCardInformation, Error>) -> ())? = nil) {
         guard let tokenizationData = getTokenizationData(), let addCardData = getAddCardData() else {
             completion?(.failure(NSError(domain: "MLCardForm", code: 0, userInfo: nil) as Error))
             return
@@ -398,10 +398,13 @@ extension MLCardFormViewModel {
                                                                                  "payment_method_id": paymentMethodId,
                                                                                  "payment_type_id": paymentTypeId])
                         self.saveDataForReuse()
-                        completion?(.success(addCardData.getId()))
+                        let lastFourDigits = tokenCardData.lastFourDigits ?? ""
+                        var cardInformation = MLCardFormCardInformation(cardId: addCardData.getId(), paymentType: paymentTypeId, bin: bin, lastFourDigits: lastFourDigits)
+                        completion?(.success(cardInformation))
                     case .failure(let error):
-                        if case MLCardFormAddCardServiceError.missingPrivateKey = error {
-                            completion?(.success(""))
+                        if case
+                            MLCardFormAddCardServiceError.missingPrivateKey = error {
+                            completion?(.success(MLCardFormCardInformation()))
                         } else {
                             let errorMessage = error.localizedDescription
                             MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_data", "error_message": errorMessage])
