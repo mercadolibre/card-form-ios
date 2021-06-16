@@ -142,7 +142,7 @@ extension MLCardFormBinService {
 
         debugLog("Bin data New call: Operation -> \(binNumber)")
         let operation = BlockOperation(block: {
-            if  self.getFlowId().contains("chekout-on") ?? false, var cardInfo = self.cardInfoMarketplace {
+            if  self.getFlowId().contains("checkout-on") ?? false, var cardInfo = self.cardInfoMarketplace {
                 cardInfo.bin = binNumber
                 self.getCardDataMarketplace(cardInfo: cardInfo,
                                             completion: completion)
