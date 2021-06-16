@@ -1,3 +1,8 @@
+# v0.9.7
+🚀 Release 0.9.7 🚀
+- Added getCardDataFromMarketplace method
+- Supporting more customized texts from backend for hybrid and combo cards
+
 # v0.9.6
 🚀 Release 0.9.6 🚀
 - Changed cookie policy for webpay
