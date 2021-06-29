@@ -23,19 +23,19 @@ import Foundation
     
     override init() {}
     
-    public func getCardId() -> String {
+    @objc public func getCardId() -> String {
         return cardId
     }
     
-    public func getBin() -> String {
+    @objc public func getBin() -> String {
         return bin
     }
     
-    public func getPaymentType() -> String {
+    @objc public func getPaymentType() -> String {
         return paymentType
     }
     
-    public func getLastFourDigits() -> String {
+    @objc public func getLastFourDigits() -> String {
         return lastFourDigits
     }
 }
