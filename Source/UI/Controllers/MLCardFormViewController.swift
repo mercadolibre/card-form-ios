@@ -8,6 +8,7 @@
 import UIKit
 import MLCardDrawer
 import MLUI
+import AndesUI
 
 /** :nodoc: */
 open class MLCardFormViewController: MLCardFormBaseViewController {
@@ -31,7 +32,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     private weak var cardFieldCollectionView: UICollectionView?
 
     private var cardDrawer: MLCardDrawerController?
-    private var mlSnackbar: MLSnackbar?
+    private var andesSnackbar: AndesSnackbar?
 
     /// :nodoc
     open override func viewDidLoad() {
@@ -61,7 +62,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeKeyboardNotifications()
-        mlSnackbar?.dismiss()
+//        andesSnackbar?.dismiss()
     }
 
     open func dismissLoadingAndPop(completion: (() -> Void)? = nil) {
@@ -143,13 +144,17 @@ private extension MLCardFormViewController {
                 DispatchQueue.main.async { [weak self] in
                     if showProggressAndSnackBar {
                         self?.hideProgress(completion: { [weak self] in
-                            self?.mlSnackbar = MLSnackbar.show(withTitle: title, actionTitle: "Reintentar".localized, actionBlock: { [weak self] in
+                            guard let self = self else { return }
+                            self.andesSnackbar = AndesSnackbar(text: title, duration: .long, type: .error)
+                            self.andesSnackbar?.action = AndesSnackbarAction(text: "Reintentar".localized, callback: { [weak self] in
                                 self?.getCardData(binNumber: binNumber, showProggressAndSnackBar: showProggressAndSnackBar)
-                                }, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
-                                self?.sendAccessibilityMessage(title)
+                                })
+                            self.andesSnackbar?.show()
+                            self.sendAccessibilityMessage(title)
                         })
                     } else if showOnlySnackBar {
-                        self?.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                        guard let self = self else { return }
+                        self.andesSnackbar = AndesSnackbar(text: title, duration: .long, type: .error)
                         UIAccessibility.post(notification: .announcement, argument: title)
                     }
                 }
@@ -158,9 +163,9 @@ private extension MLCardFormViewController {
     }
 
     func sendAccessibilityMessage(_ text: String) {
-        mlSnackbar?.isAccessibilityElement = true
-        mlSnackbar?.accessibilityLabel = text
-        UIAccessibility.post(notification: .layoutChanged, argument: mlSnackbar)
+        andesSnackbar?.isAccessibilityElement = true
+        andesSnackbar?.accessibilityLabel = text
+        UIAccessibility.post(notification: .layoutChanged, argument: andesSnackbar)
         if let cardNumberField = viewModel.getCardFormFieldWithID(MLCardFormFields.cardNumber.rawValue) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 UIAccessibility.post(notification: .layoutChanged, argument: cardNumberField.input)
@@ -170,17 +175,18 @@ private extension MLCardFormViewController {
     
     func addCard() {
         showProgress()
+        showProgress()
         viewModel.addCard(completion: { (result: Result<MLCardFormCardInformation, Error>) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 var title: String?
                 switch result {
                 case .success(let cardInformation):
-                    
+
                     // Notify listener
                     self.lifeCycleDelegate?.didAddCardInformation?(cardInformation: cardInformation)
                     self.lifeCycleDelegate?.didAddCard(cardID: cardInformation.getCardId())
-                  
+
                 case .failure(let error):
                     self.hideProgress(completion: { [weak self] in
                         guard let self = self else { return }
@@ -190,12 +196,14 @@ private extension MLCardFormViewController {
                         switch error {
                         case NetworkLayerError.noInternetConnection:
                             title = "Revisa tu conexión a internet.".localized
-                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
+                            self.andesSnackbar?.show()
                             self.setFocusOnLastField()
                             UIAccessibility.post(notification: .announcement, argument: title)
                         default:
                             title = "Algo salió mal.".localized
-                            self.mlSnackbar = MLSnackbar.show(withTitle: title, type: MLSnackbarType.error(), duration: MLSnackbarDuration.long)
+                            self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
+                            self.andesSnackbar?.show()
                             self.setFocusOnLastField()
                             UIAccessibility.post(notification: .announcement, argument: title)
                         }
