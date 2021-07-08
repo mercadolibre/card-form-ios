@@ -1,3 +1,7 @@
+# v0.9.8
+🚀 Release 0.9.8 🚀
+- Added marketplace card info support 
+
 # v0.9.7
 🚀 Release 0.9.7 🚀
 - Added getCardDataFromMarketplace method
