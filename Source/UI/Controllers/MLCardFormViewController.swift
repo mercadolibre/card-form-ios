@@ -62,7 +62,6 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeKeyboardNotifications()
-//        andesSnackbar?.dismiss()
     }
 
     open func dismissLoadingAndPop(completion: (() -> Void)? = nil) {
