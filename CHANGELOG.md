@@ -1,3 +1,8 @@
+# v0.9.9
+🚀 Release 0.9.9 🚀
+- AndesSnackbar migration
+- Added @objc to MLCardFormCardInformation methods 
+
 # v0.9.8
 🚀 Release 0.9.8 🚀
 - Added marketplace card info support 
