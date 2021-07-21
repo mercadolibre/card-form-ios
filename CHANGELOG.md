@@ -1,3 +1,7 @@
+# v0.9.10
+🚀 Release 0.9.10 🚀
+- Moved MLCardFormCardInformation from struct to class
+
 # v0.9.9
 🚀 Release 0.9.9 🚀
 - AndesSnackbar migration
