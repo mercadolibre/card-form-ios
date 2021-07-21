@@ -7,8 +7,8 @@
 
 import Foundation
 
-
-public struct MLCardFormCardInformationMarketplace: Codable {
+@objcMembers
+public class MLCardFormCardInformationMarketplace: NSObject, Codable {
     let flowId: String
     let vertical: String
     let flowType: String
@@ -51,7 +51,8 @@ public struct MLCardFormCardInformationMarketplace: Codable {
     }
 }
 
-public struct ItemForCardInfoMarketplace: Codable {
+@objcMembers
+public class ItemForCardInfoMarketplace: NSObject, Codable {
     let id:String
     public init(id:String) {
         self.id = id
