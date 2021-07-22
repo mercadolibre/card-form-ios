@@ -90,7 +90,7 @@ open class MLCardFormBuilder: NSObject {
                 lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
         self.privateKey = privateKey
-        self.siteId = "MLB"
+        self.siteId = siteId
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
         self.cardInfoMarketplace = nil
