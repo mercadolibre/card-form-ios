@@ -27,13 +27,13 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
     }
     
     func saveCard(tokenId: String, addCardData: MLCardFormAddCardService.AddCardBody, completion: ((Result<MLCardFormAddCardData, Error>) -> ())? = nil) {
-        guard let privateKey = privateKey  else {
+        guard let privateKey = privateKey, let acceptThirdPartyCard = acceptThirdPartyCard, let activateCard = activateCard else {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
         let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
         let headers = MLCardFormAddCardService.Headers(contentType: "application/json")
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(accessTokenParam, headers, buildAddCardBody(tokenId, addCardData: addCardData))) {
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(accessTokenParam, headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
             (result: Result<MLCardFormAddCardData, Error>) in
             completion?(result)
         }
@@ -78,7 +78,7 @@ private extension MLCardFormAddCardService {
         return MLCardFormTokenizationBody(cardNumber: tokenizationData.cardNumber, securityCode: tokenizationData.securityCode, expirationMonth: tokenizationData.expirationMonth, expirationYear: tokenizationData.expirationYear, cardholder: tokenizationData.cardholder, device: tokenizationData.device)
     }
 
-    func buildAddCardBody(_ tokenId: String, addCardData: MLCardFormAddCardService.AddCardBody) -> MLCardFormAddCardBody {
-        return MLCardFormAddCardBody(cardTokenId: tokenId, paymentMethod: addCardData.paymentMethod, issuer: addCardData.issuer)
+    func buildAddCardBody(_ tokenId: String, addCardData: MLCardFormAddCardService.AddCardBody, features: CardFormFeatures) -> MLCardFormAddCardBody {
+        return MLCardFormAddCardBody(cardTokenId: tokenId, paymentMethod: addCardData.paymentMethod, issuer: addCardData.issuer, features: features)
     }
 }

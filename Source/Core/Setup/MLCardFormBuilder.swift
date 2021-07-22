@@ -24,6 +24,8 @@ open class MLCardFormBuilder: NSObject {
     internal var addStatusBarBackground: Bool?
     internal var animateOnLoad: Bool = false
     internal var shouldConfigureNavigation: Bool?
+    internal let acceptThirdPartyCard: Bool
+    internal let activateCard: Bool
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
     
     // MARK: Initialization
@@ -38,6 +40,8 @@ open class MLCardFormBuilder: NSObject {
     public init(publicKey: String,
                 siteId: String,
                 flowId: String,
+                acceptThirdPartyCard: Bool = true,
+                activateCard: Bool = true,
                 lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
         self.privateKey = nil
@@ -45,6 +49,8 @@ open class MLCardFormBuilder: NSObject {
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
         self.cardInfoMarketplace = nil
+        self.acceptThirdPartyCard = acceptThirdPartyCard
+        self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -54,6 +60,8 @@ open class MLCardFormBuilder: NSObject {
     ///   - cardInformation: Information related to the card and the transaction you will carry out with it.
     ///   - lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
     public init(publicKey: String,
+                acceptThirdPartyCard: Bool = true,
+                activateCard: Bool = true,
                 cardInformation:MLCardFormCardInformationMarketplace,
                 lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = publicKey
@@ -62,6 +70,8 @@ open class MLCardFormBuilder: NSObject {
         self.flowId = cardInformation.flowId
         self.lifeCycleDelegate = lifeCycleDelegate
         self.cardInfoMarketplace = cardInformation
+        self.acceptThirdPartyCard = acceptThirdPartyCard
+        self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -75,13 +85,17 @@ open class MLCardFormBuilder: NSObject {
     public init(privateKey: String,
                 siteId: String,
                 flowId: String,
+                acceptThirdPartyCard: Bool = true,
+                activateCard: Bool = true,
                 lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
         self.privateKey = privateKey
-        self.siteId = siteId
+        self.siteId = "MLB"
         self.flowId = flowId
         self.lifeCycleDelegate = lifeCycleDelegate
         self.cardInfoMarketplace = nil
+        self.acceptThirdPartyCard = acceptThirdPartyCard
+        self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
     }
     
@@ -91,6 +105,8 @@ open class MLCardFormBuilder: NSObject {
     ///   - cardInformation: Information related to the card and the transaction you will carry out with it.
     ///   - lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
     public init(privateKey: String,
+                acceptThirdPartyCard: Bool = true,
+                activateCard: Bool = true,
                 cardInformation:MLCardFormCardInformationMarketplace,
                 lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
         self.publicKey = nil
@@ -99,6 +115,8 @@ open class MLCardFormBuilder: NSObject {
         self.flowId = cardInformation.flowId
         self.lifeCycleDelegate = lifeCycleDelegate
         self.cardInfoMarketplace = cardInformation
+        self.acceptThirdPartyCard = acceptThirdPartyCard
+        self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
     }
     

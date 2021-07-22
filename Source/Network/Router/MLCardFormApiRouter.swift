@@ -34,18 +34,12 @@ enum MLCardFormApiRouter {
 
     var path: String {
         switch self {
-        case .getCardData:
-            return "/production/px_mobile/v1/card"
-        case .postCardTokenData:
-            return "/v1/card_tokens"
-        case .postCardData:
-            return "/production/px_mobile/v1/card"
-        case .getWebPayInitInscription:
-            return "/production/px_mobile/v1/card_webpay/inscription/init"
-        case .postWebPayFinishInscription:
-            return "/production/px_mobile/v1/card_webpay/inscription/finish"
-        case .getCardDataFromMarketplace:
-            return "/production/px_mobile/v1/card/marketplace"
+        case .getCardData: return "/production/px_mobile/v1/card"
+        case .postCardTokenData: return "/v1/card_tokens"
+        case .postCardData: return "/production/px_mobile/v1/card"
+        case .getWebPayInitInscription: return "/production/px_mobile/v1/card_webpay/inscription/init"
+        case .postWebPayFinishInscription: return "/production/px_mobile/v1/card_webpay/inscription/finish"
+        case .getCardDataFromMarketplace: return "/production/px_mobile/v1/card/marketplace"
         }
     }
 
@@ -103,7 +97,7 @@ enum MLCardFormApiRouter {
         case .getWebPayInitInscription(let queryParams, _),
              .postWebPayFinishInscription(let queryParams, _, _):
             let urlQueryItems = [
-                URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken),
+                URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken)
             ]
             return urlQueryItems
         case .getCardDataFromMarketplace(_):

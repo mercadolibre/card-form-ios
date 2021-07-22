@@ -64,10 +64,8 @@ extension MLCardFormWebPayService {
 
         var getKey: String {
             switch self {
-            case .contentType:
-                return "content-type"
-            case .xpublic:
-                return "X-Public"
+            case .contentType: return "content-type"
+            case .xpublic: return "X-Public"
             }
         }
     }
