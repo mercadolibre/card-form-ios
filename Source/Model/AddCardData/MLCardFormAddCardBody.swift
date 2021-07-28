@@ -11,4 +11,10 @@ struct MLCardFormAddCardBody: Codable {
     let cardTokenId: String
     let paymentMethod: MLCardFormAddCardPaymentMethod
     let issuer: MLCardFormAddCardIssuer
+    let features: CardFormFeatures
+}
+
+struct CardFormFeatures: Codable {
+    let acceptThirdPartyCard: Bool
+    let activateCard: Bool
 }

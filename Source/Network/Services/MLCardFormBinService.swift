@@ -95,16 +95,11 @@ extension MLCardFormBinService {
 
         var getKey: String {
             switch self {
-            case .bin:
-                return "bin"
-            case .siteId:
-                return "site_id"
-            case .platform:
-                return "platform"
-            case .excludedPaymentTypes:
-                return "excluded_payment_types"
-            case .odr:
-                return "odr"
+            case .bin: return "bin"
+            case .siteId: return "site_id"
+            case .platform: return "platform"
+            case .excludedPaymentTypes: return "excluded_payment_types"
+            case .odr: return "odr"
             }
         }
     }

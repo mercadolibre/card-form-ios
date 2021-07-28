@@ -15,11 +15,19 @@ enum MLCardFormAddCardServiceError: Error {
 internal class MLCardFormAddCardServiceBase {
     internal var publicKey: String?
     internal var privateKey: String?
+    internal var acceptThirdPartyCard: Bool?
+    internal var activateCard: Bool?
+
     weak var delegate: MLCardFormInternetConnectionProtocol?
     
-    func update(publicKey: String?, privateKey: String?) {
+    func update(publicKey: String?,
+                privateKey: String?,
+                acceptThirdPartyCard: Bool?,
+                activateCard: Bool?) {
         self.publicKey = publicKey
         self.privateKey = privateKey
+        self.acceptThirdPartyCard = acceptThirdPartyCard
+        self.activateCard = activateCard
     }
 }
 
@@ -28,13 +36,15 @@ extension MLCardFormAddCardServiceBase {
     enum QueryKeys {
         case publicKey
         case accessToken
-
+        case acceptThirdPartyCard
+        case activateCard
+        
         var getKey: String {
             switch self {
-            case .publicKey:
-                return "public_key"
-            case .accessToken:
-                return "access_token"
+            case .publicKey: return "public_key"
+            case .accessToken: return "access_token"
+            case .acceptThirdPartyCard: return "acceptThirdPartyCard"
+            case .activateCard: return "activateCard"
             }
         }
     }
