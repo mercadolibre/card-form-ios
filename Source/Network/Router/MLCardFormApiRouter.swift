@@ -27,7 +27,7 @@ enum MLCardFormApiRouter {
 
     var host: String {
         switch self {
-        case .getCardData, .postCardTokenData, .postCardData, .getWebPayInitInscription, .postWebPayFinishInscription, .getCardDataFromMarketplace:
+        case .getCardData, .postCardTokenData, .getWebPayInitInscription, .postWebPayFinishInscription, .postCardData, .getCardDataFromMarketplace:
             return "api.mercadopago.com"
         }
     }

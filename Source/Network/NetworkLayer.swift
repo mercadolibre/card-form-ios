@@ -13,14 +13,14 @@ enum NetworkLayerError: Error {
     case dataTask
     case data
     case response
-    case statusCode(status: Int, message: String)
+    case statusCode(status: Int, message: String, userErrorMessage: String?)
     case noInternetConnection
 }
 
 extension NetworkLayerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .statusCode(status: _, message: let message):
+        case .statusCode(status: _, message: let message, userErrorMessage: _):
             return message
         default:
             return "Algo salió mal.".localized
@@ -35,7 +35,7 @@ extension NetworkLayerError: CustomNSError {
     
     public var errorCode: Int {
         switch self {
-        case .statusCode(status: let status, message: _):
+        case .statusCode(status: let status, message: _,  userErrorMessage: _):
             return status
         default:
             return 0
@@ -97,15 +97,20 @@ struct NetworkLayer {
             #endif
             guard (200...299).contains(response.statusCode) else {
                 var message = ""
+                var errorMessage: String?
                 do {
                     let responseData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
                     if let responseMessage = responseData?["message"] as? String {
                         message = responseMessage
                     }
+                    
+                    if let userErrorMessage = responseData?["userErrorMessage"] as? String {
+                        errorMessage = userErrorMessage
+                    }
                 } catch let error as NSError {
                     print(error)
                 }
-                completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message)))
+                completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
                 return
             }
             do {

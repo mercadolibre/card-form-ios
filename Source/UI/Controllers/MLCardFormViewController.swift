@@ -132,7 +132,7 @@ private extension MLCardFormViewController {
                 switch error {
                 case NetworkLayerError.noInternetConnection:
                     title = "Revisa tu conexión a internet.".localized
-                case NetworkLayerError.statusCode(status: let status, message: let message):
+                case NetworkLayerError.statusCode(status: let status, message: let message, userErrorMessage: _):
                     if !String.isNullOrEmpty(message) {
                         title = message
                     }
@@ -195,6 +195,12 @@ private extension MLCardFormViewController {
                         switch error {
                         case NetworkLayerError.noInternetConnection:
                             title = "Revisa tu conexión a internet.".localized
+                            self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
+                            self.andesSnackbar?.show()
+                            self.setFocusOnLastField()
+                            UIAccessibility.post(notification: .announcement, argument: title)
+                        case NetworkLayerError.statusCode(status: let status, message: let message, userErrorMessage: let userErrorMessage) :
+                            title = userErrorMessage ?? "Algo salió mal.".localized
                             self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
                             self.andesSnackbar?.show()
                             self.setFocusOnLastField()

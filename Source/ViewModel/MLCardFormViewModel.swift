@@ -355,7 +355,7 @@ extension MLCardFormViewModel {
                 let errorMessage = error.localizedDescription
                 var properties: [String: Any] = ["error_step": "bin_number", "error_message": errorMessage]
                 switch error {
-                case NetworkLayerError.statusCode(status: let status, message: _):
+                case NetworkLayerError.statusCode(status: let status, message: _, userErrorMessage: _):
                     if status == 400 {
                         path = "/card_form/bin_number/unknown"
                         properties = ["bin_number": binNumber.prefix(6)]

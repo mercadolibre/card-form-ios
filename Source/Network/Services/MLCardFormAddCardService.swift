@@ -47,8 +47,7 @@ extension MLCardFormAddCardService {
 
         var getKey: String {
             switch self {
-            case .contentType:
-                return "content-type"
+            case .contentType: return "content-type"
             }
         }
     }
