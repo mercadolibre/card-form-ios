@@ -104,7 +104,7 @@ struct NetworkLayer {
                         message = responseMessage
                     }
                     
-                    if let userErrorMessage = responseData?["userErrorMessage"] as? String {
+                    if let userErrorMessage = responseData?["user_error_message"] as? String {
                         errorMessage = userErrorMessage
                     }
                 } catch let error as NSError {
