@@ -1,5 +1,9 @@
 # v0.9.11
 🚀 Release 0.9.11 🚀
+- Fix userErrorMessage mapping
+
+# v0.9.11
+🚀 Release 0.9.11 🚀
 - Added acceptThirdPartyCard and activateCard properties in MLCardFormBuilder to conform with BCRA regulation
 
 # v0.9.10
