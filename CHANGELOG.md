@@ -1,5 +1,5 @@
-# v0.9.11
-🚀 Release 0.9.11 🚀
+# v0.9.12
+🚀 Release 0.9.12 🚀
 - Fix userErrorMessage mapping
 
 # v0.9.11
