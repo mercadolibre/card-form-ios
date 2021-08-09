@@ -197,19 +197,16 @@ private extension MLCardFormViewController {
                             title = "Revisa tu conexión a internet.".localized
                             self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
                             self.andesSnackbar?.show()
-                            self.setFocusOnLastField()
                             UIAccessibility.post(notification: .announcement, argument: title)
                         case NetworkLayerError.statusCode(status: let status, message: let message, userErrorMessage: let userErrorMessage) :
                             title = userErrorMessage ?? "Algo salió mal.".localized
                             self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
                             self.andesSnackbar?.show()
-                            self.setFocusOnLastField()
                             UIAccessibility.post(notification: .announcement, argument: title)
                         default:
                             title = "Algo salió mal.".localized
                             self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
                             self.andesSnackbar?.show()
-                            self.setFocusOnLastField()
                             UIAccessibility.post(notification: .announcement, argument: title)
                         }
                     })
@@ -344,7 +341,9 @@ private extension MLCardFormViewController {
 
     func setFocusOnLastField() {
         if let field = viewModel.cardFormFields?.last?.last {
-            field.doFocus()
+            if !viewModel.isLastField(cardFormField: field) {
+                field.doFocus()
+            }
         }
     }
 }
