@@ -35,6 +35,8 @@ open class MLCardFormBuilder: NSObject {
      - parameter publicKey: Merchant public key / collector public key
      - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
+     - parameter acceptThirdPartyCard: Indicates if card form must accept cards with identity number that does not match MP user. Only for MLA.
+     - parameter activateCard: Indicates if the card must be activated after its creation. Not activated card will be visible only once in PX checkout to that specific product.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
     public init(publicKey: String,
@@ -59,6 +61,9 @@ open class MLCardFormBuilder: NSObject {
     ///   - publicKey: Merchant public key / collector public key
     ///   - cardInformation: Information related to the card and the transaction you will carry out with it.
     ///   - lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
+    ///   - acceptThirdPartyCard: Indicates if card form must accept cards with identity number that does not match MP user. Only for MLA.
+    ///   - activateCard: Indicates if the card must be activated after its creation. Not activated card will be visible only once in PX checkout to that specific product.
+    
     public init(publicKey: String,
                 acceptThirdPartyCard: Bool = true,
                 activateCard: Bool = true,
@@ -80,6 +85,8 @@ open class MLCardFormBuilder: NSObject {
      - parameter privateKey: Logged access token - user key
      - parameter siteId: Country Meli/MP Site identifier - Ej: MLA, MLB..
      - parameter flowId: Your flow identifier. Using for tracking and traffic segmentation.
+     - parameter acceptThirdPartyCard: Indicates if card form must accept cards with identity number that does not match MP user. Only for MLA.
+     - parameter activateCard: Indicates if the card must be activated after its creation. Not activated card will be visible only once in PX checkout to that specific product.
      - parameter lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
      */
     public init(privateKey: String,
@@ -104,6 +111,9 @@ open class MLCardFormBuilder: NSObject {
     ///   - privateKey: Logged access token - user key
     ///   - cardInformation: Information related to the card and the transaction you will carry out with it.
     ///   - lifeCycleDelegate: The protocol to stay informed about credit card creation life cycle. (`didAddCard`)
+    ///   - acceptThirdPartyCard: Indicates if card form must accept cards with identity number that does not match MP user. Only for MLA.
+    ///   - activateCard: Indicates if the card must be activated after its creation. Not activated card will be visible only once in PX checkout to that specific product.
+    
     public init(privateKey: String,
                 acceptThirdPartyCard: Bool = true,
                 activateCard: Bool = true,
