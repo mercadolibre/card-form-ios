@@ -1,3 +1,7 @@
+# v0.9.13
+🚀 Release 0.9.13 🚀
+- Hiding keyboard on error to show toast message
+
 # v0.9.12
 🚀 Release 0.9.12 🚀
 - Fix userErrorMessage mapping
