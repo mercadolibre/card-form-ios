@@ -60,6 +60,7 @@ extension MLCardFormBinService {
         case xDensity
         case acceptLanguage
         case xProductId
+        case xFlowId
         case contentType
 
         var getKey: String {
@@ -74,6 +75,8 @@ extension MLCardFormBinService {
                 return "x-product-id"
             case .contentType:
                 return "content-type"
+            case .xFlowId:
+                return "x-flow-id"
             }
         }
     }
@@ -82,8 +85,8 @@ extension MLCardFormBinService {
         let userAgent: String
         let xDensity: String
         let acceptLanguage: String
-        let xProductId: String
-        let contentType:String?
+        let xFlowId: String
+        let contentType: String?
     }
 
     enum QueryKeys {
@@ -164,7 +167,7 @@ private extension MLCardFormBinService {
     func getCardData (queryParams: MLCardFormBinService.QueryParams,
                       completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
 
-        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xProductId: getFlowId(), contentType: nil)
+        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xFlowId: getFlowId(), contentType: nil)
         NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers))
         { [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
@@ -186,7 +189,7 @@ private extension MLCardFormBinService {
         let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4",
                                                    xDensity: "xxxhdpi",
                                                    acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
-                                                   xProductId: getFlowId(),
+                                                   xFlowId: getFlowId(),
                                                    contentType: "application/json")
 
         NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))

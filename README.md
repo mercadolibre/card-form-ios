@@ -29,9 +29,9 @@ pod 'MLCardForm'
 import MLCardForm
 ```
 
-### 2 - Create an instance of MLCardFormBuilder with your `PublicKey` or `PrivateKey` and your `siteId
+### 2 - Create an instance of MLCardFormBuilder with your `PublicKey` or `PrivateKey`, your `siteId` and your `flowId`
 ```swift
-let builder = MLCardFormBuilder(publicKey: yourPublicKey, siteId: yourSiteId, lifeCycleDelegate: self)
+let builder = MLCardFormBuilder(publicKey: yourPublicKey, siteId: yourSiteId, flowId: yourFlowId, lifeCycleDelegate: self)
 ```
 
 ### 3 - Implement `MLCardFormLifeCycleDelegate` to get notified about MLCardForm events.

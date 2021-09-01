@@ -61,11 +61,13 @@ extension MLCardFormWebPayService {
     enum HeadersKeys {
         case contentType
         case xpublic
+        case xFlowId
 
         var getKey: String {
             switch self {
             case .contentType: return "content-type"
             case .xpublic: return "X-Public"
+            case .xFlowId: return "x-flow-id"
             }
         }
     }
@@ -73,11 +75,12 @@ extension MLCardFormWebPayService {
     struct Headers {
         let contentType: String
         let xpublic: String
+        let xFlowId: String
     }
 }
 
 private extension MLCardFormWebPayService {
     func buildJSONHeaders() -> MLCardFormWebPayService.Headers {
-        return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true")
+        return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true", xFlowId: getFlowId())
     }
 }

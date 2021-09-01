@@ -15,6 +15,7 @@ enum MLCardFormAddCardServiceError: Error {
 internal class MLCardFormAddCardServiceBase {
     internal var publicKey: String?
     internal var privateKey: String?
+    internal var flowId: String?
     internal var acceptThirdPartyCard: Bool?
     internal var activateCard: Bool?
 
@@ -22,12 +23,18 @@ internal class MLCardFormAddCardServiceBase {
     
     func update(publicKey: String?,
                 privateKey: String?,
+                flowId: String?,
                 acceptThirdPartyCard: Bool?,
                 activateCard: Bool?) {
         self.publicKey = publicKey
         self.privateKey = privateKey
+        self.flowId = flowId
         self.acceptThirdPartyCard = acceptThirdPartyCard
         self.activateCard = activateCard
+    }
+    
+    func getFlowId() -> String {
+        return flowId ?? "MLCardForm"
     }
 }
 

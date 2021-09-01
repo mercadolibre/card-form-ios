@@ -17,8 +17,8 @@ final class MLCardFormWebPayViewModel {
     
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
-        serviceManager.webPayService.update(publicKey: builder.publicKey, privateKey: builder.privateKey, acceptThirdPartyCard: nil, activateCard: nil)
-        serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey, acceptThirdPartyCard: builder.acceptThirdPartyCard, activateCard: builder.activateCard)
+        serviceManager.webPayService.update(publicKey: builder.publicKey, privateKey: builder.privateKey, flowId: builder.flowId, acceptThirdPartyCard: nil, activateCard: nil)
+        serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey, flowId: builder.flowId, acceptThirdPartyCard: builder.acceptThirdPartyCard, activateCard: builder.activateCard)
     }
 
     func getNavigationBarCustomColor() -> (backgroundColor: UIColor?, textColor: UIColor?) {
