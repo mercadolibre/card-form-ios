@@ -1,3 +1,7 @@
+# v0.9.14
+🚀 Release 0.9.14 🚀
+- Sending flow_id into headers in backend requests
+
 # v0.9.12
 🚀 Release 0.9.12 🚀
 - Fix userErrorMessage mapping
