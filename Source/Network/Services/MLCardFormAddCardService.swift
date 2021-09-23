@@ -20,7 +20,9 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             return
         }
         let queryParams = MLCardFormAddCardService.KeyParam(publicKey: publicKey, accessToken: privateKey)
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId())
+        
+        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId(), sessionId: MLCardFormTracker.sharedInstance.getSessionID(), accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
+        
         NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
             completion?(result)
         }
@@ -32,7 +34,7 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             return
         }
         let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId())
+        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId(), sessionId: MLCardFormTracker.sharedInstance.getSessionID(), accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
         NetworkLayer.request(router: MLCardFormApiRouter.postCardData(accessTokenParam, headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
             (result: Result<MLCardFormAddCardData, Error>) in
             completion?(result)
@@ -45,11 +47,15 @@ extension MLCardFormAddCardService {
     enum HeadersKeys {
         case contentType
         case xFlowId
+        case sessionId
+        case accessToken
 
         var getKey: String {
             switch self {
             case .contentType: return "content-type"
             case .xFlowId: return "x-flow-id"
+            case .sessionId: return "X-Session-Id"
+            case .accessToken: return "Authorization"
             }
         }
     }
@@ -57,6 +63,8 @@ extension MLCardFormAddCardService {
     struct Headers {
         let contentType: String
         let xFlowId: String
+        let sessionId: String
+        let accessToken: String
     }
 
     struct TokenizationBody {

@@ -62,12 +62,16 @@ extension MLCardFormWebPayService {
         case contentType
         case xpublic
         case xFlowId
+        case sessionId
+        case accessToken
 
         var getKey: String {
             switch self {
             case .contentType: return "content-type"
             case .xpublic: return "X-Public"
             case .xFlowId: return "x-flow-id"
+            case .sessionId: return "X-Session-Id"
+            case .accessToken: return "Authorization"
             }
         }
     }
@@ -76,11 +80,16 @@ extension MLCardFormWebPayService {
         let contentType: String
         let xpublic: String
         let xFlowId: String
+        let sessionId: String
+        let accessToken: String
     }
 }
 
 private extension MLCardFormWebPayService {
     func buildJSONHeaders() -> MLCardFormWebPayService.Headers {
-        return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true", xFlowId: getFlowId())
+        return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true",
+                                               xFlowId: getFlowId(),
+                                               sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                               accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
     }
 }

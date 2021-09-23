@@ -49,13 +49,17 @@ enum MLCardFormApiRouter {
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .getCardDataFromMarketplace(_, let headers):
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xProductId.getKey: headers.xFlowId,
-                    MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? ""]
+                    MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? "",
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .postCardTokenData(_, let headers, _),
              .postCardData(_, let headers, _):
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
@@ -63,11 +67,15 @@ enum MLCardFormApiRouter {
         case .getWebPayInitInscription(_, let headers):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .postWebPayFinishInscription(_, let headers, _):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         }
     }
 
@@ -86,17 +94,12 @@ enum MLCardFormApiRouter {
             return urlQueryItems
         case.postCardTokenData(let queryParams, _, _):
             var urlQueryItems:[URLQueryItem] = []
-            if let accessToken = queryParams.accessToken {
-                urlQueryItems.append(URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: accessToken))
-            } else if let publicKey = queryParams.publicKey {
+            if let publicKey = queryParams.publicKey {
                 urlQueryItems.append(URLQueryItem(name: MLCardFormAddCardService.QueryKeys.publicKey.getKey, value: publicKey))
             }
             return urlQueryItems
-        case .postCardData(let queryParams, _, _):
-            let urlQueryItems = [
-                URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken),
-            ]
-            return urlQueryItems
+        case .postCardData(_):
+            return [];
         case .getWebPayInitInscription(let queryParams, _),
              .postWebPayFinishInscription(let queryParams, _, _):
             let urlQueryItems = [
