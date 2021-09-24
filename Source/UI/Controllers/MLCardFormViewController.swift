@@ -199,7 +199,7 @@ private extension MLCardFormViewController {
                             self.andesSnackbar?.show()
                             UIAccessibility.post(notification: .announcement, argument: title)
                         case NetworkLayerError.statusCode(status: let status, message: let message, userErrorMessage: let userErrorMessage) :
-                            title = userErrorMessage ?? "Algo salió mal.".localized
+                            title = message.localized ?? "Algo salió mal.".localized
                             self.andesSnackbar = AndesSnackbar(text: title ?? "", duration: .long, type: .error)
                             self.andesSnackbar?.show()
                             UIAccessibility.post(notification: .announcement, argument: title)
