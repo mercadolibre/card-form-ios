@@ -63,7 +63,9 @@ enum MLCardFormApiRouter {
         case .postCardTokenData(_, let headers, _),
              .postCardData(_, let headers, _):
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .getWebPayInitInscription(_, let headers):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
@@ -100,12 +102,9 @@ enum MLCardFormApiRouter {
             return urlQueryItems
         case .postCardData(_):
             return [];
-        case .getWebPayInitInscription(let queryParams, _),
-             .postWebPayFinishInscription(let queryParams, _, _):
-            let urlQueryItems = [
-                URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken)
-            ]
-            return urlQueryItems
+        case .getWebPayInitInscription(_, _),
+             .postWebPayFinishInscription(_, _, _):
+            return [];
         case .getCardDataFromMarketplace(_):
             return [];
         }
