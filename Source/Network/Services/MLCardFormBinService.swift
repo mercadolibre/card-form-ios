@@ -182,9 +182,7 @@ private extension MLCardFormBinService {
                                                    contentType: nil,
                                                    sessionId: getSessionID(),
                                                    accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
-        NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers))
-       
-        { [weak self] (result: Result<MLCardFormBinData, Error>) in
+        NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)){ [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let cardFormBinData):
