@@ -14,6 +14,8 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
             return
         }
+        guard let privateKey = privateKey else { return }
+        let accessBearerToken = "Bearer " + privateKey
 
         if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
             completion?(.failure(NetworkLayerError.noInternetConnection))
@@ -21,7 +23,10 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
         }
         let queryParams = MLCardFormAddCardService.KeyParam(publicKey: publicKey, accessToken: privateKey)
         
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId(), sessionId: MLCardFormTracker.sharedInstance.getSessionID(), accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
+        let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
+                                                       xFlowId: getFlowId(),
+                                                       sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                       accessToken: accessBearerToken)
         
         NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
             completion?(result)
@@ -33,8 +38,14 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
+        
+        let accessBearerToken = "Bearer " + privateKey
         let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId(), sessionId: MLCardFormTracker.sharedInstance.getSessionID(), accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
+        let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
+                                                       xFlowId: getFlowId(),
+                                                       sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                       accessToken: accessBearerToken)
+        
         NetworkLayer.request(router: MLCardFormApiRouter.postCardData(accessTokenParam, headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
             (result: Result<MLCardFormAddCardData, Error>) in
             completion?(result)

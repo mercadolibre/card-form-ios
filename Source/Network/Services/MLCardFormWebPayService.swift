@@ -13,6 +13,8 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
+        
+        let accessBearerToken = "Bearer " + privateKey
 
         if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
             completion?(.failure(NetworkLayerError.noInternetConnection))
@@ -28,7 +30,7 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             switch result {
             case .success(let accessTokenParam):
                 guard let self = self else { return }
-                let headers = self.buildJSONHeaders()
+                let headers = self.buildJSONHeaders(accessToken: accessTokenParam)
                 NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(accessTokenParam, headers)) {
                     (result: Result<MLCardFormWebPayInscriptionData, Error>) in
                     completion?(result)
@@ -44,7 +46,7 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             switch result {
             case .success(let accessTokenParam):
                 guard let self = self else { return }
-                let headers = self.buildJSONHeaders()
+                let headers = self.buildJSONHeaders(accessToken: accessTokenParam)
                 NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(accessTokenParam, headers, inscriptionData)) {
                     (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
                     completion?(result)
@@ -86,10 +88,10 @@ extension MLCardFormWebPayService {
 }
 
 private extension MLCardFormWebPayService {
-    func buildJSONHeaders() -> MLCardFormWebPayService.Headers {
+    func buildJSONHeaders(accessToken: AccessTokenParam) -> MLCardFormWebPayService.Headers {
         return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true",
                                                xFlowId: getFlowId(),
                                                sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
-                                               accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
+                                               accessToken: "Bearer " + accessToken.accessToken)
     }
 }

@@ -62,8 +62,6 @@ extension MLCardFormBinService {
         case xProductId
         case xFlowId
         case contentType
-        case sessionId
-        case accessToken
 
         var getKey: String {
             switch self {
@@ -79,10 +77,6 @@ extension MLCardFormBinService {
                 return "content-type"
             case .xFlowId:
                 return "x-flow-id"
-            case .sessionId:
-                return "X-Session-Id"
-            case .accessToken:
-                return "Authorization"
             }
         }
     }
@@ -93,8 +87,6 @@ extension MLCardFormBinService {
         let acceptLanguage: String
         let xFlowId: String
         let contentType: String?
-        let sessionId: String
-        let accessToken: String
     }
 
     enum QueryKeys {
@@ -126,6 +118,7 @@ extension MLCardFormBinService {
 
 // MARK: Public methods.
 extension MLCardFormBinService {
+    
     func getCardData(binNumber: String, completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
         guard let siteId = siteId else {
             let error = NSError(domain:"", code:0, userInfo:nil)
@@ -174,14 +167,12 @@ private extension MLCardFormBinService {
     
     func getCardData (queryParams: MLCardFormBinService.QueryParams,
                       completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
-        
+                
         let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4",
                                                    xDensity: "xxxhdpi",
                                                    acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
                                                    xFlowId: getFlowId(),
-                                                   contentType: nil,
-                                                   sessionId: getSessionID(),
-                                                   accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
+                                                   contentType: nil)
         NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)){ [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
@@ -203,10 +194,7 @@ private extension MLCardFormBinService {
                                                    xDensity: "xxxhdpi",
                                                    acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
                                                    xFlowId: getFlowId(),
-                                                   contentType: "application/json",
-                                                   sessionId: getSessionID(),
-                                                   accessToken: "Bearer " + MLCardFormAddCardService.QueryKeys.accessToken.getKey)
-
+                                                   contentType: "application/json")
         NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))
         {  [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
@@ -220,10 +208,6 @@ private extension MLCardFormBinService {
             }
             completion?(result)
         }
-    }
-    
-    func getSessionID() -> String {
-        return getSessionID()
     }
     
     func getFlowId() -> String {
