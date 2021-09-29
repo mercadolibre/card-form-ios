@@ -31,7 +31,7 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             case .success(let accessTokenParam):
                 guard let self = self else { return }
                 let headers = self.buildJSONHeaders(accessToken: accessTokenParam)
-                NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(accessTokenParam, headers)) {
+                NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(headers)) {
                     (result: Result<MLCardFormWebPayInscriptionData, Error>) in
                     completion?(result)
                 }
@@ -47,7 +47,7 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             case .success(let accessTokenParam):
                 guard let self = self else { return }
                 let headers = self.buildJSONHeaders(accessToken: accessTokenParam)
-                NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(accessTokenParam, headers, inscriptionData)) {
+                NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(headers, inscriptionData)) {
                     (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
                     completion?(result)
                 }

@@ -81,7 +81,7 @@ struct NetworkLayer {
         if let headers = router.headers {
             headers.forEach { urlRequest.setValue($0.value, forHTTPHeaderField: $0.key) }
         }
-
+        
         let session = URLSession(configuration: .default)
         
         #if DEBUG

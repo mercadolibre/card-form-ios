@@ -29,7 +29,7 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
                                                        sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
                                                        accessToken: accessBearerToken)
         
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
             completion?(result)
         }
     }
@@ -47,7 +47,7 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
                                                        sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
                                                        accessToken: accessBearerToken)
         
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(accessTokenParam, headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
             (result: Result<MLCardFormAddCardData, Error>) in
             completion?(result)
         }
