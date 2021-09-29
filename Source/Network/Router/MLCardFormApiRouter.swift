@@ -81,6 +81,8 @@ enum MLCardFormApiRouter {
 
     var parameters: [URLQueryItem] {
             switch self {
+            
+            
             case .getCardData(let queryParams, _):
                 var urlQueryItems = [
                     URLQueryItem(name: MLCardFormBinService.QueryKeys.bin.getKey, value: queryParams.bin),
@@ -92,11 +94,11 @@ enum MLCardFormApiRouter {
                     urlQueryItems.append(URLQueryItem(name: MLCardFormBinService.QueryKeys.excludedPaymentTypes.getKey, value: excludedPaymentTypes))
                 }
                 return urlQueryItems
-                case.postCardTokenData( _, _),
-                    .postCardData( _, _),
-                    .getWebPayInitInscription( _),
-                    .postWebPayFinishInscription( _, _),
-                    .getCardDataFromMarketplace(_):
+                case.postCardTokenData,
+                    .postCardData,
+                    .getWebPayInitInscription,
+                    .postWebPayFinishInscription,
+                    .getCardDataFromMarketplace:
                 return [];
             }
         }
