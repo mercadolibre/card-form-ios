@@ -92,14 +92,11 @@ enum MLCardFormApiRouter {
                     urlQueryItems.append(URLQueryItem(name: MLCardFormBinService.QueryKeys.excludedPaymentTypes.getKey, value: excludedPaymentTypes))
                 }
                 return urlQueryItems
-            case.postCardTokenData( _, _):
-                return [];
-            case .postCardData( _, _):
-                return [];
-            case .getWebPayInitInscription( _),
-                 .postWebPayFinishInscription( _, _):
-                return [];
-            case .getCardDataFromMarketplace(_):
+                case.postCardTokenData( _, _),
+                    .postCardData( _, _),
+                    .getWebPayInitInscription( _),
+                    .postWebPayFinishInscription( _, _),
+                    .getCardDataFromMarketplace(_):
                 return [];
             }
         }
