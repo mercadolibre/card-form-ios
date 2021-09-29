@@ -49,25 +49,35 @@ enum MLCardFormApiRouter {
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .getCardDataFromMarketplace(_, let headers):
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xProductId.getKey: headers.xFlowId,
-                    MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? ""]
+                    MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? "",
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .postCardTokenData(_, let headers, _),
              .postCardData(_, let headers, _):
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.sessionId,
+                    MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.accessToken]
         case .getWebPayInitInscription(_, let headers):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .postWebPayFinishInscription(_, let headers, _):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         }
     }
 

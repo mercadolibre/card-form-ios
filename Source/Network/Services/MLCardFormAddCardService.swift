@@ -23,6 +23,7 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
         }
         let queryParams = MLCardFormAddCardService.KeyParam(publicKey: publicKey, accessToken: privateKey)
         
+
         let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
                                                        xFlowId: getFlowId(),
                                                        sessionId: MLCardFormTracker.sharedInstance.getSessionID(),

@@ -89,7 +89,8 @@ extension MLCardFormWebPayService {
 
 private extension MLCardFormWebPayService {
     func buildJSONHeaders(accessToken: AccessTokenParam) -> MLCardFormWebPayService.Headers {
-        return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true",
+        return MLCardFormWebPayService.Headers(contentType: "application/json",
+                                               xpublic: "true",
                                                xFlowId: getFlowId(),
                                                sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
                                                accessToken: "Bearer " + accessToken.accessToken)
