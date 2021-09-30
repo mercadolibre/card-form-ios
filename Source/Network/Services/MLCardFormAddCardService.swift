@@ -9,6 +9,7 @@ import Foundation
 import MLCardDrawer
 
 final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
+    var bearer = "Bearer "
     func addCardToken(tokenizationData: MLCardFormAddCardService.TokenizationBody, completion: ((Result<MLCardFormTokenizationCardData, Error>) -> ())? = nil) {
         if publicKey == nil && privateKey == nil {
             completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
@@ -18,7 +19,7 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
-        let accessBearerToken = "Bearer " + privateKey
+        let accessBearerToken = bearer + privateKey
 
         if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
             completion?(.failure(NetworkLayerError.noInternetConnection))
@@ -43,7 +44,7 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             return
         }
         
-        let accessBearerToken = "Bearer " + privateKey
+        let accessBearerToken = bearer + privateKey
         let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
         let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
                                                        xFlowId: getFlowId(),

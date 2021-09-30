@@ -8,6 +8,7 @@
 import Foundation
 
 final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
+    var bearer = "Bearer "
     private func getATParamAndCheckConnection(completion: ((Result<MLCardFormWebPayService.AccessTokenParam, Error>) -> ())? = nil) {
         guard let privateKey = privateKey else {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
@@ -92,6 +93,6 @@ private extension MLCardFormWebPayService {
                                                xpublic: "true",
                                                xFlowId: getFlowId(),
                                                sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
-                                               accessToken: "Bearer " + accessToken.accessToken)
+                                               accessToken: bearer + accessToken.accessToken)
     }
 }

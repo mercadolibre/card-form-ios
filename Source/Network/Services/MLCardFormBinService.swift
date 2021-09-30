@@ -17,6 +17,7 @@ final class MLCardFormBinService {
     }
     private let meliName: String = "mercadolibre"
     private let mpName: String = "mercadopago"
+    var bearer = "Bearer "
 
     weak var delegate: MLCardFormInternetConnectionProtocol?
     
@@ -176,7 +177,7 @@ extension MLCardFormBinService {
 
 // MARK: Privates
 private extension MLCardFormBinService {
-    
+
     func getCardData (queryParams: MLCardFormBinService.QueryParams,
                       completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
         
@@ -186,7 +187,7 @@ private extension MLCardFormBinService {
                                                    xFlowId: getFlowId(),
                                                    contentType: nil,
                                                    sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
-                                                   accessToken: getAccessToken())
+                                                   accessToken: bearer + getAccessToken())
         NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)){ [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
@@ -210,7 +211,7 @@ private extension MLCardFormBinService {
                                                    xFlowId: getFlowId(),
                                                    contentType: "application/json",
                                                    sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
-                                                   accessToken: getAccessToken())
+                                                   accessToken: bearer + getAccessToken())
         NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))
         {  [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
