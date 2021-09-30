@@ -17,7 +17,7 @@ enum NetworkLayerError: Error {
     case noInternetConnection
 }
 
-enum HttpError: String {
+enum HttpError: Error {
     case noConectivity
     case fail
     case badRequest
@@ -120,17 +120,20 @@ struct NetworkLayer {
                 } catch let error as NSError {
                     print(error)
                 }
+                
                 switch response.statusCode {
                     case 401:
-                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: HttpError.unauthorized.rawValue)))
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
                     case 403:
-                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: HttpError.forbidden.rawValue)))
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
                     case 400...499:
-                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: HttpError.badRequest.rawValue)))
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
+                        print("###message", message)
+                        print("###errorMessage", errorMessage)
                     case 500...599:
-                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: HttpError.serverError.rawValue)))
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
                     default:
-                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: HttpError.serverError.rawValue)))
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
                 }
                 return
             }
