@@ -50,14 +50,16 @@ enum MLCardFormApiRouter {
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
-                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId]
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .getCardDataFromMarketplace(_, let headers):
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xProductId.getKey: headers.xFlowId,
                     MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? "",
-                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId]
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .postCardTokenData(let headers, _),
              .postCardData(let headers, _):
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
@@ -77,7 +79,7 @@ enum MLCardFormApiRouter {
                     MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
                     MLCardFormWebPayService.HeadersKeys.accessToken.getKey: headers.accessToken]
         }
-6    }
+    }
 
     var parameters: [URLQueryItem] {
             switch self {
