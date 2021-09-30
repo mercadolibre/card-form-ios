@@ -128,8 +128,6 @@ struct NetworkLayer {
                         completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
                     case 400...499:
                         completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
-                        print("###message", message)
-                        print("###errorMessage", errorMessage)
                     case 500...599:
                         completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
                     default:
