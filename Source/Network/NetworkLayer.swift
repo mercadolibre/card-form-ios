@@ -79,7 +79,6 @@ struct NetworkLayer {
         }
 
         if let headers = router.headers {
-            print("\nHTTP headers:", headers)
             headers.forEach { urlRequest.setValue($0.value, forHTTPHeaderField: $0.key) }
         }
         
