@@ -81,8 +81,6 @@ enum MLCardFormApiRouter {
 
     var parameters: [URLQueryItem] {
             switch self {
-            
-            
             case .getCardData(let queryParams, _):
                 var urlQueryItems = [
                     URLQueryItem(name: MLCardFormBinService.QueryKeys.bin.getKey, value: queryParams.bin),

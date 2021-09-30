@@ -13,8 +13,6 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
-        
-        let accessBearerToken = "Bearer " + privateKey
 
         if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
             completion?(.failure(NetworkLayerError.noInternetConnection))
@@ -89,6 +87,7 @@ extension MLCardFormWebPayService {
 
 private extension MLCardFormWebPayService {
     func buildJSONHeaders(accessToken: AccessTokenParam) -> MLCardFormWebPayService.Headers {
+        
         return MLCardFormWebPayService.Headers(contentType: "application/json",
                                                xpublic: "true",
                                                xFlowId: getFlowId(),

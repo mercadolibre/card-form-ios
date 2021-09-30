@@ -64,6 +64,7 @@ extension MLCardFormBinService {
         case xFlowId
         case contentType
         case sessionId
+        case accessToken
 
         var getKey: String {
             switch self {
@@ -81,6 +82,8 @@ extension MLCardFormBinService {
                 return "x-flow-id"
             case .sessionId:
                 return "X-Session-Id"
+            case .accessToken:
+                return "Authorization"
             }
         }
     }
@@ -92,6 +95,7 @@ extension MLCardFormBinService {
         let xFlowId: String
         let contentType: String?
         let sessionId: String
+        let accessToken: String
     }
 
     enum QueryKeys {
@@ -178,7 +182,8 @@ private extension MLCardFormBinService {
                                                    acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
                                                    xFlowId: getFlowId(),
                                                    contentType: nil,
-                                                   sessionId: MLCardFormTracker.sharedInstance.getSessionID())
+                                                   sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                   accessToken: "")
         NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)){ [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
@@ -201,7 +206,8 @@ private extension MLCardFormBinService {
                                                    acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
                                                    xFlowId: getFlowId(),
                                                    contentType: "application/json",
-                                                   sessionId: MLCardFormTracker.sharedInstance.getSessionID())
+                                                   sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                   accessToken: "")
         NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))
         {  [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }

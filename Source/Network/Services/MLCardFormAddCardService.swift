@@ -14,7 +14,10 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
             return
         }
-        guard let privateKey = privateKey else { return }
+        guard let privateKey = privateKey else {
+            completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
+            return
+        }
         let accessBearerToken = "Bearer " + privateKey
 
         if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
