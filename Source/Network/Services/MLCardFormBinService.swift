@@ -22,6 +22,7 @@ final class MLCardFormBinService {
     
     private var siteId: String?
     private var flowId: String?
+    private var privateKey: String?
     private var excludedPaymentTypes: [String]?
     private let queue = OperationQueue()
     private var lastBin: String?
@@ -31,8 +32,10 @@ final class MLCardFormBinService {
     func update(siteId: String?,
                 excludedPaymentTypes: [String]?,
                 flowId: String?,
+                privateKey: String?,
                 cardInfoMarketplace:MLCardFormCardInformationMarketplace?) {
         self.siteId = siteId
+        self.privateKey = privateKey
         self.excludedPaymentTypes = excludedPaymentTypes
         self.flowId = flowId
         self.cardInfoMarketplace = cardInfoMarketplace
@@ -183,7 +186,7 @@ private extension MLCardFormBinService {
                                                    xFlowId: getFlowId(),
                                                    contentType: nil,
                                                    sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
-                                                   accessToken: "")
+                                                   accessToken: getAccessToken())
         NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)){ [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
@@ -207,7 +210,7 @@ private extension MLCardFormBinService {
                                                    xFlowId: getFlowId(),
                                                    contentType: "application/json",
                                                    sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
-                                                   accessToken: "")
+                                                   accessToken: getAccessToken())
         NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))
         {  [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
@@ -227,8 +230,8 @@ private extension MLCardFormBinService {
         return flowId ?? "MLCardForm"
     }
     
-    func getAccessToken(accessToken: String) -> String {
-        return accessToken
+    func getAccessToken() -> String {
+        return privateKey ?? ""
     }
 
     func debugLog(_ message: Any) {
