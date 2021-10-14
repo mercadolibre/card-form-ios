@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 final class MLCardFormBinService {
     private enum AppIdentifier: String {
         case meli = "ML"
@@ -16,11 +17,13 @@ final class MLCardFormBinService {
     }
     private let meliName: String = "mercadolibre"
     private let mpName: String = "mercadopago"
+    var bearer = "Bearer "
 
     weak var delegate: MLCardFormInternetConnectionProtocol?
     
     private var siteId: String?
     private var flowId: String?
+    private var privateKey: String?
     private var excludedPaymentTypes: [String]?
     private let queue = OperationQueue()
     private var lastBin: String?
@@ -30,8 +33,10 @@ final class MLCardFormBinService {
     func update(siteId: String?,
                 excludedPaymentTypes: [String]?,
                 flowId: String?,
+                privateKey: String?,
                 cardInfoMarketplace:MLCardFormCardInformationMarketplace?) {
         self.siteId = siteId
+        self.privateKey = privateKey
         self.excludedPaymentTypes = excludedPaymentTypes
         self.flowId = flowId
         self.cardInfoMarketplace = cardInfoMarketplace
@@ -62,6 +67,8 @@ extension MLCardFormBinService {
         case xProductId
         case xFlowId
         case contentType
+        case sessionId
+        case accessToken
 
         var getKey: String {
             switch self {
@@ -77,6 +84,10 @@ extension MLCardFormBinService {
                 return "content-type"
             case .xFlowId:
                 return "x-flow-id"
+            case .sessionId:
+                return "X-Session-Id"
+            case .accessToken:
+                return "Authorization"
             }
         }
     }
@@ -87,6 +98,8 @@ extension MLCardFormBinService {
         let acceptLanguage: String
         let xFlowId: String
         let contentType: String?
+        let sessionId: String
+        let accessToken: String
     }
 
     enum QueryKeys {
@@ -118,6 +131,7 @@ extension MLCardFormBinService {
 
 // MARK: Public methods.
 extension MLCardFormBinService {
+    
     func getCardData(binNumber: String, completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
         guard let siteId = siteId else {
             let error = NSError(domain:"", code:0, userInfo:nil)
@@ -163,13 +177,18 @@ extension MLCardFormBinService {
 
 // MARK: Privates
 private extension MLCardFormBinService {
-    
+
     func getCardData (queryParams: MLCardFormBinService.QueryParams,
                       completion: ((Result<MLCardFormBinData, Error>) -> ())? = nil) {
-
-        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4", xDensity: "xxxhdpi", acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(), xFlowId: getFlowId(), contentType: nil)
-        NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers))
-        { [weak self] (result: Result<MLCardFormBinData, Error>) in
+        
+        let headers = MLCardFormBinService.Headers(userAgent: "PX/iOS/4.3.4",
+                                                   xDensity: "xxxhdpi",
+                                                   acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
+                                                   xFlowId: getFlowId(),
+                                                   contentType: nil,
+                                                   sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                   accessToken: bearer + getAccessToken())
+        NetworkLayer.request(router: MLCardFormApiRouter.getCardData(queryParams, headers)){ [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let cardFormBinData):
@@ -190,8 +209,9 @@ private extension MLCardFormBinService {
                                                    xDensity: "xxxhdpi",
                                                    acceptLanguage: MLCardFormLocalizatorManager.shared.getLanguage(),
                                                    xFlowId: getFlowId(),
-                                                   contentType: "application/json")
-
+                                                   contentType: "application/json",
+                                                   sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                   accessToken: bearer + getAccessToken())
         NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))
         {  [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
@@ -209,6 +229,10 @@ private extension MLCardFormBinService {
     
     func getFlowId() -> String {
         return flowId ?? "MLCardForm"
+    }
+    
+    func getAccessToken() -> String {
+        return privateKey ?? ""
     }
 
     func debugLog(_ message: Any) {

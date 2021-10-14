@@ -17,6 +17,15 @@ enum NetworkLayerError: Error {
     case noInternetConnection
 }
 
+enum HttpError: Error {
+    case noConectivity
+    case fail
+    case badRequest
+    case serverError
+    case unauthorized
+    case forbidden
+}
+
 extension NetworkLayerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
@@ -72,7 +81,7 @@ struct NetworkLayer {
         if let headers = router.headers {
             headers.forEach { urlRequest.setValue($0.value, forHTTPHeaderField: $0.key) }
         }
-
+        
         let session = URLSession(configuration: .default)
         
         #if DEBUG
@@ -110,7 +119,19 @@ struct NetworkLayer {
                 } catch let error as NSError {
                     print(error)
                 }
-                completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
+                
+                switch response.statusCode {
+                    case 401:
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
+                    case 403:
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
+                    case 400...499:
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
+                    case 500...599:
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
+                    default:
+                        completion(.failure(NetworkLayerError.statusCode(status: response.statusCode, message: message, userErrorMessage: errorMessage)))
+                }
                 return
             }
             do {

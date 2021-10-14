@@ -8,6 +8,7 @@
 import Foundation
 
 final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
+    var bearer = "Bearer "
     private func getATParamAndCheckConnection(completion: ((Result<MLCardFormWebPayService.AccessTokenParam, Error>) -> ())? = nil) {
         guard let privateKey = privateKey else {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
@@ -28,8 +29,8 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             switch result {
             case .success(let accessTokenParam):
                 guard let self = self else { return }
-                let headers = self.buildJSONHeaders()
-                NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(accessTokenParam, headers)) {
+                let headers = self.buildJSONHeaders(accessToken: accessTokenParam)
+                NetworkLayer.request(router: MLCardFormApiRouter.getWebPayInitInscription(headers)) {
                     (result: Result<MLCardFormWebPayInscriptionData, Error>) in
                     completion?(result)
                 }
@@ -44,8 +45,8 @@ final class MLCardFormWebPayService: MLCardFormAddCardServiceBase {
             switch result {
             case .success(let accessTokenParam):
                 guard let self = self else { return }
-                let headers = self.buildJSONHeaders()
-                NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(accessTokenParam, headers, inscriptionData)) {
+                let headers = self.buildJSONHeaders(accessToken: accessTokenParam)
+                NetworkLayer.request(router: MLCardFormApiRouter.postWebPayFinishInscription(headers, inscriptionData)) {
                     (result: Result<MLCardFormWebPayFinishInscriptionData, Error>) in
                     completion?(result)
                 }
@@ -62,12 +63,16 @@ extension MLCardFormWebPayService {
         case contentType
         case xpublic
         case xFlowId
+        case sessionId
+        case accessToken
 
         var getKey: String {
             switch self {
             case .contentType: return "content-type"
             case .xpublic: return "X-Public"
             case .xFlowId: return "x-flow-id"
+            case .sessionId: return "X-Session-Id"
+            case .accessToken: return "Authorization"
             }
         }
     }
@@ -76,11 +81,18 @@ extension MLCardFormWebPayService {
         let contentType: String
         let xpublic: String
         let xFlowId: String
+        let sessionId: String
+        let accessToken: String
     }
 }
 
 private extension MLCardFormWebPayService {
-    func buildJSONHeaders() -> MLCardFormWebPayService.Headers {
-        return MLCardFormWebPayService.Headers(contentType: "application/json", xpublic: "true", xFlowId: getFlowId())
+    func buildJSONHeaders(accessToken: AccessTokenParam) -> MLCardFormWebPayService.Headers {
+        
+        return MLCardFormWebPayService.Headers(contentType: "application/json",
+                                               xpublic: "true",
+                                               xFlowId: getFlowId(),
+                                               sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                               accessToken: bearer + accessToken.accessToken)
     }
 }

@@ -11,10 +11,10 @@ import Foundation
 enum MLCardFormApiRouter {
 
     case getCardData(MLCardFormBinService.QueryParams, MLCardFormBinService.Headers)
-    case postCardTokenData(MLCardFormAddCardService.KeyParam, MLCardFormAddCardService.Headers, MLCardFormTokenizationBody)
-    case postCardData(MLCardFormAddCardService.AccessTokenParam, MLCardFormAddCardService.Headers, MLCardFormAddCardBody)
-    case getWebPayInitInscription(MLCardFormWebPayService.AccessTokenParam, MLCardFormWebPayService.Headers)
-    case postWebPayFinishInscription(MLCardFormWebPayService.AccessTokenParam, MLCardFormWebPayService.Headers, MLCardFormFinishInscriptionBody)
+    case postCardTokenData(MLCardFormAddCardService.Headers, MLCardFormTokenizationBody)
+    case postCardData(MLCardFormAddCardService.Headers, MLCardFormAddCardBody)
+    case getWebPayInitInscription(MLCardFormWebPayService.Headers)
+    case postWebPayFinishInscription(MLCardFormWebPayService.Headers, MLCardFormFinishInscriptionBody)
     case getCardDataFromMarketplace(MLCardFormCardInformationMarketplace,
                                     MLCardFormBinService.Headers)
 
@@ -49,64 +49,59 @@ enum MLCardFormApiRouter {
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .getCardDataFromMarketplace(_, let headers):
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xProductId.getKey: headers.xFlowId,
-                    MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? ""]
-        case .postCardTokenData(_, let headers, _),
-             .postCardData(_, let headers, _):
+                    MLCardFormBinService.HeadersKeys.contentType.getKey: headers.contentType ?? "",
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
+        case .postCardTokenData(let headers, _),
+             .postCardData(let headers, _):
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
-        case .getWebPayInitInscription(_, let headers):
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormAddCardService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken]
+        case .getWebPayInitInscription(let headers):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
-        case .postWebPayFinishInscription(_, let headers, _):
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormWebPayService.HeadersKeys.accessToken.getKey: headers.accessToken]
+        case .postWebPayFinishInscription(let headers, _):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
-                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId]
+                    MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                    MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                    MLCardFormWebPayService.HeadersKeys.accessToken.getKey: headers.accessToken]
         }
     }
 
     var parameters: [URLQueryItem] {
-        switch self {
-        case .getCardData(let queryParams, _):
-            var urlQueryItems = [
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.bin.getKey, value: queryParams.bin),
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.siteId.getKey, value: queryParams.siteId),
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.platform.getKey, value: queryParams.platform),
-                URLQueryItem(name: MLCardFormBinService.QueryKeys.odr.getKey, value: String(queryParams.odr))
-            ]
-            if let excludedPaymentTypes = queryParams.excludedPaymentTypes {
-                urlQueryItems.append(URLQueryItem(name: MLCardFormBinService.QueryKeys.excludedPaymentTypes.getKey, value: excludedPaymentTypes))
+            switch self {
+            case .getCardData(let queryParams, _):
+                var urlQueryItems = [
+                    URLQueryItem(name: MLCardFormBinService.QueryKeys.bin.getKey, value: queryParams.bin),
+                    URLQueryItem(name: MLCardFormBinService.QueryKeys.siteId.getKey, value: queryParams.siteId),
+                    URLQueryItem(name: MLCardFormBinService.QueryKeys.platform.getKey, value: queryParams.platform),
+                    URLQueryItem(name: MLCardFormBinService.QueryKeys.odr.getKey, value: String(queryParams.odr))
+                ]
+                if let excludedPaymentTypes = queryParams.excludedPaymentTypes {
+                    urlQueryItems.append(URLQueryItem(name: MLCardFormBinService.QueryKeys.excludedPaymentTypes.getKey, value: excludedPaymentTypes))
+                }
+                return urlQueryItems
+                case.postCardTokenData,
+                    .postCardData,
+                    .getWebPayInitInscription,
+                    .postWebPayFinishInscription,
+                    .getCardDataFromMarketplace:
+                return [];
             }
-            return urlQueryItems
-        case.postCardTokenData(let queryParams, _, _):
-            var urlQueryItems:[URLQueryItem] = []
-            if let accessToken = queryParams.accessToken {
-                urlQueryItems.append(URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: accessToken))
-            } else if let publicKey = queryParams.publicKey {
-                urlQueryItems.append(URLQueryItem(name: MLCardFormAddCardService.QueryKeys.publicKey.getKey, value: publicKey))
-            }
-            return urlQueryItems
-        case .postCardData(let queryParams, _, _):
-            let urlQueryItems = [
-                URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken),
-            ]
-            return urlQueryItems
-        case .getWebPayInitInscription(let queryParams, _),
-             .postWebPayFinishInscription(let queryParams, _, _):
-            let urlQueryItems = [
-                URLQueryItem(name: MLCardFormAddCardService.QueryKeys.accessToken.getKey, value: queryParams.accessToken)
-            ]
-            return urlQueryItems
-        case .getCardDataFromMarketplace(_):
-            return [];
         }
-    }
 
     var method: String {
         switch self {
@@ -123,11 +118,11 @@ enum MLCardFormApiRouter {
 
     var body: Data? {
         switch self {
-        case .postCardTokenData(_, _, let body):
+        case .postCardTokenData( _, let body):
             return encode(body)
-        case .postCardData(_, _, let body):
+        case .postCardData( _, let body):
             return encode(body)
-        case .postWebPayFinishInscription(_, _, let body):
+        case .postWebPayFinishInscription( _, let body):
             return encode(body)
         case .getCardDataFromMarketplace(let body, _):
             return encode(body)

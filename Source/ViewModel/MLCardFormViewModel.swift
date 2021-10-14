@@ -59,7 +59,7 @@ final class MLCardFormViewModel {
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
         serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey, flowId: builder.flowId, acceptThirdPartyCard: builder.acceptThirdPartyCard, activateCard: builder.activateCard)
-        serviceManager.binService.update(siteId: builder.siteId, excludedPaymentTypes: builder.excludedPaymentTypes, flowId: builder.flowId, cardInfoMarketplace: builder.cardInfoMarketplace)
+        serviceManager.binService.update(siteId: builder.siteId, excludedPaymentTypes: builder.excludedPaymentTypes, flowId: builder.flowId, privateKey: builder.privateKey, cardInfoMarketplace: builder.cardInfoMarketplace)
     }
     
     func setupDefaultCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {

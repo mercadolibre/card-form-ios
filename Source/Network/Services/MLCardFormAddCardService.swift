@@ -9,19 +9,31 @@ import Foundation
 import MLCardDrawer
 
 final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
+    var bearer = "Bearer "
     func addCardToken(tokenizationData: MLCardFormAddCardService.TokenizationBody, completion: ((Result<MLCardFormTokenizationCardData, Error>) -> ())? = nil) {
         if publicKey == nil && privateKey == nil {
             completion?(.failure(MLCardFormAddCardServiceError.missingKeys))
             return
         }
+        guard let privateKey = privateKey else {
+            completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
+            return
+        }
+        let accessBearerToken = bearer + privateKey
 
         if let internetConnection = delegate?.hasInternetConnection(), !internetConnection {
             completion?(.failure(NetworkLayerError.noInternetConnection))
             return
         }
         let queryParams = MLCardFormAddCardService.KeyParam(publicKey: publicKey, accessToken: privateKey)
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId())
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(queryParams, headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
+        
+
+        let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
+                                                       xFlowId: getFlowId(),
+                                                       sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                       accessToken: accessBearerToken)
+        
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardTokenData(headers, buildTokenizationBody(tokenizationData))) { (result: Result<MLCardFormTokenizationCardData, Error>) in
             completion?(result)
         }
     }
@@ -31,9 +43,15 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
             completion?(.failure(MLCardFormAddCardServiceError.missingPrivateKey))
             return
         }
+        
+        let accessBearerToken = bearer + privateKey
         let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
-        let headers = MLCardFormAddCardService.Headers(contentType: "application/json", xFlowId: getFlowId())
-        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(accessTokenParam, headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
+        let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
+                                                       xFlowId: getFlowId(),
+                                                       sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
+                                                       accessToken: accessBearerToken)
+        
+        NetworkLayer.request(router: MLCardFormApiRouter.postCardData(headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
             (result: Result<MLCardFormAddCardData, Error>) in
             completion?(result)
         }
@@ -45,11 +63,15 @@ extension MLCardFormAddCardService {
     enum HeadersKeys {
         case contentType
         case xFlowId
+        case sessionId
+        case accessToken
 
         var getKey: String {
             switch self {
             case .contentType: return "content-type"
             case .xFlowId: return "x-flow-id"
+            case .sessionId: return "X-Session-Id"
+            case .accessToken: return "Authorization"
             }
         }
     }
@@ -57,6 +79,8 @@ extension MLCardFormAddCardService {
     struct Headers {
         let contentType: String
         let xFlowId: String
+        let sessionId: String
+        let accessToken: String
     }
 
     struct TokenizationBody {
