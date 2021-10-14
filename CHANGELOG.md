@@ -1,3 +1,7 @@
+# v0.9.15
+🚀 Release 0.9.15 🚀
+- Agregar session id en el header de los request de CardForm
+
 # v0.9.14
 🚀 Release 0.9.14 🚀
 - Sending flow_id into headers in backend requests
