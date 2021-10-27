@@ -458,7 +458,6 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     
     public func didBeginEditing(from: MLCardFormField) {
         guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
-        //scrollCollectionViewToCardFormField(from)
         
         if fieldId == MLCardFormFields.securityCode {
             cardDrawer?.showSecurityCode()
