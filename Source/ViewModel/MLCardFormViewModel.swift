@@ -193,13 +193,16 @@ final class MLCardFormViewModel {
     
     func groupIndexOfCardFormField(_ cardFormField: MLCardFormField) -> Int? {
         let fieldId = cardFormField.property.fieldId()
-        let index = cardFormFields?.firstIndex(where: {
+        guard let index = cardFormFields?.firstIndex(where: {
             $0.first(where: {
                 $0.property.fieldId() == fieldId
             }) != nil
-        })
+        }) else { return nil }
         
-        return index
+        if fieldId == MLCardFormFields.expiration.rawValue {
+            return index
+        }
+        return Int(index + 1)
     }
     
     func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) {

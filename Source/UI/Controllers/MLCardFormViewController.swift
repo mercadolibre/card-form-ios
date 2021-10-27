@@ -458,7 +458,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     
     public func didBeginEditing(from: MLCardFormField) {
         guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
-        scrollCollectionViewToCardFormField(from)
+        //scrollCollectionViewToCardFormField(from)
         
         if fieldId == MLCardFormFields.securityCode {
             cardDrawer?.showSecurityCode()
@@ -493,12 +493,19 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             getCardData(binNumber: currentBin, showProggressAndSnackBar: true)
             return
         }
+        
         if viewModel.isSecurityCodeFieldAndIsMissingExpiration(cardFormField: from) {
             return
         }
         trackNextEvent(from)
         trackValidEvent(from)
+        
+        if !viewModel.isLastField(cardFormField: from) {
+            scrollCollectionViewToCardFormField(from)
+        }
+        
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
+        
         if viewModel.isLastField(cardFormField: from) {
             // TODO: Dar de alta la tarjeta
             from.resignFocus()
