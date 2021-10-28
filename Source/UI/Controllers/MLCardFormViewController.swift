@@ -47,6 +47,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     /// :nodoc
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.clearFieldsOnFirstAccess()
         if !viewModel.shouldAnimateOnLoad() {
             animateCardAppear()
         }
@@ -85,6 +86,13 @@ internal extension MLCardFormViewController {
         controller.lifeCycleDelegate = builder.lifeCycleDelegate
         controller.viewModel.updateWithBuilder(builder)
         return controller
+    }
+    
+    func clearFieldsOnFirstAccess() {
+        self.viewModel.cardDataHandler.number = ""
+        self.viewModel.cardDataHandler.name = ""
+        self.viewModel.cardDataHandler.expiration = ""
+        self.viewModel.cardDataHandler.securityCode = ""
     }
 }
 
