@@ -482,6 +482,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
                 defaultCardDataHandler.identificationType = identificationType
             }
         case MLCardFormFields.identificationTypeNumber:
+            scrollCollectionViewToCardFormField(from)
             if let defaultCardDataHandler = viewModel.cardDataHandler as? DefaultCardDataHandler,
                 let identificationNumber = from.getValue() {
                 defaultCardDataHandler.identificationNumber = identificationNumber
@@ -507,7 +508,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         trackNextEvent(from)
         trackValidEvent(from)
         
-            scrollCollectionViewToCardFormField(from)
+        scrollCollectionViewToCardFormField(from)
 
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
         
