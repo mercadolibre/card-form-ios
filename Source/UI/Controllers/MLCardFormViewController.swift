@@ -507,10 +507,8 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         trackNextEvent(from)
         trackValidEvent(from)
         
-        if !viewModel.isLastField(cardFormField: from) {
             scrollCollectionViewToCardFormField(from)
-        }
-        
+
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
         
         if viewModel.isLastField(cardFormField: from) {
