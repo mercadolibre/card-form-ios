@@ -507,7 +507,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         trackNextEvent(from)
         trackValidEvent(from)
         
-        scrollCollectionViewToCardFormField(from)
+        scrollCollectionViewToCardFormField(from, offSet: false)
 
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
         
@@ -525,8 +525,8 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     public func shouldBack(from: MLCardFormField) {
         trackPreviousEvent(from)
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: -1)
+        scrollCollectionViewToCardFormField(from, offSet:  true)
     }
-    
     public func didTapClear(from: MLCardFormField) {
         trackClearEvent(from)
     }
@@ -608,18 +608,20 @@ extension MLCardFormViewController: MLCardFormViewModelProtocol {
 
 // MARK: Collectionview methods.
 private extension MLCardFormViewController {
-    func scrollCollectionViewToCardFormField(_ cardFormField: MLCardFormField) {
-        guard let index = viewModel.groupIndexOfCardFormField(cardFormField),
+    func scrollCollectionViewToCardFormField(_ cardFormField: MLCardFormField, offSet: Bool) {
+        guard var index = viewModel.groupIndexOfCardFormField(cardFormField, offSet: offSet),
             let cardFieldCollectionView = cardFieldCollectionView else { return }
         guard index != currentCellIndex() else {
             return
         }
+        
+        
         trackScreen(cardFormField)
         //debugPrint("Scrolling collection to \(cardFormField.property.fieldId())")
         let section = 0
         let numberOfItems = cardFieldCollectionView.numberOfItems(inSection: section)
         let safeIndex = max(0, min(numberOfItems - 1, index))
-        let indexPath = IndexPath(row: safeIndex, section: section)
+        var indexPath = IndexPath(row: safeIndex, section: section)
         cardFieldCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
     

@@ -191,7 +191,7 @@ final class MLCardFormViewModel {
         }
     }
     
-    func groupIndexOfCardFormField(_ cardFormField: MLCardFormField) -> Int? {
+    func groupIndexOfCardFormField(_ cardFormField: MLCardFormField, offSet: Bool) -> Int? {
             let fieldId = cardFormField.property.fieldId()
             guard let index = cardFormFields?.firstIndex(where: {
                 $0.first(where: {
@@ -200,9 +200,15 @@ final class MLCardFormViewModel {
             }) else { return nil }
             
             if fieldId == MLCardFormFields.expiration.rawValue {
+                if offSet {
+                    return shouldReturnIndex(index: index, isTurnBack: true)
+                }
                 return index
             }
-            return Int(index + 1)
+            if offSet {
+                return shouldReturnIndex(index: index, isTurnBack: true)
+            }
+        return shouldReturnIndex(index: index, isTurnBack: false)
         }
     
     func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) {
@@ -311,6 +317,14 @@ final class MLCardFormViewModel {
 
     func shouldAnimateOnLoad() -> Bool {
         return builder?.animateOnLoad ?? false
+    }
+    
+    func shouldReturnIndex(index: Int, isTurnBack: Bool) -> Int {
+        if isTurnBack {
+            return index - 1
+        } else {
+            return index + 1
+        }
     }
 }
 
