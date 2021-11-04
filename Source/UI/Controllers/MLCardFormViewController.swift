@@ -609,7 +609,7 @@ extension MLCardFormViewController: MLCardFormViewModelProtocol {
 // MARK: Collectionview methods.
 private extension MLCardFormViewController {
     func scrollCollectionViewToCardFormField(_ cardFormField: MLCardFormField, offSet: Bool) {
-        guard var index = viewModel.groupIndexOfCardFormField(cardFormField, offSet: offSet),
+        guard let index = viewModel.groupIndexOfCardFormField(cardFormField, offSet: offSet),
             let cardFieldCollectionView = cardFieldCollectionView else { return }
         guard index != currentCellIndex() else {
             return
@@ -621,7 +621,7 @@ private extension MLCardFormViewController {
         let section = 0
         let numberOfItems = cardFieldCollectionView.numberOfItems(inSection: section)
         let safeIndex = max(0, min(numberOfItems - 1, index))
-        var indexPath = IndexPath(row: safeIndex, section: section)
+        let indexPath = IndexPath(row: safeIndex, section: section)
         cardFieldCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
     
