@@ -88,7 +88,7 @@ internal extension MLCardFormViewController {
         return controller
     }
     
-    func clearFieldsOnFirstAccess() {
+    private func clearFieldsOnFirstAccess() {
         self.viewModel.cardDataHandler.number = ""
         self.viewModel.cardDataHandler.name = ""
         self.viewModel.cardDataHandler.expiration = ""
