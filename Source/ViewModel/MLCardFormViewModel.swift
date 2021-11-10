@@ -316,7 +316,7 @@ final class MLCardFormViewModel {
     }
     
     func shouldReturnIndex(index: Int, isTurnBack: Bool) -> Int {
-        return isTurnBack ? index + 1 : index - 1
+        return isTurnBack ? index - 1 : index + 1
     }
 }
 
