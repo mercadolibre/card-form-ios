@@ -191,16 +191,22 @@ final class MLCardFormViewModel {
         }
     }
     
-    func groupIndexOfCardFormField(_ cardFormField: MLCardFormField) -> Int? {
-        let fieldId = cardFormField.property.fieldId()
-        let index = cardFormFields?.firstIndex(where: {
-            $0.first(where: {
-                $0.property.fieldId() == fieldId
-            }) != nil
-        })
-        
-        return index
-    }
+    func groupIndexOfCardFormField(_ cardFormField: MLCardFormField, offSet: Bool) -> Int? {
+            let fieldId = cardFormField.property.fieldId()
+            guard let index = cardFormFields?.firstIndex(where: {
+                $0.first(where: {
+                    $0.property.fieldId() == fieldId
+                }) != nil
+            }) else { return nil }
+            
+            if fieldId == MLCardFormFields.expiration.rawValue {
+                if offSet {
+                    return shouldReturnIndex(index: index, isTurnBack: true)
+                }
+                return index
+            }
+            return shouldReturnIndex(index: index, isTurnBack: offSet)
+        }
     
     func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) {
         let flattenedCardFormFields = cardFormFields?.flatMap{ $0 }
@@ -213,7 +219,6 @@ final class MLCardFormViewModel {
             if field.property.shouldShowPickerInput() {
                 focusCardFormFieldWithOffset(cardFormField: field, offset: offset)
             } else {
-                //debugPrint("Setting focus on \(field.property.fieldId()) from \(cardFormField.property.fieldId())")
                 field.doFocus()
             }
         }
@@ -308,6 +313,10 @@ final class MLCardFormViewModel {
 
     func shouldAnimateOnLoad() -> Bool {
         return builder?.animateOnLoad ?? false
+    }
+    
+    func shouldReturnIndex(index: Int, isTurnBack: Bool) -> Int {
+        return isTurnBack ? index - 1 : index + 1
     }
 }
 

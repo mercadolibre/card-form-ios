@@ -47,6 +47,7 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     /// :nodoc
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.clearFieldsOnFirstAccess()
         if !viewModel.shouldAnimateOnLoad() {
             animateCardAppear()
         }
@@ -85,6 +86,13 @@ internal extension MLCardFormViewController {
         controller.lifeCycleDelegate = builder.lifeCycleDelegate
         controller.viewModel.updateWithBuilder(builder)
         return controller
+    }
+    
+    private func clearFieldsOnFirstAccess() {
+        self.viewModel.cardDataHandler.number = ""
+        self.viewModel.cardDataHandler.name = ""
+        self.viewModel.cardDataHandler.expiration = ""
+        self.viewModel.cardDataHandler.securityCode = ""
     }
 }
 
@@ -458,7 +466,6 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     
     public func didBeginEditing(from: MLCardFormField) {
         guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
-        scrollCollectionViewToCardFormField(from)
         
         if fieldId == MLCardFormFields.securityCode {
             cardDrawer?.showSecurityCode()
@@ -493,12 +500,17 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             getCardData(binNumber: currentBin, showProggressAndSnackBar: true)
             return
         }
+        
         if viewModel.isSecurityCodeFieldAndIsMissingExpiration(cardFormField: from) {
             return
         }
         trackNextEvent(from)
         trackValidEvent(from)
+        
+        scrollCollectionViewToCardFormField(from, offSet: false)
+
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
+        
         if viewModel.isLastField(cardFormField: from) {
             // TODO: Dar de alta la tarjeta
             from.resignFocus()
@@ -513,8 +525,8 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     public func shouldBack(from: MLCardFormField) {
         trackPreviousEvent(from)
         viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: -1)
+        scrollCollectionViewToCardFormField(from, offSet:  true)
     }
-    
     public func didTapClear(from: MLCardFormField) {
         trackClearEvent(from)
     }
@@ -596,14 +608,14 @@ extension MLCardFormViewController: MLCardFormViewModelProtocol {
 
 // MARK: Collectionview methods.
 private extension MLCardFormViewController {
-    func scrollCollectionViewToCardFormField(_ cardFormField: MLCardFormField) {
-        guard let index = viewModel.groupIndexOfCardFormField(cardFormField),
+    func scrollCollectionViewToCardFormField(_ cardFormField: MLCardFormField, offSet: Bool) {
+        guard let index = viewModel.groupIndexOfCardFormField(cardFormField, offSet: offSet),
             let cardFieldCollectionView = cardFieldCollectionView else { return }
         guard index != currentCellIndex() else {
             return
         }
+        
         trackScreen(cardFormField)
-        //debugPrint("Scrolling collection to \(cardFormField.property.fieldId())")
         let section = 0
         let numberOfItems = cardFieldCollectionView.numberOfItems(inSection: section)
         let safeIndex = max(0, min(numberOfItems - 1, index))
