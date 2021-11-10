@@ -205,10 +205,7 @@ final class MLCardFormViewModel {
                 }
                 return index
             }
-            if offSet {
-                return shouldReturnIndex(index: index, isTurnBack: true)
-            }
-        return shouldReturnIndex(index: index, isTurnBack: false)
+            return shouldReturnIndex(index: index, isTurnBack: offSet)
         }
     
     func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) {
@@ -222,7 +219,6 @@ final class MLCardFormViewModel {
             if field.property.shouldShowPickerInput() {
                 focusCardFormFieldWithOffset(cardFormField: field, offset: offset)
             } else {
-                //debugPrint("Setting focus on \(field.property.fieldId()) from \(cardFormField.property.fieldId())")
                 field.doFocus()
             }
         }
@@ -320,11 +316,7 @@ final class MLCardFormViewModel {
     }
     
     func shouldReturnIndex(index: Int, isTurnBack: Bool) -> Int {
-        if isTurnBack {
-            return index - 1
-        } else {
-            return index + 1
-        }
+        return isTurnBack ? index + 1 : index - 1
     }
 }
 

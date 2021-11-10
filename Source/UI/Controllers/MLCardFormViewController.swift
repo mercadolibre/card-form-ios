@@ -615,9 +615,7 @@ private extension MLCardFormViewController {
             return
         }
         
-        
         trackScreen(cardFormField)
-        //debugPrint("Scrolling collection to \(cardFormField.property.fieldId())")
         let section = 0
         let numberOfItems = cardFieldCollectionView.numberOfItems(inSection: section)
         let safeIndex = max(0, min(numberOfItems - 1, index))
