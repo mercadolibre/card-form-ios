@@ -34,7 +34,7 @@ enum MLCardFormApiRouter {
 
     var path: String {
         switch self {
-        case .getCardData: return "/production/px_mobile/v1/card"
+        case .getCardData: return "/alpha/px_mobile/v1/card"
         case .postCardTokenData: return "/v1/card_tokens"
         case .postCardData: return "/production/px_mobile/v1/card"
         case .getWebPayInitInscription: return "/production/px_mobile/v1/card_webpay/inscription/init"
