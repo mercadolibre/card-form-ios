@@ -1,3 +1,8 @@
+# v0.9.16
+🚀 Release 0.9.16 🚀
+- reorganiza método isValid para evitar o crash do range negativo (minLength > maxLength)
+- Adjustment in the validation fields of the module that includes new cards
+
 # v0.9.15
 🚀 Release 0.9.15 🚀
 - Agregar session id en el header de los request de CardForm
