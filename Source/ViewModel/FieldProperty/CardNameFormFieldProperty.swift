@@ -83,22 +83,19 @@ struct CardNameFormFieldProperty : MLCardFormFieldPropertyProtocol {
     }
     
     func isValid(value: String?) -> Bool {
-        guard let value = value else { return false }
-        if minLenght() ... maxLenght() ~= value.count {
-            if let pattern = validationPattern() {
-                do {
-                    let regex = try NSRegularExpression(pattern: pattern, options: .caseInsensitive)
-                    let range = NSRange(value.startIndex..., in: value)
-                    return regex.firstMatch(in: value, options: [], range: range) != nil
-                } catch {
-                    // regex was malformed!
-                    return true
-                }
-            } else {
+        guard let value = value,
+              minLenght() <= maxLenght(),
+              minLenght() ... maxLenght() ~= value.count else {return false }
+        
+        guard let pattern = validationPattern() else { return true }
+        
+            do {
+                let regex = try NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+                let range = NSRange(value.startIndex..., in: value)
+                return regex.firstMatch(in: value, options: [], range: range) != nil
+            } catch {
+                // regex was malformed!
                 return true
             }
-        } else {
-            return false
-        }
     }
 }
