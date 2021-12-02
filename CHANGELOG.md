@@ -58,6 +58,7 @@
 
 # v0.9.1
 🚀 Release 0.9.1 🚀
+- Date: 02/12/21
 - Make Reachability public
 
 # v0.9.0
