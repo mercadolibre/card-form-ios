@@ -16,18 +16,20 @@ import Foundation
 
 class MLCardFormCustomMask {
     
-    var finalText: String?
+    var finalText: String? = String()
+    var bufferText: String? = String()
 
     private var mask: String?
     
     public init(mask: String = String()){
         self.mask = mask
-        self.finalText = String()
     }
 
     public func formatString(string: String) -> String {
         
         self.finalText = string
+        
+        self.bufferText = string
         
         self.finalText?.applyMask(self.mask)
         
@@ -46,6 +48,9 @@ class MLCardFormCustomMask {
         }
         
         finalText?.appendCharWithMask(Character(string), mask: self.mask)
+        
+        bufferText?.append(string)
+        
         return finalText ?? String()
     }
 }

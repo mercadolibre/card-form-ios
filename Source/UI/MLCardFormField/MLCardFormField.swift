@@ -86,7 +86,7 @@ extension MLCardFormField {
     func getUnmaskedValue() -> String? {
         var value: String? = getValue()
         if let customMask = customMask {
-            value = customMask.finalText
+            value = customMask.bufferText
         }
         return value
     }
@@ -113,8 +113,8 @@ extension MLCardFormField {
     
     func updateInput() {
         if let maskPattern = property.patternMask() {
-            customMask = MLCardFormCustomMask(mask: maskPattern)
-            maxLenght = maskPattern.count
+            //customMask = MLCardFormCustomMask(mask: maskPattern)
+            //maxLenght = maskPattern.count
         } else {
             customMask = nil
             maxLenght = property.maxLenght()
