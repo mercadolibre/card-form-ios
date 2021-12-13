@@ -59,7 +59,7 @@ internal extension String {
     
     mutating func applyMask(_ mask: String?) {
         
-        guard let mask = mask else { return }
+        guard let mask = mask, !self.isEmpty else { return }
         
         var result = String()
         var c: Character

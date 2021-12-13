@@ -113,8 +113,8 @@ extension MLCardFormField {
     
     func updateInput() {
         if let maskPattern = property.patternMask() {
-            //customMask = MLCardFormCustomMask(mask: maskPattern)
-            //maxLenght = maskPattern.count
+            customMask = MLCardFormCustomMask(mask: maskPattern)
+            maxLenght = maskPattern.count
         } else {
             customMask = nil
             maxLenght = property.maxLenght()
