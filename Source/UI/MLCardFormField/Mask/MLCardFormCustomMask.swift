@@ -44,6 +44,10 @@ class MLCardFormCustomMask {
                 finalText?.removeLast()
             }
             
+            if range.upperBound <= bufferText?.count ?? 0 {
+                bufferText?.removeLast()
+            }
+            
             return finalText ?? String()
         }
         
