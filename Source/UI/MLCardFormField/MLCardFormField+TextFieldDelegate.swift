@@ -48,7 +48,7 @@ extension MLCardFormField {
         guard let inputCharsCount = textField.text?.count else { return }
         var sendValue: String? = textField.text
         if let customMask = customMask {
-            sendValue = customMask.cleanText
+            sendValue = customMask.bufferText
         }
         notifierProtocol?.didChangeValue(newValue: sendValue, from: self)
         if property.shouldShowTick() {

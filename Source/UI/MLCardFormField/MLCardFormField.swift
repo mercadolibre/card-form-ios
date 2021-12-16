@@ -41,7 +41,7 @@ final public class MLCardFormField: UIView {
     public init(fieldProperty: MLCardFormFieldPropertyProtocol) {
         property = fieldProperty
         if let maskPattern = fieldProperty.patternMask() {
-            customMask = MLCardFormCustomMask(formattingPattern: maskPattern)
+            customMask = MLCardFormCustomMask(mask: maskPattern)
             maxLenght = maskPattern.count
         } else {
             maxLenght = fieldProperty.maxLenght()
@@ -86,7 +86,7 @@ extension MLCardFormField {
     func getUnmaskedValue() -> String? {
         var value: String? = getValue()
         if let customMask = customMask {
-            value = customMask.cleanText
+            value = customMask.bufferText
         }
         return value
     }
@@ -113,7 +113,7 @@ extension MLCardFormField {
     
     func updateInput() {
         if let maskPattern = property.patternMask() {
-            customMask = MLCardFormCustomMask(formattingPattern: maskPattern)
+            customMask = MLCardFormCustomMask(mask: maskPattern)
             maxLenght = maskPattern.count
         } else {
             customMask = nil
