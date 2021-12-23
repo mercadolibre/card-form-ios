@@ -1,3 +1,7 @@
+# v0.9.18
+🚀 Release 0.9.18 🚀
+- Refatora classe MLCardFormCustomMask para corrigir crash que ocorre durante a inserção de dados no componente
+
 # v0.9.17
 🚀 Release 0.9.17 🚀
 - reorganiza método isValid para evitar o crash do range negativo (minLength > maxLength)
