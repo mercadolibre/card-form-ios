@@ -305,4 +305,12 @@ internal extension MLCardFormField {
             UIAccessibility.post(notification: .announcement, argument: text)
         }
     }
+    
+    public override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if input.isFirstResponder {
+            DispatchQueue.main.async(execute: {(sender as? UIMenuController)?.setMenuVisible(false, animated: false)})
+            return false
+        }
+        return super.canPerformAction(action, withSender: sender)
+    }
 }

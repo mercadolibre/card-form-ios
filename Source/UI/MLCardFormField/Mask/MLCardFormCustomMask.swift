@@ -51,9 +51,10 @@ class MLCardFormCustomMask {
             return finalText ?? String()
         }
         
-        finalText?.appendCharWithMask(Character(string), mask: self.mask)
-        
-        bufferText?.append(string)
+        if string.count == 1 && CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: string)) {
+            finalText?.appendCharWithMask(Character(string), mask: self.mask)
+            bufferText?.append(string)
+        }
         
         return finalText ?? String()
     }
