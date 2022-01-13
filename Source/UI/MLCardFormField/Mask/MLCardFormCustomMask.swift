@@ -6,7 +6,7 @@ import Foundation
  *
  *  usage:
  *   func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
- *      self.text = customMask!.formatStringWithRange(range, string: string)
+ *      textField.text = customMask.shouldChangeCharactersIn(range, with: string)
  *      return false
  *   }
  *
@@ -14,109 +14,72 @@ import Foundation
  *  Use * for characters [a-zA-Z] (**-****)
  */
 
-class MLCardFormCustomMask {
+final class MLCardFormCustomMask {
+    let mask: String
+    private(set) var value: String = ""
+    var unmaskedText: String { removeMask(to: value) }
     
-    var finalText: String? = String()
-    var bufferText: String? = String()
-
-    private var mask: String?
-    
-    public init(mask: String = String()){
+    init(mask: String) {
         self.mask = mask
     }
-
-    public func formatString(string: String) -> String {
-        
-        self.finalText = string
-        
-        self.bufferText = string
-        
-        self.finalText?.applyMask(self.mask)
-        
-        return self.finalText ?? String()
+    
+    func clear() {
+        value.removeAll()
     }
-
-    public func formatStringWithRange(range: NSRange, string: String) -> String {
-        
-        guard !string.isEmpty else {
-            
-            if range.upperBound <= finalText?.count ?? 0 {
-                finalText?.removeLast()
-            }
-            
-            if range.upperBound <= bufferText?.count ?? 0 {
-                bufferText?.removeLast()
-            }
-            
-            return finalText ?? String()
+    
+    @discardableResult
+    func applyMask(to string: String) -> String {
+        guard !mask.isEmpty, !string.isEmpty else {
+            self.value = string
+            return string
         }
         
-        finalText?.appendCharWithMask(Character(string), mask: self.mask)
-        bufferText?.append(string)
-        
-        return finalText ?? String()
-    }
-}
-
-internal extension String {
-    
-    mutating func applyMask(_ mask: String?) {
-        
-        guard let mask = mask, !self.isEmpty else { return }
-        
-        var result = String()
-        var c: Character
-        var i = 0
+        let string = removeMask(to: string)
+        let count = string.count
+        var maskedString = ""
+        var character: Character
+        var index = 0
         
         for m in mask {
-            
             if m != "$" && m != "*" {
-                result.append(m)
+                maskedString.append(m)
                 continue
             }
             
             repeat {
-                c = self[self.index(self.startIndex, offsetBy: i)]
-                i = i + 1
-            } while !(m == "$" && c.isNumber) && !(m == "*" && c.isLetter) && i < self.count
-        
-            result.append(c)
+                character = string[string.index(string.startIndex, offsetBy: index)]
+                index += 1
+            } while !(m == "$" && character.isNumber) && !(m == "*" && character.isLetter) && index < count
             
-            if i >= self.count {
+            if (m == "$" && character.isNumber) || (m == "*" && character.isLetter) {
+                maskedString.append(character)
+            }
+            
+            if index >= count {
                 break
             }
         }
-
-        self = result
+        
+        self.value = maskedString
+        return maskedString
     }
     
-    mutating func appendCharWithMask(_ character: Character?, mask: String?) {
-        
-        guard let character = character, let mask = mask, self.count < mask.count else { return }
-
-        var i = self.count
-        var c: Character?
-        var result = String()
-        
-        repeat {
-            
-            if let ch = c {
-                result.append(ch)
-            }
-            
-            c = mask[mask.index(mask.startIndex, offsetBy: i)]
-            
-            i = i + 1
-            
-        } while c != "$" && c != "*" && i < mask.count
+    @discardableResult
+    func shouldChangeCharactersIn(
+        _ range: NSRange,
+        with string: String
+    ) -> String {
+        let newString = (self.value as NSString).replacingCharacters(in: range, with: string)
+        return applyMask(to: newString)
+    }
     
-        if (c == "$" && character.isNumber) || (c == "*" && character.isLetter) {
-            result.append(character)
-            self.append(result)
+    private func removeMask(to string: String) -> String {
+        do {
+            let regex = try NSRegularExpression(pattern: "\\W", options: NSRegularExpression.Options.caseInsensitive)
+            let range = NSMakeRange(0, string.count)
+            return regex.stringByReplacingMatches(in: string, options: [], range: range, withTemplate: "")
+        } catch {
+            return string
         }
-    }
-    
-    mutating func removeMask(_ mask: String?) {
-        
     }
 }

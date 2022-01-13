@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "MLCardForm"
-  s.version          = "0.9.18"
+  s.version          = "0.9.19"
   s.summary          = "MLCardForm for iOS"
   s.homepage         = "https://www.mercadolibre.com"
   s.license          = { :type => "MIT", :file => "LICENSE" }
@@ -20,5 +20,11 @@ Pod::Spec.new do |s|
     s.dependency 'MLUI', '~> 5.0'
     s.dependency 'AndesUI', '~> 3.0'
     s.dependency 'MLCardDrawer', '~> 1.0'
+  end
+
+  s.test_spec 'Tests' do |test_spec|
+      test_spec.requires_app_host = false
+      test_spec.source_files = 'Tests/**/*.{swift}'
+      test_spec.frameworks = 'XCTest'
   end
 end

@@ -13,7 +13,7 @@ extension MLCardFormField: UITextFieldDelegate {
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
         if let customMask = customMask {
-            textField.text = customMask.formatStringWithRange(range: range, string: string)
+            textField.text = customMask.shouldChangeCharactersIn(range, with: string)
             setBottomLineColorAndShowHelp()
             updateTextField(textField)
             return false
@@ -36,9 +36,7 @@ extension MLCardFormField: UITextFieldDelegate {
         if !String.isNullOrEmpty(input.text) {
             notifierProtocol?.didTapClear(from: self)
         }
-        if let customMask = customMask {
-            _ = customMask.formatString(string: "")
-        }
+        customMask?.clear()
         return true
     }
 }
@@ -46,10 +44,7 @@ extension MLCardFormField: UITextFieldDelegate {
 extension MLCardFormField {
     func updateTextField(_ textField: UITextField) {
         guard let inputCharsCount = textField.text?.count else { return }
-        var sendValue: String? = textField.text
-        if let customMask = customMask {
-            sendValue = customMask.bufferText
-        }
+        var sendValue = customMask?.unmaskedText ?? textField.text
         notifierProtocol?.didChangeValue(newValue: sendValue, from: self)
         if property.shouldShowTick() {
             input.rightViewMode = .never

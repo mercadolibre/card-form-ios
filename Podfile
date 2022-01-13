@@ -9,5 +9,5 @@ use_frameworks!
 inhibit_all_warnings!
 
 target 'Example_CardForm' do
-  pod 'MLCardForm', :path => './'
+  pod 'MLCardForm', :path => './', :testspecs => ['Tests']
 end

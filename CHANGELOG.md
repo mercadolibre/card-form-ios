@@ -1,3 +1,7 @@
+# v0.9.19
+🚀 Release 0.9.19 🚀
+- Refactor MLCardFormCustomMask to fix issues when getting the value unmasked
+
 # v0.9.18
 🚀 Release 0.9.18 🚀
 - Refatora classe MLCardFormCustomMask para corrigir crash que ocorre durante a inserção de dados no componente
