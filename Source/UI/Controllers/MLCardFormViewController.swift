@@ -447,7 +447,8 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             viewModel.cardDataHandler.securityCode = newValue
 
         case MLCardFormFields.identificationTypesPicker:
-            if let defaultCardDataHandler = viewModel.cardDataHandler as? DefaultCardDataHandler {
+            if let defaultCardDataHandler = viewModel.cardDataHandler as? DefaultCardDataHandler,
+                defaultCardDataHandler.identificationType != newValue {
                 viewModel.updateIDNumberFieldValue(value: newValue)
                 defaultCardDataHandler.identificationType = newValue
                 defaultCardDataHandler.identificationNumber = ""
