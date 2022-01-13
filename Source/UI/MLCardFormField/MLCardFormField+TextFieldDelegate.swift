@@ -33,6 +33,10 @@ extension MLCardFormField: UITextFieldDelegate {
         return true
     }
     
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.isUserInteractionEnabled = true
+    }
+    
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         notifierProtocol?.didBeginEditing(from: self)
     }
