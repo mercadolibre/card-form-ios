@@ -78,4 +78,18 @@ final class MLCardFormCustomMaskTests: XCTestCase {
         XCTAssertEqual(sut.value, "12")
         XCTAssertEqual(sut.unmaskedText, "12")
     }
+    
+    func testMixedMask() {
+        let value = "12a34b"
+        let sut = MLCardFormCustomMask(mask: "*$*")
+        
+        XCTAssertEqual(sut.applyMask(to: value), "a3b")
+        XCTAssertEqual(sut.value, "a3b")
+        XCTAssertEqual(sut.unmaskedText, "a3b")
+        
+        sut.shouldChangeCharactersIn(.init(location: 2, length: 1), with: "a")
+        
+        XCTAssertEqual(sut.value, "a3a")
+        XCTAssertEqual(sut.unmaskedText, "a3a")
+    }
 }
