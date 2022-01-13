@@ -51,7 +51,9 @@ final class MLCardFormCustomMask {
                 index += 1
             } while !(m == "$" && character.isNumber) && !(m == "*" && character.isLetter) && index < count
             
-            maskedString.append(character)
+            if (m == "$" && character.isNumber) || (m == "*" && character.isLetter) {
+                maskedString.append(character)
+            }
             
             if index >= count {
                 break
