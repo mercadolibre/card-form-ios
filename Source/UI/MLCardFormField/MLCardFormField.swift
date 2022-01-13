@@ -84,11 +84,7 @@ extension MLCardFormField {
     }
     
     func getUnmaskedValue() -> String? {
-        var value: String? = getValue()
-        if let customMask = customMask {
-            value = customMask.bufferText
-        }
-        return value
+        customMask?.unmaskedText ?? getValue()
     }
     
     func getPickerValue() -> String? {
@@ -150,10 +146,7 @@ private extension MLCardFormField {
         input.accessibilityLabel = titleLabel.text
 
         if let defaultValue = property.defaultValue()?.uppercased() {
-            input.text = defaultValue
-            if let customMask = customMask {
-                input.text = customMask.formatString(string: defaultValue)
-            }
+            input.text = customMask?.applyMask(to: defaultValue) ?? defaultValue
         }
         input.maxLength = maxLenght
 

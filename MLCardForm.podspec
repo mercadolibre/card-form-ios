@@ -21,4 +21,10 @@ Pod::Spec.new do |s|
     s.dependency 'AndesUI', '~> 3.0'
     s.dependency 'MLCardDrawer', '~> 1.0'
   end
+
+  s.test_spec 'Tests' do |test_spec|
+      test_spec.requires_app_host = false
+      test_spec.source_files = 'Tests/**/*.{swift}'
+      test_spec.frameworks = 'XCTest'
+  end
 end
