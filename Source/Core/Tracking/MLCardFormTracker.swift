@@ -13,6 +13,13 @@ final class MLCardFormTracker: NSObject {
         case sessionTime  = "session_time"
         case siteId = "site_id"
         case flowId = "flow_id"
+        case bin
+        case issuer
+        case paymentMethodId = "payment_method_id"
+        case paymentTypeId = "payment_type_id"
+        case errorStep = "error_step"
+        case errorMessage = "error_message"
+        
         var value: String {
             return self.rawValue
         }

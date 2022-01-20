@@ -59,8 +59,9 @@ extension MLCardFormViewController {
             let path = getScreenName(cardFormField) else { return }
         let validEventPath = "/valid"
         switch fieldId {
-        case MLCardFormFields.cardNumber,
-            MLCardFormFields.name,
+        case MLCardFormFields.cardNumber:
+            viewModel.trackValidBinNumber(path: path + validEventPath)
+        case MLCardFormFields.name,
             MLCardFormFields.identificationTypeNumber:
             MLCardFormTracker.sharedInstance.trackEvent(path: path + validEventPath)
         case MLCardFormFields.expiration:
