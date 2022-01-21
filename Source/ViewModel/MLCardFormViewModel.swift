@@ -353,7 +353,15 @@ extension MLCardFormViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let cardFormBinData):
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/bin_number/recognized")
+                MLCardFormTracker.sharedInstance.trackEvent(
+                    path: "/card_form/bin_number/recognized",
+                    properties: [
+                        MLCardFormTracker.TrackerParams.bin.value: binNumber,
+                        MLCardFormTracker.TrackerParams.issuer.value: cardFormBinData.issuers.first?.id ?? 0,
+                        MLCardFormTracker.TrackerParams.paymentMethodId.value: cardFormBinData.paymentMethod.paymentMethodId,
+                        MLCardFormTracker.TrackerParams.paymentTypeId.value: cardFormBinData.paymentMethod.paymentTypeId
+                    ]
+                )
                 self.lastFetchedBinNumber = binNumber
                 self.binData = cardFormBinData
                 self.viewModelDelegate?.updateTitle(title: cardFormBinData.otherTexts.cardFormTitle)
@@ -416,17 +424,56 @@ extension MLCardFormViewModel {
                             completion?(.success(MLCardFormCardInformation()))
                         } else {
                             let errorMessage = error.localizedDescription
-                            MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_data", "error_message": errorMessage])
+                            MLCardFormTracker.sharedInstance.trackEvent(
+                                path: "/card_form/error",
+                                properties: [
+                                    MLCardFormTracker.TrackerParams.bin.value: tokenCardData.firstSixDigits ?? "",
+                                    MLCardFormTracker.TrackerParams.issuer.value: addCardData.issuer.id,
+                                    MLCardFormTracker.TrackerParams.paymentMethodId.value: addCardData.paymentMethod.id,
+                                    MLCardFormTracker.TrackerParams.paymentTypeId.value: addCardData.paymentMethod.paymentTypeId,
+                                    MLCardFormTracker.TrackerParams.errorStep.value: "save_card_data",
+                                    MLCardFormTracker.TrackerParams.errorMessage.value: errorMessage
+                                ]
+                            )
                             completion?(.failure(error))
                         }
                     }
                 })
             case .failure(let error):
                 let errorMessage = error.localizedDescription
-                MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/error", properties: ["error_step": "save_card_token", "error_message": errorMessage])
+                MLCardFormTracker.sharedInstance.trackEvent(
+                    path: "/card_form/error",
+                    properties: [
+                        MLCardFormTracker.TrackerParams.bin.value: tokenizationData.cardNumber.prefix(6),
+                        MLCardFormTracker.TrackerParams.issuer.value: addCardData.issuer.id,
+                        MLCardFormTracker.TrackerParams.paymentMethodId.value: addCardData.paymentMethod.id,
+                        MLCardFormTracker.TrackerParams.paymentTypeId.value: addCardData.paymentMethod.paymentTypeId,
+                        MLCardFormTracker.TrackerParams.errorStep.value: "save_card_token",
+                        MLCardFormTracker.TrackerParams.errorMessage.value: errorMessage
+                    ]
+                )
                 completion?(.failure(error))
             }
         })
+    }
+}
+
+// MARK: Track events.
+extension MLCardFormViewModel {
+    func trackValidBinNumber(path: String) {
+        let issuer = binData?.issuers.first?.id ?? 0
+        let paymentMethodId = binData?.paymentMethod.paymentMethodId ?? ""
+        let paymentTypeId = binData?.paymentMethod.paymentTypeId ?? ""
+        
+        MLCardFormTracker.sharedInstance.trackEvent(
+            path: path,
+            properties: [
+                MLCardFormTracker.TrackerParams.bin.value: lastFetchedBinNumber,
+                MLCardFormTracker.TrackerParams.issuer.value: issuer,
+                MLCardFormTracker.TrackerParams.paymentMethodId.value: paymentMethodId,
+                MLCardFormTracker.TrackerParams.paymentTypeId.value: paymentTypeId
+            ]
+        )
     }
 }
 
