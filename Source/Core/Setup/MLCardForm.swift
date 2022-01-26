@@ -33,11 +33,17 @@ extension MLCardForm {
      */
     public func setupController() -> MLCardFormViewController {
         MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/init", properties: ["type": "traditional"])
+        var trackModel = MLCardFormGAModel()
+        trackModel.action = "INPUT_CARD"
+        MLCardFormTracker.sharedInstance.trackEventGA(trackInfo: trackModel)
         return MLCardFormViewController.setupWithBuilder(builder)
     }
     
     public func setupWebPayController() -> MLCardFormWebPayViewController {
         MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/init", properties: ["type": "web_view"])
+        var trackModel = MLCardFormGAModel()
+        trackModel.action = "INPUT_CARD"
+        MLCardFormTracker.sharedInstance.trackEventGA(trackInfo: trackModel)
         return MLCardFormWebPayViewController.setupWithBuilder(builder)
     }
 }

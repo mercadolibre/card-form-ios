@@ -134,6 +134,7 @@ private extension MLCardFormViewController {
                 }
                 break
             case .failure(let error):
+                self.trackErrorEvent(binNumber: binNumber, error: error)
                 // Show error to the user
                 var title = "Algo salió mal.".localized
                 var showOnlySnackBar = false
@@ -313,7 +314,7 @@ private extension MLCardFormViewController {
         issuersVC.delegate = self
         let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
         navigationController?.present(issuersNavigation, animated: true, completion: nil)
-        MLCardFormTracker.sharedInstance.trackScreen(screenName: "/card_form/issuers", properties: ["issuers_quantity": viewModel.getIssuers()?.count ?? 0])
+        self.trackScreenIssuers()
     }
 
     func animateCardAppear() {
@@ -512,6 +513,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         }
         trackNextEvent(from)
         trackValidEvent(from)
+        trackValidEventGA(from)
         
         scrollCollectionViewToCardFormField(from, offSet: false)
 
@@ -539,6 +541,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     
     public func invalidInput(from: MLCardFormField) {
         trackInvalidEvent(from)
+        trackInvalidEventGA(from)
     }
 }
 
@@ -622,6 +625,7 @@ private extension MLCardFormViewController {
         }
         
         trackScreen(cardFormField)
+
         let section = 0
         let numberOfItems = cardFieldCollectionView.numberOfItems(inSection: section)
         let safeIndex = max(0, min(numberOfItems - 1, index))

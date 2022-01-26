@@ -19,16 +19,17 @@ final class MLCardFormTracker: NSObject {
         case paymentMethodType = "payment_method_type"
         case errorStep = "error_step"
         case errorMessage = "error_message"
-        
+        case dimension = "89"
         var value: String {
             return self.rawValue
         }
     }
     internal static let sharedInstance = MLCardFormTracker()
-    
+    private let category = "PX"
     private var sessionService: MLCardFormSessionService = MLCardFormSessionService()
     private var trackerDelegate: MLCardFormTrackerDelegate?
     private var trackerStore: MLCardFormTrackingStore = MLCardFormTrackingStore.sharedInstance
+    
 }
 
 // MARK: Getters/setters.
@@ -71,6 +72,22 @@ internal extension MLCardFormTracker {
             delegate.trackEvent(screenName: path, extraParams: metadata)
         }
     }
+    
+    func trackScreenGA(trackInfo: MLCardFormGAModel) {
+        if let delegate = trackerDelegate {
+            trackInfo.category = category
+            trackInfo.customDimensions = buildCommonParamsGA(trackInfo.customDimensions)
+            delegate.trackScreenGA(trackInfo: trackInfo)
+        }
+    }
+    
+    func trackEventGA(trackInfo: MLCardFormGAModel) {
+        if let delegate = trackerDelegate {
+            trackInfo.category = category
+            trackInfo.customDimensions = buildCommonParamsGA(trackInfo.customDimensions)
+            delegate.trackEventGA(trackInfo: trackInfo)
+        }
+    }
 
     private func buildCommonParams(_ properties: [String: Any]) -> [String: Any] {
         var metadata = properties
@@ -82,6 +99,14 @@ internal extension MLCardFormTracker {
         }
         metadata[TrackerParams.sessionId.value] = getSessionID()
         metadata[TrackerParams.sessionTime.value] = trackerStore.getSecondsAfterInit()
+        return metadata
+    }
+    
+    private func buildCommonParamsGA(_ properties: [String: Any]) -> [String: Any] {
+        var metadata = properties
+        if let flowId = trackerStore.flowId {
+            metadata[TrackerParams.dimension.value] = flowId
+        }
         return metadata
     }
 }

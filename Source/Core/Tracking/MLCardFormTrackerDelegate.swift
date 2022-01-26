@@ -24,4 +24,16 @@ import Foundation
      - parameter extraParams: Extra data.
      */
     func trackEvent(screenName: String?, extraParams: [String: Any]?)
+    
+    /**
+     This method is called when a new screen is shown to the user and tracked by our Checkout.
+     - parameter trackInfo: Model Track.
+     */
+    func trackScreenGA(trackInfo: MLCardFormGAModel)
+    
+    /**
+     This method is called when a new event is ocurred to the user and tracked by our Checkout.
+     - parameter trackInfo: Model Track.
+     */
+    func trackEventGA(trackInfo: MLCardFormGAModel)
 }
