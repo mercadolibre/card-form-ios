@@ -38,10 +38,6 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
-        
-        if let cardNumberField = viewModel.getCardFormFieldWithID(MLCardFormFields.cardNumber.rawValue) {
-            trackScreen(cardNumberField)
-        }
     }
 
     /// :nodoc
@@ -315,10 +311,13 @@ private extension MLCardFormViewController {
         let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
         navigationController?.present(issuersNavigation, animated: true, completion: nil)
         self.trackScreenIssuers()
+        self.trackScreenIssuersGA()
     }
 
     func animateCardAppear() {
         if let field = viewModel.cardFormFields?.first?.first {
+            trackScreen(field)
+            trackScreenGA(field)
             field.doFocus()
         }
         if viewModel.shouldAnimateOnLoad() {
@@ -513,12 +512,11 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         }
         trackNextEvent(from)
         trackValidEvent(from)
-        trackValidEventGA(from)
         
         scrollCollectionViewToCardFormField(from, offSet: false)
 
-        viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
-        
+        let cardFormField = viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: 1)
+
         if viewModel.isLastField(cardFormField: from) {
             // TODO: Dar de alta la tarjeta
             from.resignFocus()
@@ -527,12 +525,17 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             } else {
                 addCard()
             }
+        } else {
+            trackScreen(cardFormField)
+            trackScreenGA(cardFormField)
         }
     }
     
     public func shouldBack(from: MLCardFormField) {
         trackPreviousEvent(from)
-        viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: -1)
+        let cardFormField = viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: -1)
+        trackScreen(cardFormField)
+        trackScreenGA(cardFormField)
         scrollCollectionViewToCardFormField(from, offSet:  true)
     }
     public func didTapClear(from: MLCardFormField) {
@@ -623,8 +626,6 @@ private extension MLCardFormViewController {
         guard index != currentCellIndex() else {
             return
         }
-        
-        trackScreen(cardFormField)
 
         let section = 0
         let numberOfItems = cardFieldCollectionView.numberOfItems(inSection: section)

@@ -273,9 +273,10 @@ final class MLCardFormViewModel {
             return shouldReturnIndex(index: index, isTurnBack: offSet)
         }
     
-    func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) {
+    func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) -> MLCardFormField {
+        var cardFormFieldAux = cardFormField
         let flattenedCardFormFields = cardFormFields?.flatMap{ $0 }
-        guard let unwrappedCardFormFields = flattenedCardFormFields else { return }
+        guard let unwrappedCardFormFields = flattenedCardFormFields else { return cardFormField }
         let fieldId = cardFormField.property.fieldId()
         let index = unwrappedCardFormFields.firstIndex(where: { $0.property.fieldId() == fieldId }) ?? 0
         let indexWithOffset = min(max(index + offset, 0), unwrappedCardFormFields.count - 1)
@@ -303,11 +304,14 @@ final class MLCardFormViewModel {
             }
             
             if field.property.shouldShowPickerInput() {
-                focusCardFormFieldWithOffset(cardFormField: field, offset: offset)
+                cardFormFieldAux = focusCardFormFieldWithOffset(cardFormField: field, offset: offset)
             } else {
                 field.doFocus()
+                cardFormFieldAux = field
             }
+            
         }
+        return cardFormFieldAux
     }
     
     func isCardNumberFieldAndIsMissingCardData(cardFormField: MLCardFormField) -> (isCardNumberMissingCardData: Bool, currentBin: String?) {
