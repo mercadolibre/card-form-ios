@@ -65,7 +65,7 @@ final class MLCardFormViewModel {
     func setupDefaultCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
         cardFormFields = [
             [MLCardFormField(fieldProperty:CardNumberFormFieldProperty())],
-            [MLCardFormField(fieldProperty:CardNameFormFieldProperty(cardNameValue: storedCardName))],
+            [MLCardFormField(fieldProperty:CardNameFormFieldProperty())],
             [MLCardFormField(fieldProperty:CardExpirationFormFieldProperty()),
              MLCardFormField(fieldProperty:CardSecurityCodeFormFieldProperty())],
             [MLCardFormField(fieldProperty:IDTypeFormFieldProperty()),
@@ -87,8 +87,15 @@ final class MLCardFormViewModel {
         }
 
         if let nameFieldProp = remoteSettings.filter({ $0.name == MLCardFormFields.name.rawValue }).first {
-            let nameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp, cardNameValue: storedCardName))
-            cardFormFields?.append([nameField])
+            
+            let storedNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp, cardNameValue: storedCardName))
+            let defaultNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp))
+            
+            if nameFieldProp.autocomplete ?? true {
+                cardFormFields?.append([storedNameField])
+            } else {
+                cardFormFields?.append([defaultNameField])
+            }
         }
 
         if let expirationFieldSetting = remoteSettings.filter({ $0.name == MLCardFormFields.expiration.rawValue}).first,
@@ -101,13 +108,25 @@ final class MLCardFormViewModel {
         }
 
         if let remoteIdTypes = binData?.identificationTypes, remoteIdTypes.count > 0,
-            let idNumberSetting = remoteSettings.filter({ $0.name == MLCardFormFields.identificationTypeNumber.rawValue}).first {
-            cardFormFields?.append([
+           let idNumberSetting = remoteSettings.filter({ $0.name == MLCardFormFields.identificationTypeNumber.rawValue}).first {
+            
+            let storedIDFields = [
                 MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, keyboardHeight: measuredKeyboardSize)),
                 MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, remoteSetting: idNumberSetting, idNumberValue: storedIDNumber))
-                ])
+            ]
+            let defaultIDFields = [
+                MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, keyboardHeight: measuredKeyboardSize)),
+                MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, remoteSetting: idNumberSetting))
+            ]
+            
+            if idNumberSetting.autocomplete ?? true {
+                cardFormFields?.append(storedIDFields)
+            } else {
+                cardFormFields?.append(defaultIDFields)
+            }
+            
+            setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
         }
-        setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
     }
     
     func updateOfflineCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
