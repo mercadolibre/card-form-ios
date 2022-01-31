@@ -85,7 +85,7 @@ final class MLCardFormViewModel {
             let numberField = MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))
             cardFormFields?.append([numberField])
         }
-
+        
         if let nameFieldProp = remoteSettings.filter({ $0.name == MLCardFormFields.name.rawValue }).first {
             
             let storedNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp, cardNameValue: storedCardName))
@@ -97,16 +97,16 @@ final class MLCardFormViewModel {
                 cardFormFields?.append([defaultNameField])
             }
         }
-
+        
         if let expirationFieldSetting = remoteSettings.filter({ $0.name == MLCardFormFields.expiration.rawValue}).first,
-            let securityFieldSetting = remoteSettings.filter({ $0.name == MLCardFormFields.securityCode.rawValue}).first,
-            let mergedSecurityFieldSetting = MLCardFormFieldSetting.createSettingForField(.securityCode, remoteSetting: securityFieldSetting, cardUI: cardUI) {
+           let securityFieldSetting = remoteSettings.filter({ $0.name == MLCardFormFields.securityCode.rawValue}).first,
+           let mergedSecurityFieldSetting = MLCardFormFieldSetting.createSettingForField(.securityCode, remoteSetting: securityFieldSetting, cardUI: cardUI) {
             cardFormFields?.append([
                 MLCardFormField(fieldProperty: CardExpirationFormFieldProperty(remoteSetting: expirationFieldSetting)),
                 MLCardFormField(fieldProperty: CardSecurityCodeFormFieldProperty(remoteSetting: mergedSecurityFieldSetting))
-                ])
+            ])
         }
-
+        
         if let remoteIdTypes = binData?.identificationTypes, remoteIdTypes.count > 0,
            let idNumberSetting = remoteSettings.filter({ $0.name == MLCardFormFields.identificationTypeNumber.rawValue}).first {
             
@@ -124,9 +124,8 @@ final class MLCardFormViewModel {
             } else {
                 cardFormFields?.append(defaultIDFields)
             }
-            
-            setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
         }
+        setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
     }
     
     func updateOfflineCardFormFields(notifierProtocol: MLCardFormFieldNotifierProtocol?) {
