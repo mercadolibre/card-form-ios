@@ -17,6 +17,7 @@ struct MLCardFormFieldSetting: Codable {
     let validationPattern: String?
     let validationMessage: String?
     let extraValidations: [MLCardFormExtraValidation]?
+    let autocomplete: Bool?
 }
 
 extension MLCardFormFieldSetting {
@@ -34,7 +35,7 @@ extension MLCardFormFieldSetting {
                 String(repeating: "$", count: $0)
                 }.joined(separator: " ")
             
-            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: nil, validationPattern: cardUI.validation, validationMessage: validationMessage, extraValidations: cardUI.extraValidations)
+            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: nil, validationPattern: cardUI.validation, validationMessage: validationMessage, extraValidations: cardUI.extraValidations, autocomplete: false)
         case .securityCode:
             guard let remoteSetting = remoteSetting, let cardUI = cardUI  else { return nil }
             let name: String = remoteSetting.name
@@ -46,7 +47,7 @@ extension MLCardFormFieldSetting {
             let lenght: Int = cardUI.securityCodeLength
             let mask = String(repeating: "$", count: lenght)
             
-            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: hintMessage, validationPattern: nil, validationMessage: validationMessage, extraValidations: nil)
+            return MLCardFormFieldSetting(name: name, lenght: lenght, type: type, title: title, mask: mask, hintMessage: hintMessage, validationPattern: nil, validationMessage: validationMessage, extraValidations: nil, autocomplete: false)
         default:
             return nil
         }
