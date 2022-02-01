@@ -154,6 +154,10 @@ final class MLCardFormViewModel {
         cardFormFields?.forEach{ $0.forEach{
             $0.notifierProtocol = notifierProtocol
             $0.render()
+            
+            if let cardFormField = MLCardFormFields(rawValue: $0.property.fieldId()), cardFormField != .cardNumber {
+                $0.setEnableField(false)
+            }
         }}
     }
     
@@ -205,6 +209,15 @@ final class MLCardFormViewModel {
                 }
                 return index
             }
+        
+            if fieldId == MLCardFormFields.securityCode.rawValue {
+                if !offSet {
+                    return shouldReturnIndex(index: index, isTurnBack: false)
+                }
+                
+                return index
+            }
+        
             return shouldReturnIndex(index: index, isTurnBack: offSet)
         }
     
@@ -215,7 +228,28 @@ final class MLCardFormViewModel {
         let index = unwrappedCardFormFields.firstIndex(where: { $0.property.fieldId() == fieldId }) ?? 0
         let indexWithOffset = min(max(index + offset, 0), unwrappedCardFormFields.count - 1)
         
+        if let currentCardFormField = MLCardFormFields(rawValue: fieldId),
+            currentCardFormField != .identificationTypesPicker {
+            cardFormField.setEnableField(false)
+        }
+        
         if let field = flattenedCardFormFields?[indexWithOffset] {
+            field.setEnableField(true)
+            
+            if field.property.fieldId() == MLCardFormFields.expiration.rawValue {
+                let nextOffset = indexWithOffset + 1
+                
+                if let nextField = flattenedCardFormFields?[nextOffset], nextField.property.fieldId() == MLCardFormFields.securityCode.rawValue {
+                    nextField.setEnableField(true)
+                }
+            } else if field.property.fieldId() == MLCardFormFields.securityCode.rawValue {
+                let previousOffset = indexWithOffset - 1
+                
+                if let nextField = flattenedCardFormFields?[previousOffset], nextField.property.fieldId() == MLCardFormFields.expiration.rawValue {
+                    nextField.setEnableField(true)
+                }
+            }
+            
             if field.property.shouldShowPickerInput() {
                 focusCardFormFieldWithOffset(cardFormField: field, offset: offset)
             } else {

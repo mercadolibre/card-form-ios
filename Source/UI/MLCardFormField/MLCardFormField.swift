@@ -121,6 +121,10 @@ extension MLCardFormField {
             input.keyboardType = keyboardType
         }
     }
+    
+    func setEnableField(_ enabled: Bool) {
+        input.isEnabled = enabled
+    }
 }
 
 // MARK: Private methods.
