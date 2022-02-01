@@ -32,6 +32,11 @@ extension MLCardFormField: UITextFieldDelegate {
         notifierProtocol?.didBeginEditing(from: self)
     }
     
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.text = textField.text?.trimmingCharacters(in: .whitespaces)
+        notifierProtocol?.didEndEditing(from: self)
+    }
+    
     public func textFieldShouldClear(_ textField: UITextField) -> Bool {
         if !String.isNullOrEmpty(input.text) {
             notifierProtocol?.didTapClear(from: self)
