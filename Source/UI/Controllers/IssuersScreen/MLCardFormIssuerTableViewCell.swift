@@ -7,11 +7,13 @@
 
 import Foundation
 import MLUI
+import UIKit
 
 final class MLCardFormIssuerTableViewCell: UITableViewCell {
 
     static let cellIdentifier = "IssuerTableViewCell"
     private let issuerImageView = UIImageView()
+    private let titleLabel = UILabel()
     private let issuerImageHeight: CGFloat = 35
     private let deltaWidthRatio: CGFloat = 3.5
     private weak var radioButton: MLCardFormRadioButton?
@@ -22,6 +24,7 @@ final class MLCardFormIssuerTableViewCell: UITableViewCell {
         setupRadioButton()
         if let radioButton = radioButton {
             setupIssuerImage(rightOf: radioButton)
+            setupLabel(rightOf: radioButton)
         }
     }
 
@@ -41,10 +44,34 @@ final class MLCardFormIssuerTableViewCell: UITableViewCell {
 extension MLCardFormIssuerTableViewCell {
     func setupCell(with issuer: MLCardFormIssuer, radioButtonOn: Bool) {
         radioButtonOn ? setupRadioButton(radioButtonOn: true) : setupRadioButton(radioButtonOn: false)
-        if let imageUrl = issuer.imageUrl {
-            issuerImageView.setRemoteImage(imageUrl: imageUrl)
-        }
+        checkHasImage(issuer: issuer)
         accessibilityLabel = issuer.name
+    }
+    
+    private func checkHasImage(issuer: MLCardFormIssuer) {
+        guard let imageURL = issuer.imageUrl else {
+            titleLabel.text = issuer.name
+            issuerImageView.isHidden = true
+            titleLabel.isHidden = false
+            return
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let data = try Data.init(contentsOf: URL.init(string: issuer.name)!)
+                    DispatchQueue.main.async {
+                        let image: UIImage = UIImage(data: data)!
+                        self.issuerImageView.image = image
+                        self.titleLabel.isHidden = false
+                    }
+            } catch {
+                DispatchQueue.main.async {
+                    self.titleLabel.text = issuer.name
+                    self.issuerImageView.isHidden = true
+                    self.titleLabel.isHidden = false
+                }
+            }
+        }
     }
 }
 
@@ -63,6 +90,19 @@ private extension MLCardFormIssuerTableViewCell {
             button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UI.Margin.M_MARGIN)
         ])
         radioButton = button
+    }
+    
+    func setupLabel(rightOf radioButton: UIView) {
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = UI.Colors.labelColor
+        titleLabel.font = UIFont.ml_semiboldSystemFont(ofSize: UI.FontSize.XM_FONT)
+        contentView.addSubview(titleLabel)
+        NSLayoutConstraint.activate([
+            titleLabel.widthAnchor.constraint(equalToConstant: contentView.frame.width / deltaWidthRatio),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.leftAnchor.constraint(equalTo: radioButton.rightAnchor, constant: UI.Margin.M_MARGIN),
+            titleLabel.heightAnchor.constraint(equalToConstant: issuerImageHeight)
+        ])
     }
 
     func setupIssuerImage(rightOf radioButton: UIView) {
