@@ -87,13 +87,11 @@ final class MLCardFormViewModel {
         }
         
         if let nameFieldProp = remoteSettings.filter({ $0.name == MLCardFormFields.name.rawValue }).first {
-            
-            let storedNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp, cardNameValue: storedCardName))
-            let defaultNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp))
-            
             if nameFieldProp.autocomplete ?? true {
+                let storedNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp, cardNameValue: storedCardName))
                 cardFormFields?.append([storedNameField])
             } else {
+                let defaultNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp))
                 cardFormFields?.append([defaultNameField])
             }
         }
@@ -109,19 +107,17 @@ final class MLCardFormViewModel {
         
         if let remoteIdTypes = binData?.identificationTypes, remoteIdTypes.count > 0,
            let idNumberSetting = remoteSettings.filter({ $0.name == MLCardFormFields.identificationTypeNumber.rawValue}).first {
-            
-            let storedIDFields = [
-                MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, keyboardHeight: measuredKeyboardSize)),
-                MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, remoteSetting: idNumberSetting, idNumberValue: storedIDNumber))
-            ]
-            let defaultIDFields = [
-                MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, keyboardHeight: measuredKeyboardSize)),
-                MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, remoteSetting: idNumberSetting))
-            ]
-            
             if idNumberSetting.autocomplete ?? true {
+                let storedIDFields = [
+                    MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, keyboardHeight: measuredKeyboardSize)),
+                    MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, remoteSetting: idNumberSetting, idNumberValue: storedIDNumber))
+                ]
                 cardFormFields?.append(storedIDFields)
             } else {
+                let defaultIDFields = [
+                    MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, keyboardHeight: measuredKeyboardSize)),
+                    MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, remoteSetting: idNumberSetting))
+                ]
                 cardFormFields?.append(defaultIDFields)
             }
         }
