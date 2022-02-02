@@ -247,6 +247,7 @@ final class MLCardFormViewModel {
                 
                 if let nextField = flattenedCardFormFields?[previousOffset], nextField.property.fieldId() == MLCardFormFields.expiration.rawValue {
                     nextField.setEnableField(true)
+                    nextField.isHidden = true
                 }
             }
             
