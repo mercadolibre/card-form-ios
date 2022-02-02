@@ -48,27 +48,42 @@ extension MLCardFormIssuerTableViewCell {
         accessibilityLabel = issuer.name
     }
     
+    private func setupImageView(image: UIImage) {
+        issuerImageView.image = image
+        titleLabel.isHidden = true
+        issuerImageView.isHidden = false
+    }
+    
+    private func setupPlaceholder(title: String) {
+        titleLabel.text = title
+        issuerImageView.isHidden = true
+        titleLabel.isHidden = false
+    }
+    
     private func checkHasImage(issuer: MLCardFormIssuer) {
         guard let imageURL = issuer.imageUrl else {
-            titleLabel.text = issuer.name
-            issuerImageView.isHidden = true
-            titleLabel.isHidden = false
+            setupPlaceholder(title: issuer.name)
+            return
+        }
+        
+        guard let url = URL.init(string: imageURL) else {
+            setupPlaceholder(title: issuer.name)
             return
         }
         
         DispatchQueue.global(qos: .background).async {
             do {
-                let data = try Data.init(contentsOf: URL.init(string: imageURL)!)
+                let data = try Data.init(contentsOf: url)
                     DispatchQueue.main.async {
-                        let image: UIImage = UIImage(data: data)!
-                        self.issuerImageView.image = image
-                        self.titleLabel.isHidden = false
+                        if let image = UIImage(data: data) {
+                            self.setupImageView(image: image)
+                        } else {
+                            self.setupPlaceholder(title: issuer.name)
+                        }
                     }
             } catch {
                 DispatchQueue.main.async {
-                    self.titleLabel.text = issuer.name
-                    self.issuerImageView.isHidden = true
-                    self.titleLabel.isHidden = false
+                    self.setupPlaceholder(title: issuer.name)
                 }
             }
         }
