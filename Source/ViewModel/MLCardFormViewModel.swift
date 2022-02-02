@@ -82,41 +82,88 @@ final class MLCardFormViewModel {
         guard let cardUI = binData?.cardUI, let remoteSettings = remoteSettings else { return }
         cardFormFields = [[MLCardFormField]]()
         if let cardNumberFieldSettings = MLCardFormFieldSetting.createSettingForField(.cardNumber, cardUI: cardUI) {
-            let numberField = MLCardFormField(fieldProperty: CardNumberFormFieldProperty(remoteSetting: cardNumberFieldSettings, cardNumberValue: tempTextField.getValue()))
+            let numberField = MLCardFormField(
+                fieldProperty: CardNumberFormFieldProperty(
+                    remoteSetting: cardNumberFieldSettings,
+                    cardNumberValue: tempTextField.getValue()
+                )
+            )
             cardFormFields?.append([numberField])
         }
         
-        if let nameFieldProp = remoteSettings.filter({ $0.name == MLCardFormFields.name.rawValue }).first {
+        if let nameFieldProp = remoteSettings.get(.name) {
             if nameFieldProp.autocomplete ?? true {
-                let storedNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp, cardNameValue: storedCardName))
+                let storedNameField = MLCardFormField(
+                    fieldProperty: CardNameFormFieldProperty(
+                        remoteSetting: nameFieldProp,
+                        cardNameValue: storedCardName
+                    )
+                )
                 cardFormFields?.append([storedNameField])
+                
             } else {
-                let defaultNameField = MLCardFormField(fieldProperty: CardNameFormFieldProperty(remoteSetting: nameFieldProp))
+                let defaultNameField = MLCardFormField(
+                    fieldProperty: CardNameFormFieldProperty(
+                        remoteSetting: nameFieldProp
+                    )
+                )
                 cardFormFields?.append([defaultNameField])
             }
         }
         
-        if let expirationFieldSetting = remoteSettings.filter({ $0.name == MLCardFormFields.expiration.rawValue}).first,
-           let securityFieldSetting = remoteSettings.filter({ $0.name == MLCardFormFields.securityCode.rawValue}).first,
+        if let expirationFieldSetting = remoteSettings.get(.expiration),
+           let securityFieldSetting = remoteSettings.get(.securityCode),
            let mergedSecurityFieldSetting = MLCardFormFieldSetting.createSettingForField(.securityCode, remoteSetting: securityFieldSetting, cardUI: cardUI) {
             cardFormFields?.append([
-                MLCardFormField(fieldProperty: CardExpirationFormFieldProperty(remoteSetting: expirationFieldSetting)),
-                MLCardFormField(fieldProperty: CardSecurityCodeFormFieldProperty(remoteSetting: mergedSecurityFieldSetting))
+                MLCardFormField(
+                    fieldProperty: CardExpirationFormFieldProperty(
+                        remoteSetting: expirationFieldSetting
+                    )
+                ),
+                MLCardFormField(
+                    fieldProperty: CardSecurityCodeFormFieldProperty(
+                        remoteSetting: mergedSecurityFieldSetting
+                    )
+                )
             ])
         }
         
         if let remoteIdTypes = binData?.identificationTypes, remoteIdTypes.count > 0,
-           let idNumberSetting = remoteSettings.filter({ $0.name == MLCardFormFields.identificationTypeNumber.rawValue}).first {
+           let idNumberSetting = remoteSettings.get(.identificationTypeNumber) {
             if idNumberSetting.autocomplete ?? true {
                 let storedIDFields = [
-                    MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, keyboardHeight: measuredKeyboardSize)),
-                    MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, idTypeValue: storedIDType, remoteSetting: idNumberSetting, idNumberValue: storedIDNumber))
+                    MLCardFormField(
+                        fieldProperty: IDTypeFormFieldProperty(
+                            identificationTypes: remoteIdTypes,
+                            idTypeValue: storedIDType,
+                            keyboardHeight: measuredKeyboardSize
+                        )
+                    ),
+                    MLCardFormField(
+                        fieldProperty: IDNumberFormFieldProperty(
+                            identificationTypes: remoteIdTypes,
+                            idTypeValue: storedIDType,
+                            remoteSetting: idNumberSetting,
+                            idNumberValue: storedIDNumber
+                        )
+                    )
                 ]
                 cardFormFields?.append(storedIDFields)
+                
             } else {
                 let defaultIDFields = [
-                    MLCardFormField(fieldProperty: IDTypeFormFieldProperty(identificationTypes: remoteIdTypes, keyboardHeight: measuredKeyboardSize)),
-                    MLCardFormField(fieldProperty: IDNumberFormFieldProperty(identificationTypes: remoteIdTypes, remoteSetting: idNumberSetting))
+                    MLCardFormField(
+                        fieldProperty: IDTypeFormFieldProperty(
+                            identificationTypes: remoteIdTypes,
+                            keyboardHeight: measuredKeyboardSize
+                        )
+                    ),
+                    MLCardFormField(
+                        fieldProperty: IDNumberFormFieldProperty(
+                            identificationTypes: remoteIdTypes,
+                            remoteSetting: idNumberSetting
+                        )
+                    )
                 ]
                 cardFormFields?.append(defaultIDFields)
             }
@@ -332,6 +379,7 @@ final class MLCardFormViewModel {
     func shouldReturnIndex(index: Int, isTurnBack: Bool) -> Int {
         return isTurnBack ? index - 1 : index + 1
     }
+
 }
 
 // MARK: IssuersScreen
