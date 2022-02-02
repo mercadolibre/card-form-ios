@@ -81,7 +81,7 @@ private extension ViewController {
     func openCardForm() {
         title = ""
         //let publicKey = ""
-        let privateKey = ""
+        let privateKey = "APP_USR-324068370355082-051417-dda04b758b53f1190eb690aa881a0e4e-759464005"
         let builder = MLCardFormBuilder(privateKey: privateKey, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
         //let builder = MLCardFormBuilder(publicKey: publicKey, siteId: "MLA", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
         builder.setLanguage("es")
