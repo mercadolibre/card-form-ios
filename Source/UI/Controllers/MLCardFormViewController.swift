@@ -493,6 +493,13 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         }
     }
     
+    public func didEndEditing(from: MLCardFormField) {
+        guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
+        if (fieldId == MLCardFormFields.name) {
+            viewModel.cardDataHandler.name = from.getValue() ?? ""
+        }
+    }
+    
     public func shouldNext(from: MLCardFormField) {
         let returnValue = viewModel.isCardNumberFieldAndIsMissingCardData(cardFormField: from)
         if returnValue.isCardNumberMissingCardData, let currentBin = returnValue.currentBin {
