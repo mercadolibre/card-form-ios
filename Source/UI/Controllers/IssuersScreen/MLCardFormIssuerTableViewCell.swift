@@ -114,7 +114,7 @@ private extension MLCardFormIssuerTableViewCell {
         contentView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.widthAnchor.constraint(equalToConstant: contentView.frame.width / deltaWidthRatio),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: radioButton.centerYAnchor),
             titleLabel.leftAnchor.constraint(equalTo: radioButton.rightAnchor, constant: UI.Margin.M_MARGIN),
             titleLabel.heightAnchor.constraint(equalToConstant: issuerImageHeight)
         ])
@@ -126,7 +126,7 @@ private extension MLCardFormIssuerTableViewCell {
         contentView.addSubview(issuerImageView)
         NSLayoutConstraint.activate([
             issuerImageView.widthAnchor.constraint(equalToConstant: contentView.frame.width / deltaWidthRatio),
-            issuerImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            issuerImageView.centerYAnchor.constraint(equalTo: radioButton.centerYAnchor),
             issuerImageView.leftAnchor.constraint(equalTo: radioButton.rightAnchor, constant: UI.Margin.M_MARGIN),
             issuerImageView.heightAnchor.constraint(equalToConstant: issuerImageHeight)
         ])
