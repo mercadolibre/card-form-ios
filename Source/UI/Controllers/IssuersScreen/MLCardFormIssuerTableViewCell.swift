@@ -58,7 +58,7 @@ extension MLCardFormIssuerTableViewCell {
         
         DispatchQueue.global(qos: .background).async {
             do {
-                let data = try Data.init(contentsOf: URL.init(string: issuer.name)!)
+                let data = try Data.init(contentsOf: URL.init(string: imageURL)!)
                     DispatchQueue.main.async {
                         let image: UIImage = UIImage(data: data)!
                         self.issuerImageView.image = image
