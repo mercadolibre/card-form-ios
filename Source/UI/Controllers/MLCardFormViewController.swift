@@ -447,8 +447,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             viewModel.cardDataHandler.securityCode = newValue
 
         case MLCardFormFields.identificationTypesPicker:
-            if let defaultCardDataHandler = viewModel.cardDataHandler as? DefaultCardDataHandler,
-                defaultCardDataHandler.identificationType != newValue {
+            if let defaultCardDataHandler = viewModel.cardDataHandler as? DefaultCardDataHandler {
                 viewModel.updateIDNumberFieldValue(value: newValue)
                 defaultCardDataHandler.identificationType = newValue
                 defaultCardDataHandler.identificationNumber = ""
@@ -491,6 +490,13 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         }
         if !viewModel.updateProgressWithCompletion {
             updateProgressFromField(from)
+        }
+    }
+    
+    public func didEndEditing(from: MLCardFormField) {
+        guard let fieldId = MLCardFormFields(rawValue: from.property.fieldId()) else { return }
+        if (fieldId == MLCardFormFields.name) {
+            viewModel.cardDataHandler.name = from.getValue() ?? ""
         }
     }
     
