@@ -1,5 +1,5 @@
-# v0.9.20
-🚀 Release 0.9.20 🚀
+# v0.9.21
+🚀 Release 0.9.21 🚀
 - Added new backend flag that allows us to enable/disable Name and ID fields autocompletion.
 - Added new tracking data.
 - Fixed issue in ID number's mask when typing a Card number, and then typing a different one. 
