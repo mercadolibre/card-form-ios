@@ -79,24 +79,6 @@ extension MLCardFormFieldSetting {
 
 extension Array where Element == MLCardFormFieldSetting {
     func get(_ cardFormField: MLCardFormFields) -> MLCardFormFieldSetting? {
-        switch cardFormField {
-        case .cardNumber:
-            return self.filter({ $0.name == MLCardFormFields.cardNumber.rawValue}).first
-
-        case .name:
-            return self.filter({ $0.name == MLCardFormFields.name.rawValue}).first
-
-        case .expiration:
-            return self.filter({ $0.name == MLCardFormFields.expiration.rawValue}).first
-
-        case .securityCode:
-            return self.filter({ $0.name == MLCardFormFields.securityCode.rawValue}).first
-
-        case .identificationTypesPicker:
-            return self.filter({ $0.name == MLCardFormFields.identificationTypesPicker.rawValue}).first
-
-        case .identificationTypeNumber:
-            return self.filter({ $0.name == MLCardFormFields.identificationTypeNumber.rawValue}).first
-        }
+        filter { $0.name == cardFormField.rawValue }.first
     }
 }

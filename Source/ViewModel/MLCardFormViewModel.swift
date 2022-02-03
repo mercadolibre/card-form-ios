@@ -92,23 +92,14 @@ final class MLCardFormViewModel {
         }
         
         if let nameFieldProp = remoteSettings.get(.name) {
-            if nameFieldProp.autocomplete ?? true {
-                let storedNameField = MLCardFormField(
-                    fieldProperty: CardNameFormFieldProperty(
-                        remoteSetting: nameFieldProp,
-                        cardNameValue: storedCardName
-                    )
+            let autocomplete = nameFieldProp.autocomplete ?? true
+            let nameField = MLCardFormField(
+                fieldProperty: CardNameFormFieldProperty(
+                    remoteSetting: nameFieldProp,
+                    cardNameValue: autocomplete ? storedIDNumber : nil
                 )
-                cardFormFields?.append([storedNameField])
-                
-            } else {
-                let defaultNameField = MLCardFormField(
-                    fieldProperty: CardNameFormFieldProperty(
-                        remoteSetting: nameFieldProp
-                    )
-                )
-                cardFormFields?.append([defaultNameField])
-            }
+            )
+            cardFormFields?.append([nameField])
         }
         
         if let expirationFieldSetting = remoteSettings.get(.expiration),
