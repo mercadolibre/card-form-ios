@@ -96,7 +96,7 @@ final class MLCardFormViewModel {
             let nameField = MLCardFormField(
                 fieldProperty: CardNameFormFieldProperty(
                     remoteSetting: nameFieldProp,
-                    cardNameValue: autocomplete ? storedIDNumber : nil
+                    cardNameValue: autocomplete ? storedCardName : nil
                 )
             )
             cardFormFields?.append([nameField])
