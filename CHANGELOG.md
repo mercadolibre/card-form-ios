@@ -1,3 +1,6 @@
+# Unpublished
+- New backend flag that allows us to enable/disable Name and ID fields autocompletion.
+
 # v0.9.19
 🚀 Release 0.9.19 🚀
 - Refactor MLCardFormCustomMask to fix issues when getting the value unmasked
