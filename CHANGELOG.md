@@ -1,5 +1,10 @@
-# Unpublished
-- New backend flag that allows us to enable/disable Name and ID fields autocompletion.
+# v0.9.20
+🚀 Release 0.9.20 🚀
+- Added new backend flag that allows us to enable/disable Name and ID fields autocompletion.
+- Added new tracking data.
+- Fixed issue in ID number's mask when typing a Card number, and then typing a different one. 
+- Fixed issue in card fields to avoid being able to select the next field when current one is invalid. 
+- Fixed bug when completing cardName field with whitespaces at the end. 
 
 # v0.9.19
 🚀 Release 0.9.19 🚀
