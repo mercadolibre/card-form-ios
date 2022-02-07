@@ -200,9 +200,9 @@ private extension MLCardFormWebPayViewModel {
         let paymentMethodId = finishInscriptionData?.paymentMethod.id ?? ""
         let paymentTypeId = finishInscriptionData?.paymentMethod.paymentTypeId ?? ""
         MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success",
-                                                    properties: ["bin": bin,
-                                                                 "issuer": issuer,
-                                                                 "payment_method_id": paymentMethodId,
-                                                                 "payment_type_id": paymentTypeId])
+                                                    properties: [MLCardFormTracker.TrackerParams.bin.value: bin,
+                                                                 MLCardFormTracker.TrackerParams.issuer.value: issuer,
+                                                                 MLCardFormTracker.TrackerParams.paymentMethodId.value: paymentMethodId,
+                                                                 MLCardFormTracker.TrackerParams.paymentMethodType.value: paymentTypeId])
     }
 }

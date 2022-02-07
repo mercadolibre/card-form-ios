@@ -44,7 +44,7 @@ extension MLCardFormViewController {
         case MLCardFormFields.cardNumber,
              MLCardFormFields.name,
              MLCardFormFields.identificationTypeNumber:
-            MLCardFormTracker.sharedInstance.trackEvent(path: path)
+            MLCardFormTracker.sharedInstance.trackEvent(path: path, properties: ["current_step": stepName])
         case MLCardFormFields.expiration:
             MLCardFormTracker.sharedInstance.trackEvent(path: path, properties: ["current_step": stepName + "_date"])
         case MLCardFormFields.securityCode:

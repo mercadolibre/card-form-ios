@@ -446,7 +446,7 @@ extension MLCardFormViewModel {
                         MLCardFormTracker.TrackerParams.bin.value: binNumber,
                         MLCardFormTracker.TrackerParams.issuer.value: cardFormBinData.issuers.first?.id ?? 0,
                         MLCardFormTracker.TrackerParams.paymentMethodId.value: cardFormBinData.paymentMethod.paymentMethodId,
-                        MLCardFormTracker.TrackerParams.paymentTypeId.value: cardFormBinData.paymentMethod.paymentTypeId
+                        MLCardFormTracker.TrackerParams.paymentMethodType.value: cardFormBinData.paymentMethod.paymentTypeId
                     ]
                 )
                 self.lastFetchedBinNumber = binNumber
@@ -497,10 +497,10 @@ extension MLCardFormViewModel {
                         let paymentMethodId = self.binData?.paymentMethod.paymentMethodId ?? ""
                         let paymentTypeId = self.binData?.paymentMethod.paymentTypeId ?? ""
                         MLCardFormTracker.sharedInstance.trackEvent(path: "/card_form/success",
-                                                                    properties: ["bin": bin,
-                                                                                 "issuer": issuer,
-                                                                                 "payment_method_id": paymentMethodId,
-                                                                                 "payment_type_id": paymentTypeId])
+                                                                    properties: [MLCardFormTracker.TrackerParams.bin.value: bin,
+                                                                                 MLCardFormTracker.TrackerParams.issuer.value: issuer,
+                                                                                 MLCardFormTracker.TrackerParams.paymentMethodId.value: paymentMethodId,
+                                                                                 MLCardFormTracker.TrackerParams.paymentMethodType.value: paymentTypeId])
                         self.saveDataForReuse()
                         let lastFourDigits = tokenCardData.lastFourDigits ?? ""
                         var cardInformation = MLCardFormCardInformation(cardId: addCardData.getId(), paymentType: paymentTypeId, bin: bin, lastFourDigits: lastFourDigits)
@@ -517,7 +517,7 @@ extension MLCardFormViewModel {
                                     MLCardFormTracker.TrackerParams.bin.value: tokenCardData.firstSixDigits ?? "",
                                     MLCardFormTracker.TrackerParams.issuer.value: addCardData.issuer.id,
                                     MLCardFormTracker.TrackerParams.paymentMethodId.value: addCardData.paymentMethod.id,
-                                    MLCardFormTracker.TrackerParams.paymentTypeId.value: addCardData.paymentMethod.paymentTypeId,
+                                    MLCardFormTracker.TrackerParams.paymentMethodType.value: addCardData.paymentMethod.paymentTypeId,
                                     MLCardFormTracker.TrackerParams.errorStep.value: "save_card_data",
                                     MLCardFormTracker.TrackerParams.errorMessage.value: errorMessage
                                 ]
@@ -534,7 +534,7 @@ extension MLCardFormViewModel {
                         MLCardFormTracker.TrackerParams.bin.value: tokenizationData.cardNumber.prefix(6),
                         MLCardFormTracker.TrackerParams.issuer.value: addCardData.issuer.id,
                         MLCardFormTracker.TrackerParams.paymentMethodId.value: addCardData.paymentMethod.id,
-                        MLCardFormTracker.TrackerParams.paymentTypeId.value: addCardData.paymentMethod.paymentTypeId,
+                        MLCardFormTracker.TrackerParams.paymentMethodType.value: addCardData.paymentMethod.paymentTypeId,
                         MLCardFormTracker.TrackerParams.errorStep.value: "save_card_token",
                         MLCardFormTracker.TrackerParams.errorMessage.value: errorMessage
                     ]
@@ -558,7 +558,7 @@ extension MLCardFormViewModel {
                 MLCardFormTracker.TrackerParams.bin.value: lastFetchedBinNumber,
                 MLCardFormTracker.TrackerParams.issuer.value: issuer,
                 MLCardFormTracker.TrackerParams.paymentMethodId.value: paymentMethodId,
-                MLCardFormTracker.TrackerParams.paymentTypeId.value: paymentTypeId
+                MLCardFormTracker.TrackerParams.paymentMethodType.value: paymentTypeId
             ]
         )
     }
