@@ -148,8 +148,11 @@ struct NetworkLayer {
         dataTask.resume()
     }
 
-    static func request(imageUrl: String, success: ((UIImage)->Void)?) {
-        guard let url = URL(string: imageUrl) else { return }
+    static func request(
+        imageUrl url: URL,
+        success: ((UIImage) -> Void)?,
+        failure: (() -> Void)? = nil
+    ) {
         let cache = URLCache.shared
         let request = URLRequest(url: url)
         if let data = cache.cachedResponse(for: request)?.data, let image = UIImage(data: data) {
@@ -167,6 +170,8 @@ struct NetworkLayer {
                     print("Retrieve image from Network")
                     #endif
                     success?(image)
+                } else {
+                    failure?()
                 }
             }).resume()
         }
