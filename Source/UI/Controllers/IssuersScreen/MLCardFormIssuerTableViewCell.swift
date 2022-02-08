@@ -61,32 +61,18 @@ extension MLCardFormIssuerTableViewCell {
     }
     
     private func checkHasImage(issuer: MLCardFormIssuer) {
-        guard let imageURL = issuer.imageUrl else {
+        guard let imageURL = issuer.imageUrl,
+              let url = URL(string: imageURL)
+        else {
             setupPlaceholder(title: issuer.name)
             return
         }
         
-        guard let url = URL.init(string: imageURL) else {
-            setupPlaceholder(title: issuer.name)
-            return
-        }
-        
-        DispatchQueue.global(qos: .background).async {
-            do {
-                let data = try Data.init(contentsOf: url)
-                    DispatchQueue.main.async {
-                        if let image = UIImage(data: data) {
-                            self.setupImageView(image: image)
-                        } else {
-                            self.setupPlaceholder(title: issuer.name)
-                        }
-                    }
-            } catch {
-                DispatchQueue.main.async {
-                    self.setupPlaceholder(title: issuer.name)
-                }
-            }
-        }
+        issuerImageView.setRemoteImage(
+            imageUrl: url,
+            success: { [weak self] in self?.setupImageView(image: $0) },
+            failure: { [weak self] in self?.setupPlaceholder(title: issuer.name) }
+        )
     }
 }
 
