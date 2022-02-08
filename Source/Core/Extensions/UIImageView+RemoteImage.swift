@@ -8,8 +8,12 @@
 import Foundation
 
 extension UIImageView {
-    func setRemoteImage(imageUrl: String, success:((UIImage)->Void)? = nil) {
-        NetworkLayer.request(imageUrl: imageUrl) { [weak self] (image) in
+    func setRemoteImage(
+        imageUrl: URL,
+        success: ((UIImage) -> Void)? = nil,
+        failure: (() -> Void)? = nil
+    ) {
+        NetworkLayer.request(imageUrl: imageUrl, success: { [weak self] (image) in
             guard let self = self else { return }
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -22,6 +26,7 @@ extension UIImageView {
                         success?(image)
                 })
             }
-        }
+        }, failure: { failure.flatMap { DispatchQueue.main.async(execute: $0) } }
+        )
     }
 }
