@@ -16,7 +16,7 @@ final class MLCardFormTracker: NSObject {
         case bin
         case issuer
         case paymentMethodId = "payment_method_id"
-        case paymentTypeId = "payment_type_id"
+        case paymentMethodType = "payment_method_type"
         case errorStep = "error_step"
         case errorMessage = "error_message"
         
