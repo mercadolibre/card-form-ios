@@ -1,5 +1,5 @@
 //
-//  MLCardFormViewController+Tracking.swift
+//  MLCardFormViewController+TrackingMelidata.swift
 //  MLCardForm
 //
 //  Created by Eric Ertl on 26/11/2019.
@@ -107,6 +107,26 @@ extension MLCardFormViewController {
         default:
             break
         }
+    }
+
+    func trackErrorEvent(binNumber: String, error: Error) {
+        var path = "/card_form/error"
+        let errorMessage = error.localizedDescription
+        var properties: [String: Any] = ["error_step": "bin_number", "error_message": errorMessage]
+        switch error {
+        case NetworkLayerError.statusCode(status: let status, message: _, userErrorMessage: _):
+            if status == 400 {
+                path = "/card_form/bin_number/unknown"
+                properties = ["bin_number": binNumber.prefix(6)]
+            }
+        default:
+            break
+        }
+        MLCardFormTracker.sharedInstance.trackEvent(path: path, properties: properties)
+    }
+    
+    func trackScreenIssuers() {
+        MLCardFormTracker.sharedInstance.trackScreen(screenName: "/card_form/issuers", properties: ["issuers_quantity": viewModel.getIssuers()?.count ?? 0])
     }
     
     func getScreenName(_ cardFormField: MLCardFormField) -> String? {

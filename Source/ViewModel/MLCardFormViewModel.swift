@@ -273,9 +273,10 @@ final class MLCardFormViewModel {
             return shouldReturnIndex(index: index, isTurnBack: offSet)
         }
     
-    func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) {
+    func focusCardFormFieldWithOffset(cardFormField: MLCardFormField, offset: Int) -> MLCardFormField {
+        var cardFormFieldAux = cardFormField
         let flattenedCardFormFields = cardFormFields?.flatMap{ $0 }
-        guard let unwrappedCardFormFields = flattenedCardFormFields else { return }
+        guard let unwrappedCardFormFields = flattenedCardFormFields else { return cardFormField }
         let fieldId = cardFormField.property.fieldId()
         let index = unwrappedCardFormFields.firstIndex(where: { $0.property.fieldId() == fieldId }) ?? 0
         let indexWithOffset = min(max(index + offset, 0), unwrappedCardFormFields.count - 1)
@@ -303,11 +304,14 @@ final class MLCardFormViewModel {
             }
             
             if field.property.shouldShowPickerInput() {
-                focusCardFormFieldWithOffset(cardFormField: field, offset: offset)
+                cardFormFieldAux = focusCardFormFieldWithOffset(cardFormField: field, offset: offset)
             } else {
                 field.doFocus()
+                cardFormFieldAux = field
             }
+            
         }
+        return cardFormFieldAux
     }
     
     func isCardNumberFieldAndIsMissingCardData(cardFormField: MLCardFormField) -> (isCardNumberMissingCardData: Bool, currentBin: String?) {
@@ -455,19 +459,6 @@ extension MLCardFormViewModel {
                 self.updateHandlers()
                 completion?(.success(binNumber))
             case .failure(let error):
-                var path = "/card_form/error"
-                let errorMessage = error.localizedDescription
-                var properties: [String: Any] = ["error_step": "bin_number", "error_message": errorMessage]
-                switch error {
-                case NetworkLayerError.statusCode(status: let status, message: _, userErrorMessage: _):
-                    if status == 400 {
-                        path = "/card_form/bin_number/unknown"
-                        properties = ["bin_number": binNumber.prefix(6)]
-                    }
-                default:
-                    break
-                }
-                MLCardFormTracker.sharedInstance.trackEvent(path: path, properties: properties)
                 self.viewModelDelegate?.shouldUpdateFields(remoteSettings: nil)
                 completion?(.failure(error))
             }

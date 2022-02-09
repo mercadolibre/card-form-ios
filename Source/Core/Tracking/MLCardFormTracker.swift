@@ -19,16 +19,19 @@ final class MLCardFormTracker: NSObject {
         case paymentMethodType = "payment_method_type"
         case errorStep = "error_step"
         case errorMessage = "error_message"
-        
+        case dimensionFlowId = "89"
+        case dimensionMarketplace = "7"
+        case dimensionCore = "8"
         var value: String {
             return self.rawValue
         }
     }
     internal static let sharedInstance = MLCardFormTracker()
-    
+    private let category = "/CARD_FORM/"
     private var sessionService: MLCardFormSessionService = MLCardFormSessionService()
     private var trackerDelegate: MLCardFormTrackerDelegate?
     private var trackerStore: MLCardFormTrackingStore = MLCardFormTrackingStore.sharedInstance
+    
 }
 
 // MARK: Getters/setters.
@@ -71,6 +74,22 @@ internal extension MLCardFormTracker {
             delegate.trackEvent(screenName: path, extraParams: metadata)
         }
     }
+    
+    func trackScreenGA(trackInfo: MLCardFormGAModel) {
+        if let delegate = trackerDelegate {
+            trackInfo.category = category
+            trackInfo.customDimensions = buildCommonParamsGA(trackInfo.customDimensions)
+            delegate.trackScreenGA(trackInfo: trackInfo)
+        }
+    }
+    
+    func trackEventGA(trackInfo: MLCardFormGAModel) {
+        if let delegate = trackerDelegate {
+            trackInfo.category = category
+            trackInfo.customDimensions = buildCommonParamsGA(trackInfo.customDimensions)
+            delegate.trackEventGA(trackInfo: trackInfo)
+        }
+    }
 
     private func buildCommonParams(_ properties: [String: Any]) -> [String: Any] {
         var metadata = properties
@@ -82,6 +101,16 @@ internal extension MLCardFormTracker {
         }
         metadata[TrackerParams.sessionId.value] = getSessionID()
         metadata[TrackerParams.sessionTime.value] = trackerStore.getSecondsAfterInit()
+        return metadata
+    }
+    
+    private func buildCommonParamsGA(_ properties: [String: Any]) -> [String: Any] {
+        var metadata = properties
+        metadata[TrackerParams.dimensionMarketplace.value] = "MARKETPLACE"
+        metadata[TrackerParams.dimensionCore.value] = "CORE"
+        if let flowId = trackerStore.flowId {
+            metadata[TrackerParams.dimensionFlowId.value] = flowId
+        }
         return metadata
     }
 }

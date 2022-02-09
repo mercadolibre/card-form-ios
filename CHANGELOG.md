@@ -1,5 +1,6 @@
 # Unpublished
 - Fixed parameters in trackEvent.
+- Added GA tracks and fixed the order of action and views.
 
 # v0.9.22
 🚀 Release 0.9.22 🚀
