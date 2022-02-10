@@ -61,14 +61,6 @@ extension ViewController: MLCardFormLifeCycleDelegate {
 
 // Tracking
 extension ViewController: MLCardFormTrackerDelegate {
-    func trackScreenGA(trackInfo: MLCardFormGAModel) {
-        print("trackScreenGA: \(trackInfo.screen ?? "")")
-    }
-    
-    func trackEventGA(trackInfo: MLCardFormGAModel) {
-        print("trackEventGA: \(trackInfo.action ?? "")")
-    }
-    
     func trackScreen(screenName: String, extraParams: [String : Any]?) {
         print("trackScreen: \(screenName), extraParams: \(extraParams ?? [:])")
     }
