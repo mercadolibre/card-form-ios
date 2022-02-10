@@ -1,3 +1,7 @@
+# v0.9.24
+🚀 Release 0.9.24 🚀
+- remove GA tracks.
+
 # v0.9.23
 🚀 Release 0.9.23 🚀
 - Fixed parameters in trackEvent.
