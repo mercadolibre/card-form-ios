@@ -311,13 +311,11 @@ private extension MLCardFormViewController {
         let issuersNavigation: UINavigationController = UINavigationController(rootViewController: issuersVC)
         navigationController?.present(issuersNavigation, animated: true, completion: nil)
         self.trackScreenIssuers()
-        self.trackScreenIssuersGA()
     }
 
     func animateCardAppear() {
         if let field = viewModel.cardFormFields?.first?.first {
             trackScreen(field)
-            trackScreenGA(field)
             field.doFocus()
         }
         if viewModel.shouldAnimateOnLoad() {
@@ -527,7 +525,6 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             }
         } else {
             trackScreen(cardFormField)
-            trackScreenGA(cardFormField)
         }
     }
     
@@ -535,7 +532,6 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         trackPreviousEvent(from)
         let cardFormField = viewModel.focusCardFormFieldWithOffset(cardFormField: from, offset: -1)
         trackScreen(cardFormField)
-        trackScreenGA(cardFormField)
         scrollCollectionViewToCardFormField(from, offSet:  true)
     }
     public func didTapClear(from: MLCardFormField) {
@@ -544,7 +540,6 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     
     public func invalidInput(from: MLCardFormField) {
         trackInvalidEvent(from)
-        trackInvalidEventGA(from)
     }
 }
 
