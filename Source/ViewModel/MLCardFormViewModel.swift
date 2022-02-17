@@ -56,6 +56,9 @@ final class MLCardFormViewModel {
 
     private var builder: MLCardFormBuilder?
     
+    private let minCardNumberLength = 16
+    private let maxCardNumberLength = 20
+    
     func updateWithBuilder(_ builder: MLCardFormBuilder) {
         self.builder = builder
         serviceManager.addCardService.update(publicKey: builder.publicKey, privateKey: builder.privateKey, flowId: builder.flowId, acceptThirdPartyCard: builder.acceptThirdPartyCard, activateCard: builder.activateCard)
@@ -408,7 +411,55 @@ final class MLCardFormViewModel {
     func shouldReturnIndex(index: Int, isTurnBack: Bool) -> Int {
         return isTurnBack ? index - 1 : index + 1
     }
-
+    
+    func validatePastedTextIfNeeded(
+        text: String?,
+        cardFormField: MLCardFormField,
+        notifierProtocol: MLCardFormFieldNotifierProtocol,
+        complete: () -> Void
+    ) {
+        guard let fieldId = MLCardFormFields(rawValue: cardFormField.property.fieldId()), let currentText = text else { return }
+        
+        switch fieldId {
+        case .cardNumber:
+            //formate card number
+            var currentNumber = currentText.trimmingCharacters(in: .whitespaces).components(separatedBy: .decimalDigits.inverted).joined()
+            currentNumber = String(currentNumber.prefix(maxCardNumberLength))
+            
+            //update cardFormFields (only card number propertie) if needed
+            if currentNumber.count >= minCardNumberLength {
+                cardFormFields?[0] = [
+                    MLCardFormField(fieldProperty: CardNumberFormFieldProperty(
+                        remoteSetting: MLCardFormFieldSetting(
+                            name: MLCardFormFields.cardNumber.rawValue,
+                            lenght: currentNumber.count,
+                            type: "number",
+                            title: "Número de tarjeta".localized,
+                            mask: String(repeating: "$", count: currentNumber.count),
+                            hintMessage: nil,
+                            validationPattern: nil,
+                            validationMessage: nil,
+                            extraValidations: nil,
+                            autocomplete: nil
+                        ),
+                        cardNumberValue: currentNumber
+                    ))
+                ]
+                
+                //update values
+                tempTextField.input.text = currentNumber
+                cardDataHandler.number = currentNumber
+                
+                //update UI (collection view)
+                complete()
+                
+                //render fields
+                setupAndRenderCardFormFields(cardFormFields: cardFormFields, notifierProtocol: notifierProtocol)
+            }
+        default:
+            break
+        }
+    }
 }
 
 // MARK: IssuersScreen

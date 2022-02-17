@@ -27,7 +27,7 @@ final public class MLCardFormField: UIView {
     internal var measuredKeyboardSize: CGRect = CGRect.zero
 
     // MARK: Internals UI
-    internal let input = UITextField()
+    internal let input = PastedTextField()
     internal let helpLabel = UILabel()
     internal let titleLabel = UILabel()
     internal let bottomLine = UIView.createView()
@@ -200,6 +200,10 @@ private extension MLCardFormField {
                 input.rightViewMode = .always
             }
         }
+        
+        if let cardFormField = MLCardFormFields(rawValue: property.fieldId()), cardFormField == .cardNumber {
+            input.pastedTextFieldDelegate = self
+        }
     }
 
     func setupBottomLine() {
@@ -301,5 +305,11 @@ internal extension MLCardFormField {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             UIAccessibility.post(notification: .announcement, argument: text)
         }
+    }
+}
+
+extension MLCardFormField: PastedTextFieldDelegate {
+    func pastedText(_ text: String?) {
+        notifierProtocol?.pastedText(text, from: self)
     }
 }

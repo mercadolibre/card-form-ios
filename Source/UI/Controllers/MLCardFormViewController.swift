@@ -541,6 +541,19 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
     public func invalidInput(from: MLCardFormField) {
         trackInvalidEvent(from)
     }
+    
+    public func pastedText(_ text: String?, from: MLCardFormField) {
+        viewModel.validatePastedTextIfNeeded(text: text, cardFormField: from, notifierProtocol: self) { [weak self] in
+            guard let self = self else { return }
+            self.viewModel.tempTextField.doFocus()
+            self.cardFieldCollectionView?.reloadData()
+            self.cardFieldCollectionView?.layoutIfNeeded()
+            if let field = self.viewModel.cardFormFields?.first?.first {
+                field.doFocus()
+                UIAccessibility.post(notification: .announcement, argument: field.input.text)
+            }
+        }
+    }
 }
 
 // MARK: IssuerSelectedProtocol
