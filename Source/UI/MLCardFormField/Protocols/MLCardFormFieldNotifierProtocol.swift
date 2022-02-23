@@ -15,6 +15,7 @@ public protocol MLCardFormFieldNotifierProtocol: NSObjectProtocol {
     func didEndEditing(from: MLCardFormField)
     func didTapClear(from: MLCardFormField)
     func invalidInput(from: MLCardFormField)
+    func pastedText(_ text: String?, from: MLCardFormField)
 }
 
 extension MLCardFormFieldNotifierProtocol {
@@ -39,6 +40,10 @@ extension MLCardFormFieldNotifierProtocol {
     }
     
     public func didEndEditing(from: MLCardFormField){
+        //this is a empty implementation to allow this method to be optional
+    }
+    
+    public func pastedText(_ text: String?, from: MLCardFormField) {
         //this is a empty implementation to allow this method to be optional
     }
 }

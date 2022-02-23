@@ -1,3 +1,6 @@
+# Unpublished
+- Adjusted card number field mask according to pasted text if needed
+
 # v0.9.23
 🚀 Release 0.9.23 🚀
 - Fixed parameters in trackEvent.
