@@ -34,12 +34,12 @@ enum MLCardFormApiRouter {
 
     var path: String {
         switch self {
-        case .getCardData: return "/production/px_mobile/v1/card"
+        case .getCardData: return "/alpha/px_mobile/v1/card"
         case .postCardTokenData: return "/v1/card_tokens"
-        case .postCardData: return "/production/px_mobile/v1/card"
-        case .getWebPayInitInscription: return "/production/px_mobile/v1/card_webpay/inscription/init"
-        case .postWebPayFinishInscription: return "/production/px_mobile/v1/card_webpay/inscription/finish"
-        case .getCardDataFromMarketplace: return "/production/px_mobile/v1/card/marketplace"
+        case .postCardData: return "/alpha/px_mobile/v1/card"
+        case .getWebPayInitInscription: return "/alpha/px_mobile/v1/card_webpay/inscription/init"
+        case .postWebPayFinishInscription: return "/alpha/px_mobile/v1/card_webpay/inscription/finish"
+        case .getCardDataFromMarketplace: return "/alpha/px_mobile/v1/card/marketplace"
         }
     }
 
