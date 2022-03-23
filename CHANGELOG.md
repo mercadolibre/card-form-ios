@@ -1,4 +1,4 @@
-# Unpublished
+# v0.9.25
 - Adjusted card number field mask according to pasted text if needed
 
 # v0.9.23
