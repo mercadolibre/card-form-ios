@@ -69,6 +69,9 @@ final class MLCardFormCustomMask {
         _ range: NSRange,
         with string: String
     ) -> String {
+        guard Range.init(range, in: self.value) != nil else {
+            return self.value
+        }
         let newString = (self.value as NSString).replacingCharacters(in: range, with: string)
         return applyMask(to: newString)
     }
