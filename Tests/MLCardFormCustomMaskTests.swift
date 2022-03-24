@@ -38,6 +38,18 @@ final class MLCardFormCustomMaskTests: XCTestCase {
         XCTAssertEqual(sut.unmaskedText, "12345678")
     }
     
+    func testInvalidRange() {
+        let value = "12 345 678"
+        let sut = MLCardFormCustomMask(mask: "$$.$$$.$$$")
+        
+        XCTAssertEqual(sut.applyMask(to: value), "12.345.678")
+
+        sut.shouldChangeCharactersIn(.init(location: 10, length: 1), with: "")
+        
+        XCTAssertEqual(sut.value, "12.345.678")
+        XCTAssertEqual(sut.unmaskedText, "12345678")
+    }
+    
     func testBackSpaceWithMask() {
         let value = "12 345 678"
         let sut = MLCardFormCustomMask(mask: "$$.$$$.$$$")
