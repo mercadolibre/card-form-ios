@@ -1,4 +1,9 @@
+# v0.9.26 [Unreleased]
+🚀 Release 0.9.26 🚀
+- Fixing exception in Replace Characters In Range Function
+
 # v0.9.25
+🚀 Release 0.9.25 🚀
 - Adjusted card number field mask according to pasted text if needed
 
 # v0.9.23
