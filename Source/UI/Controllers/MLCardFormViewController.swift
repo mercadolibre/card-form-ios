@@ -33,6 +33,8 @@ open class MLCardFormViewController: MLCardFormBaseViewController {
 
     private var cardDrawer: MLCardDrawerController?
     private var andesSnackbar: AndesSnackbar?
+    
+    private let binLength : Int = 8
 
     /// :nodoc
     open override func viewDidLoad() {
@@ -425,14 +427,16 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
         switch fieldId {
         case MLCardFormFields.cardNumber:
             self.viewModel.tempTextField.input.text = newValue
-            if newValue.count == 6 {
+            
+            if newValue.count == binLength {
                 getCardData(binNumber: newValue)
-            } else if newValue.count == 5 {
+            } else if newValue.count == binLength-1 {
                 shouldUpdateCard(cardUI: DefaultCardUIHandler(), accessibilityData: AccessibilityData(paymentMethodId: "", issuer: ""))
                 shouldUpdateAppBarTitle(paymentTypeId: AppBar.Generic.rawValue)
             } else if newValue.count >= 7 {
                 from.checkExtraValidations()
             }
+        
             viewModel.cardDataHandler.number = newValue
 
         case MLCardFormFields.name:

@@ -67,10 +67,17 @@ struct NetworkLayer {
         components.path = router.path
         components.queryItems = router.parameters
 
-        guard let url = components.url else {
+        guard let targetURL = components.url else {
             completion(.failure(NetworkLayerError.url))
             return
         }
+
+        #if DEBUG
+        let url = router.mockURL ?? targetURL
+        #else
+        let url = targetURL
+        #endif
+        
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = router.method
 

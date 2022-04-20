@@ -130,6 +130,10 @@ enum MLCardFormApiRouter {
             return nil
         }
     }
+    
+    var mockURL: URL? {
+       return nil
+    }
 }
 
 // MARK: Encoding
