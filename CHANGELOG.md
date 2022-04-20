@@ -1,3 +1,7 @@
+# v0.10.0
+🚀 Release 0.10.0 🚀
+- Added Bin8 support
+
 # v0.9.26
 🚀 Release 0.9.26 🚀
 - Fixing exception in Replace Characters In Range Function
