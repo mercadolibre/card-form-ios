@@ -278,7 +278,7 @@ internal extension MLCardFormField {
 
     func isValid() -> Bool {
         guard let value = getValue() else { return false }
-        if property.isValid(value: value) {
+        if property.isValid(value: value.trimmingCharacters(in: .whitespaces)) {
             showHelpLabel()
             bottomLine.backgroundColor = highlightColor
             UINotificationFeedbackGenerator().notificationOccurred(.success)
