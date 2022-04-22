@@ -1,3 +1,6 @@
+# Unreleased
+- Fixing unable to progress adding card with name when last char is whitespace
+
 # v0.9.26
 🚀 Release 0.9.26 🚀
 - Fixing exception in Replace Characters In Range Function
