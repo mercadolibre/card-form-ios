@@ -1,7 +1,10 @@
+# v0.11.0
+🚀 Release 0.11.0 🚀
+- iOS 13 migration.
+
 # v0.10.0
 🚀 Release 0.10.0 🚀
 - Fixing unable to progress adding card with name when last char is whitespace
-- iOS 13 migration.
 
 # v0.9.26
 🚀 Release 0.9.26 🚀
