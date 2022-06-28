@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/mercadolibre/card-form-ios", :tag => s.version.to_s }
   s.swift_version    = '5.6'
   s.ios.deployment_target = '10.0'
-  s.platform         = :ios, '13.0'
+  s.platform         = :ios, '10.0'
   s.requires_arc     = true
   s.default_subspec = 'Default'
   s.static_framework = true
