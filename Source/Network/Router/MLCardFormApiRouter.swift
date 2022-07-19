@@ -51,8 +51,7 @@ enum MLCardFormApiRouter {
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
                     MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
-                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken,
-                    "status" : "testing"]
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .getCardDataFromMarketplace(_, let headers):
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
@@ -66,8 +65,7 @@ enum MLCardFormApiRouter {
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
                     MLCardFormAddCardService.HeadersKeys.sessionId.getKey: headers.sessionId,
-                    MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken,
-                    "status" : "testing"]
+                    MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .getWebPayInitInscription(let headers):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
@@ -90,18 +88,20 @@ enum MLCardFormApiRouter {
                     URLQueryItem(name: MLCardFormBinService.QueryKeys.bin.getKey, value: queryParams.bin),
                     URLQueryItem(name: MLCardFormBinService.QueryKeys.siteId.getKey, value: queryParams.siteId),
                     URLQueryItem(name: MLCardFormBinService.QueryKeys.platform.getKey, value: queryParams.platform),
-                    URLQueryItem(name: MLCardFormBinService.QueryKeys.odr.getKey, value: String(queryParams.odr))
+                    URLQueryItem(name: MLCardFormBinService.QueryKeys.odr.getKey, value: String(queryParams.odr)),
+                    URLQueryItem(name: "status", value: "testing")
                 ]
                 if let excludedPaymentTypes = queryParams.excludedPaymentTypes {
                     urlQueryItems.append(URLQueryItem(name: MLCardFormBinService.QueryKeys.excludedPaymentTypes.getKey, value: excludedPaymentTypes))
                 }
                 return urlQueryItems
-                case.postCardTokenData,
-                    .postCardData,
-                    .getWebPayInitInscription,
-                    .postWebPayFinishInscription,
-                    .getCardDataFromMarketplace:
-                return [];
+            case .postCardData:
+                return [URLQueryItem(name: "status", value: "testing")]
+            case.postCardTokenData,
+                .getWebPayInitInscription,
+                .postWebPayFinishInscription,
+                .getCardDataFromMarketplace:
+            return [];
             }
         }
 
