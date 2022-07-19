@@ -34,9 +34,9 @@ enum MLCardFormApiRouter {
 
     var path: String {
         switch self {
-        case .getCardData: return "/production/px_mobile/v1/card"
-        case .postCardTokenData: return "/v1/card_tokens"
-        case .postCardData: return "/production/px_mobile/v1/card"
+        case .getCardData: return "/alpha/px_mobile/v1/card"
+        case .postCardTokenData: return "/v1/card_tokens/zeta"
+        case .postCardData: return "/alpha/px_mobile/v1/card"
         case .getWebPayInitInscription: return "/production/px_mobile/v1/card_webpay/inscription/init"
         case .postWebPayFinishInscription: return "/production/px_mobile/v1/card_webpay/inscription/finish"
         case .getCardDataFromMarketplace: return "/production/px_mobile/v1/card/marketplace"
@@ -51,7 +51,8 @@ enum MLCardFormApiRouter {
                     MLCardFormBinService.HeadersKeys.acceptLanguage.getKey: headers.acceptLanguage,
                     MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
                     MLCardFormBinService.HeadersKeys.sessionId.getKey: headers.sessionId,
-                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
+                    MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken,
+                    "status" : "testing"]
         case .getCardDataFromMarketplace(_, let headers):
             return [MLCardFormBinService.HeadersKeys.userAgent.getKey: headers.userAgent,
                     MLCardFormBinService.HeadersKeys.xDensity.getKey: headers.xDensity,
@@ -65,7 +66,8 @@ enum MLCardFormApiRouter {
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
                     MLCardFormAddCardService.HeadersKeys.sessionId.getKey: headers.sessionId,
-                    MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken]
+                    MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken,
+                    "status" : "testing"]
         case .getWebPayInitInscription(let headers):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
