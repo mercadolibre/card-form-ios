@@ -321,7 +321,7 @@ final class MLCardFormViewModel {
         guard let fieldId = MLCardFormFields(rawValue: cardFormField.property.fieldId()) else { return (false, nil) }
         if fieldId == MLCardFormFields.cardNumber,
             cardFormField.property.isValid(value: cardFormField.getValue()),
-            let currentBin = cardFormField.getValue()?.replacingOccurrences(of: " ", with: "").prefix(6),
+            let currentBin = cardFormField.getValue()?.replacingOccurrences(of: " ", with: "").prefix(8),
             currentBin != lastFetchedBinNumber {
             return (true, String(currentBin))
         }
