@@ -1,3 +1,7 @@
+# v0.12.0
+🚀 Release 0.12.0 🚀
+- Fix prefix number
+
 # v0.11.0
 🚀 Release 0.11.0 🚀
 - iOS 13 migration.
