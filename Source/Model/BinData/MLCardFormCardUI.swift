@@ -1,11 +1,5 @@
-//
-//  MLCardFormCardUI.swift
-//  MLCardForm
-//
-//  Created by Esteban Adrian Boffa on 28/10/2019.
-//
-
 import Foundation
+import MLCardDrawer
 
 struct MLCardFormCardUI: Codable {
     let cardNumberLength: Int
@@ -21,8 +15,9 @@ struct MLCardFormCardUI: Codable {
     let paymentMethodImage: String?
     let validation: String?
     let extraValidations: [MLCardFormExtraValidation]?
+    let pan: MLCardFormPAN?
     
     func changeIssuerImageUrl(issuerImageUrl: String?) -> MLCardFormCardUI {
-        return MLCardFormCardUI(cardNumberLength: self.cardNumberLength, cardPattern: self.cardPattern, cardColor: self.cardColor, cardFontColor: self.cardFontColor, cardFontType: self.cardFontType, securityCodeLocation: self.securityCodeLocation, securityCodeLength: self.securityCodeLength, issuerImageUrl: issuerImageUrl, paymentMethodImageUrl: self.paymentMethodImageUrl, issuerImage: issuerImageUrl, paymentMethodImage: self.paymentMethodImage, validation: self.validation, extraValidations: self.extraValidations)
+        return MLCardFormCardUI(cardNumberLength: self.cardNumberLength, cardPattern: self.cardPattern, cardColor: self.cardColor, cardFontColor: self.cardFontColor, cardFontType: self.cardFontType, securityCodeLocation: self.securityCodeLocation, securityCodeLength: self.securityCodeLength, issuerImageUrl: issuerImageUrl, paymentMethodImageUrl: self.paymentMethodImageUrl, issuerImage: issuerImageUrl, paymentMethodImage: self.paymentMethodImage, validation: self.validation, extraValidations: self.extraValidations, pan: self.pan)
     }
 }

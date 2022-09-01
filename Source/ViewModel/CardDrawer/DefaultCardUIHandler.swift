@@ -1,10 +1,3 @@
-//
-//  DefaultCardUIHandler.swift
-//  MLCardForm
-//
-//  Created by Esteban Adrian Boffa on 07/11/2019.
-//
-
 import Foundation
 import MLCardDrawer
 
@@ -23,7 +16,8 @@ class DefaultCardUIHandler: NSObject, CardUI {
     var cardLogoImageUrl: String?
     var bankImageUrl: String?
     var fontType: String = ""
-
+    var pan: CustomPAN? = CustomPAN(message: nil, backgroundColor: nil, textColor: nil, weight: nil)
+    
     func update(cardUI: MLCardFormCardUI?) {
         guard let cardDataUI = cardUI else { return }
         self.cardPattern = cardDataUI.cardPattern
@@ -35,5 +29,6 @@ class DefaultCardUIHandler: NSObject, CardUI {
         self.cardLogoImageUrl = cardUI?.paymentMethodImageUrl
         self.bankImageUrl = cardUI?.issuerImageUrl
         self.fontType = cardUI?.cardFontType ?? ""
+        self.pan = CustomPAN(message: nil, backgroundColor: cardUI?.pan?.backgroundColor, textColor: cardUI?.pan?.textColor, weight: cardUI?.pan?.weight)
     }
 }
