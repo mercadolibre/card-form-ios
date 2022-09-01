@@ -1,5 +1,4 @@
 import Foundation
-import MLCardDrawer
 
 struct MLCardFormCardUI: Codable {
     let cardNumberLength: Int
