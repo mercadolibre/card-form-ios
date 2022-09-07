@@ -16,7 +16,7 @@ class DefaultCardUIHandler: NSObject, CardUI {
     var cardLogoImageUrl: String?
     var bankImageUrl: String?
     var fontType: String = ""
-    var pan: CustomPAN? = CustomPAN(message: nil, backgroundColor: nil, textColor: nil, weight: nil)
+    var panStyle: CustomPAN? = CustomPAN(backgroundColor: nil, textColor: nil, weight: nil)
     
     func update(cardUI: MLCardFormCardUI?) {
         guard let cardDataUI = cardUI else { return }
@@ -29,6 +29,6 @@ class DefaultCardUIHandler: NSObject, CardUI {
         self.cardLogoImageUrl = cardUI?.paymentMethodImageUrl
         self.bankImageUrl = cardUI?.issuerImageUrl
         self.fontType = cardUI?.cardFontType ?? ""
-        self.pan = CustomPAN(message: nil, backgroundColor: cardUI?.pan?.backgroundColor, textColor: cardUI?.pan?.textColor, weight: cardUI?.pan?.weight)
+        self.panStyle = CustomPAN(backgroundColor: cardUI?.panStyle?.backgroundColor, textColor: cardUI?.panStyle?.textColor, weight: cardUI?.panStyle?.weight)
     }
 }
