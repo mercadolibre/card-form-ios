@@ -29,13 +29,14 @@ final class MLCardFormCustomMask {
     
     @discardableResult
     func applyMask(to string: String) -> String {
-        guard !mask.isEmpty, !string.isEmpty else {
-            self.value = string
-            return string
+        var trimmedString = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !mask.isEmpty, !trimmedString.isEmpty else {
+            self.value = trimmedString
+            return trimmedString
         }
         
-        let string = removeMask(to: string)
-        let count = string.count
+        let unmaskedString = removeMask(to: trimmedString)
+        let count = unmaskedString.count
         var maskedString = ""
         var character: Character
         var index = 0
@@ -47,7 +48,7 @@ final class MLCardFormCustomMask {
             }
             
             repeat {
-                character = string[string.index(string.startIndex, offsetBy: index)]
+                character = unmaskedString[unmaskedString.index(unmaskedString.startIndex, offsetBy: index)]
                 index += 1
             } while !(m == "$" && character.isNumber) && !(m == "*" && character.isLetter) && index < count
             
