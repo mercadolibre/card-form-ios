@@ -50,6 +50,20 @@ final class MLCardFormCustomMaskTests: XCTestCase {
         XCTAssertEqual(sut.unmaskedText, "12345678")
     }
     
+    func testWhiteSpaceWithMask() {
+        let value = " "
+        let sut = MLCardFormCustomMask(mask: "$$$")
+        
+        XCTAssert(sut.applyMask(to: value).isEmpty)
+    }
+    
+    func testNewLineSpaceWithMask() {
+        let value = "\n"
+        let sut = MLCardFormCustomMask(mask: "$$$")
+        
+        XCTAssert(sut.applyMask(to: value).isEmpty)
+    }
+    
     func testBackSpaceWithMask() {
         let value = "12 345 678"
         let sut = MLCardFormCustomMask(mask: "$$.$$$.$$$")
