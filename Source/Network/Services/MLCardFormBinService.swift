@@ -1,11 +1,3 @@
-//
-//  MLCardFormBinService
-//  CardForm
-//
-//  Created by Esteban Boffa on 10/30/19.
-//  Copyright © 2019 EBoffa. All rights reserved.
-//
-
 import Foundation
 
 
@@ -108,6 +100,7 @@ extension MLCardFormBinService {
         case platform
         case excludedPaymentTypes
         case odr
+        case cardDesignVersion
 
         var getKey: String {
             switch self {
@@ -116,6 +109,7 @@ extension MLCardFormBinService {
             case .platform: return "platform"
             case .excludedPaymentTypes: return "excluded_payment_types"
             case .odr: return "odr"
+            case .cardDesignVersion: return "card_design_version"
             }
         }
     }
@@ -126,6 +120,7 @@ extension MLCardFormBinService {
         let platform: String
         let excludedPaymentTypes: String?
         let odr: Bool
+        let cardDesignVersion: String
     }
 }
 
@@ -159,7 +154,7 @@ extension MLCardFormBinService {
                 self.getCardDataMarketplace(cardInfo: cardInfo,
                                             completion: completion)
             } else {
-                let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: self.getPlatform(), excludedPaymentTypes: excludedPaymentTypesJoined, odr: true)
+                let queryParams = MLCardFormBinService.QueryParams(bin: binNumber, siteId: siteId, platform: self.getPlatform(), excludedPaymentTypes: excludedPaymentTypesJoined, odr: true, cardDesignVersion: "v2")
                 self.getCardData(queryParams: queryParams,
                                  completion: completion)
             }
@@ -212,7 +207,8 @@ private extension MLCardFormBinService {
                                                    contentType: "application/json",
                                                    sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
                                                    accessToken: bearer + getAccessToken())
-        NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers))
+        let queryParams = MLCardFormCardInformationMarketplace.QueryParams(cardDesignVersion: "v2")
+        NetworkLayer.request(router: MLCardFormApiRouter.getCardDataFromMarketplace(cardInfo, headers, queryParams))
         {  [weak self] (result: Result<MLCardFormBinData, Error>) in
             guard let self = self else { return }
             switch result {

@@ -1,10 +1,3 @@
-//
-//  MLCardFormCardInformationMarketplace.swift
-//  MLCardForm
-//
-//  Created by Cristian Enrrique Sarmiento Cabarcas on 19/05/21.
-//
-
 import Foundation
 
 @objcMembers
@@ -58,3 +51,24 @@ public class ItemForCardInfoMarketplace: NSObject, Codable {
         self.id = id
     }
 }
+
+// MARK: Query Params
+extension MLCardFormCardInformationMarketplace {
+    
+    enum QueryKeys {
+        case cardDesignVersion
+
+        var getKey: String {
+            switch self {
+            case .cardDesignVersion: return "card_design_version"
+            }
+        }
+    }
+
+    struct QueryParams {
+        let cardDesignVersion: String
+    }
+}
+
+
+
