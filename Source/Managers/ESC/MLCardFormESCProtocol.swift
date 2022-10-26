@@ -3,14 +3,11 @@
 //  MLCardForm
 //
 //  Created by Eric Ertl on 06/12/2019.
-//
+//  Refactor by bgarelli, 10/25/2022
 
-import Foundation
+public typealias CardInfo = (firstSixDigits: String, lastFourDigits: String, esc: String)
 
-/**
- Use this protocol to implement ESC functionality
- */
-/** :nodoc: */
-@objc public protocol MLCardFormESCProtocol: NSObjectProtocol {
-    @discardableResult func saveESC(config: MLCardFormESCConfig, firstSixDigits: String, lastFourDigits: String, esc: String) -> Bool
+/// ESC functionality contract
+public protocol MLCardFormESCProtocol {
+    @discardableResult func saveESC(using config: MLCardFormESCConfig, with cardInfo: CardInfo) -> Bool
 }

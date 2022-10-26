@@ -1,4 +1,5 @@
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
+source 'git@github.com:mercadolibre/mobile-ios_specs.git'
 
 workspace 'CardForm'
 project 'Example/Example_CardForm.xcodeproj'

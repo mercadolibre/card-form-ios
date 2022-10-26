@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "MLCardForm"
-  s.version          = "0.13.0"
+  s.version          = "0.14.0"
   s.summary          = "MLCardForm for iOS"
   s.homepage         = "https://www.mercadolibre.com"
   s.license          = { :type => "MIT", :file => "LICENSE" }
@@ -20,6 +20,9 @@ Pod::Spec.new do |s|
     s.dependency 'MLUI', '~> 5.0'
     s.dependency 'AndesUI', '~> 3.0'
     s.dependency 'MLCardDrawer', '~> 1.0'
+    s.dependency 'MLESCManager', '~> 2.0'
+    s.dependency 'MLMelidata', '~> 0.13'
+    s.dependency 'MLAnalytics', '~> 2.18'
   end
 
   s.test_spec 'Tests' do |test_spec|

@@ -70,10 +70,10 @@ extension ViewController: MLCardFormTrackerDelegate {
     }
 }
 
-// ESC
+// MARK: CardForm
 extension ViewController: MLCardFormESCProtocol {
-    func saveESC(config: MLCardFormESCConfig, firstSixDigits: String, lastFourDigits: String, esc: String) -> Bool {
-        return false
+    func saveESC(using config: MLCardFormESCConfig, with cardInfo: CardInfo) -> Bool {
+        false
     }
 }
 
@@ -87,7 +87,7 @@ private extension ViewController {
         builder.setLanguage("es")
         builder.setExcludedPaymentTypes(["ticket"])
 
-        MLCardFormConfiguratorManager.with(esc: self, tracking: self)
+        MLCardFormConfiguratorManager.initialize()
         
         let cardFormVC = MLCardForm(builder: builder).setupController()
         navigationController?.pushViewController(cardFormVC, animated: true)
@@ -100,7 +100,7 @@ private extension ViewController {
         let builder = MLCardFormBuilder(privateKey: privateKey, siteId: "MLC", flowId: "MLCardForm-TestApp", lifeCycleDelegate: self)
         builder.setLanguage("es")
 
-        MLCardFormConfiguratorManager.with(esc: self, tracking: self)
+        MLCardFormConfiguratorManager.initialize()
         
         let cardFormVC = MLCardForm(builder: builder).setupWebPayController()
         navigationController?.pushViewController(cardFormVC, animated: true)

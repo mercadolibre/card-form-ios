@@ -3,7 +3,7 @@
 //  MLCardForm
 //
 //  Created by Esteban Adrian Boffa on 31/10/2019.
-//
+//  Refactor by bgarelli, 10/25/2022
 
 import Foundation
 import MLCardDrawer
@@ -528,7 +528,7 @@ extension MLCardFormViewModel {
                 if let esc = tokenCardData.esc,
                    let firstSixDigits = tokenCardData.firstSixDigits,
                    let lastFourDigits = tokenCardData.lastFourDigits {
-                    MLCardFormConfiguratorManager.escProtocol.saveESC(config: MLCardFormConfiguratorManager.escConfig, firstSixDigits: firstSixDigits, lastFourDigits: lastFourDigits, esc: esc)
+                    MLCardFormConfiguratorManager.escProtocol.saveESC(using: MLCardFormConfiguratorManager.escConfig, with: (esc, firstSixDigits, lastFourDigits))
                 }
                 self.serviceManager.addCardService.saveCard(tokenId: tokenCardData.id, addCardData: addCardData, completion: { [weak self] (result: Result<MLCardFormAddCardData, Error>) in
                     guard let self = self else { return }
@@ -545,7 +545,7 @@ extension MLCardFormViewModel {
                                                                                  MLCardFormTracker.TrackerParams.paymentMethodType.value: paymentTypeId])
                         self.saveDataForReuse()
                         let lastFourDigits = tokenCardData.lastFourDigits ?? ""
-                        var cardInformation = MLCardFormCardInformation(cardId: addCardData.getId(), paymentType: paymentTypeId, bin: bin, lastFourDigits: lastFourDigits)
+                        let cardInformation = MLCardFormCardInformation(cardId: addCardData.getId(), paymentType: paymentTypeId, bin: bin, lastFourDigits: lastFourDigits)
                         completion?(.success(cardInformation))
                     case .failure(let error):
                         if case

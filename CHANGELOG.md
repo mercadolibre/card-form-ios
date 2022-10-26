@@ -1,3 +1,9 @@
+## [Unreleased]
+
+## [v0.14.0] - 2022-10-25
+### Migrated
+- According changes on CardForm configuration provider
+
 # v0.13.0
 🚀 Release 0.13.0 🚀
 - Fix mask issue
