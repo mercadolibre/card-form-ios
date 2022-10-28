@@ -18,6 +18,8 @@ internal class MLCardFormAddCardServiceBase {
     internal var flowId: String?
     internal var acceptThirdPartyCard: Bool?
     internal var activateCard: Bool?
+    internal var productId: String?
+    internal var platform: String?
 
     weak var delegate: MLCardFormInternetConnectionProtocol?
     
@@ -25,16 +27,28 @@ internal class MLCardFormAddCardServiceBase {
                 privateKey: String?,
                 flowId: String?,
                 acceptThirdPartyCard: Bool?,
-                activateCard: Bool?) {
+                activateCard: Bool?,
+                productId: String? = nil,
+                platform: String? = nil) {
         self.publicKey = publicKey
         self.privateKey = privateKey
         self.flowId = flowId
         self.acceptThirdPartyCard = acceptThirdPartyCard
         self.activateCard = activateCard
+        self.productId = productId
+        self.platform =  platform
     }
     
     func getFlowId() -> String {
         return flowId ?? "MLCardForm"
+    }
+    
+    func getProductId() -> String? {
+        return productId
+    }
+    
+    func getPlatform() -> String? {
+        return platform
     }
 }
 

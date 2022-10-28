@@ -27,6 +27,8 @@ open class MLCardFormBuilder: NSObject {
     internal let acceptThirdPartyCard: Bool
     internal let activateCard: Bool
     private var tracker: MLCardFormTracker = MLCardFormTracker.sharedInstance
+    internal var productId: String?
+    internal var platform: String?
     
     // MARK: Initialization
     
@@ -44,7 +46,9 @@ open class MLCardFormBuilder: NSObject {
                 flowId: String,
                 acceptThirdPartyCard: Bool = true,
                 activateCard: Bool = true,
-                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                productId: String? = nil,
+                platform: String? = nil) {
         self.publicKey = publicKey
         self.privateKey = nil
         self.siteId = siteId
@@ -54,6 +58,8 @@ open class MLCardFormBuilder: NSObject {
         self.acceptThirdPartyCard = acceptThirdPartyCard
         self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
+        self.productId = productId
+        self.platform = platform
     }
     
     /// Mandatory init.
@@ -68,7 +74,9 @@ open class MLCardFormBuilder: NSObject {
                 acceptThirdPartyCard: Bool = true,
                 activateCard: Bool = true,
                 cardInformation:MLCardFormCardInformationMarketplace,
-                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                productId: String? = nil,
+                platform: String? = nil) {
         self.publicKey = publicKey
         self.privateKey = nil
         self.siteId = cardInformation.siteId
@@ -78,6 +86,8 @@ open class MLCardFormBuilder: NSObject {
         self.acceptThirdPartyCard = acceptThirdPartyCard
         self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
+        self.productId = productId
+        self.platform = platform
     }
     
     /**
@@ -94,7 +104,9 @@ open class MLCardFormBuilder: NSObject {
                 flowId: String,
                 acceptThirdPartyCard: Bool = true,
                 activateCard: Bool = true,
-                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                productId: String? = nil,
+                platform: String? = nil) {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = siteId
@@ -104,6 +116,8 @@ open class MLCardFormBuilder: NSObject {
         self.acceptThirdPartyCard = acceptThirdPartyCard
         self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
+        self.productId = productId
+        self.platform = platform
     }
     
     /// Mandatory init.
@@ -118,7 +132,9 @@ open class MLCardFormBuilder: NSObject {
                 acceptThirdPartyCard: Bool = true,
                 activateCard: Bool = true,
                 cardInformation:MLCardFormCardInformationMarketplace,
-                lifeCycleDelegate: MLCardFormLifeCycleDelegate) {
+                lifeCycleDelegate: MLCardFormLifeCycleDelegate,
+                productId: String? = nil,
+                platform: String? = nil) {
         self.publicKey = nil
         self.privateKey = privateKey
         self.siteId = cardInformation.siteId
@@ -128,6 +144,8 @@ open class MLCardFormBuilder: NSObject {
         self.acceptThirdPartyCard = acceptThirdPartyCard
         self.activateCard = activateCard
         tracker.set(flowId: flowId, siteId: siteId)
+        self.productId = productId
+        self.platform = platform
     }
     
     public func getSiteId() -> String {
