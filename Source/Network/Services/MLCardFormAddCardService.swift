@@ -87,8 +87,8 @@ extension MLCardFormAddCardService {
         let xFlowId: String
         let sessionId: String
         let accessToken: String
-        var productId: String? = nil
-        var platform: String? = nil
+        var productId: String?
+        var platform: String?
     }
 
     struct TokenizationBody {
