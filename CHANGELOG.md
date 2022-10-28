@@ -1,3 +1,6 @@
+[Unreleased]
+- Two optional fieds added to the header of the postCardData requisition
+
 # v0.13.0
 🚀 Release 0.13.0 🚀
 - Fix mask issue
