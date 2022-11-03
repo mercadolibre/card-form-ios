@@ -1,4 +1,5 @@
-[Unreleased]
+# v0.14.1
+🚀 Release 0.14.1 🚀
 - Added default method to get Platform field for postCardData requisition
 
 # v0.14.0
