@@ -47,7 +47,7 @@ final class MLCardFormBinService {
         return appName.lowercased()
     }
     
-    private func getPlatform() -> String {
+    func getPlatform() -> String {
         let appName = getAppName()
         if appName.contains(meliName) {
             return AppIdentifier.meli.rawValue

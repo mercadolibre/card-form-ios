@@ -46,12 +46,13 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
         
         let accessBearerToken = bearer + privateKey
         let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
+        let platform = getPlatform() ?? MLCardFormBinService().getPlatform()
         let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
                                                        xFlowId: getFlowId(),
                                                        sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
                                                        accessToken: accessBearerToken,
                                                        productId: getProductId(),
-                                                       platform: getPlatform())
+                                                       platform: platform)
         
         NetworkLayer.request(router: MLCardFormApiRouter.postCardData(headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
             (result: Result<MLCardFormAddCardData, Error>) in
