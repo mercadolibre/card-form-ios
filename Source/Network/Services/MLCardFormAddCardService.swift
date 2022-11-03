@@ -46,10 +46,13 @@ final class MLCardFormAddCardService: MLCardFormAddCardServiceBase {
         
         let accessBearerToken = bearer + privateKey
         let accessTokenParam = MLCardFormAddCardService.AccessTokenParam(accessToken: privateKey)
+        let platform = getPlatform() ?? MLCardFormBinService().getPlatform()
         let headers = MLCardFormAddCardService.Headers(contentType: "application/json",
                                                        xFlowId: getFlowId(),
                                                        sessionId: MLCardFormTracker.sharedInstance.getSessionID(),
-                                                       accessToken: accessBearerToken)
+                                                       accessToken: accessBearerToken,
+                                                       productId: getProductId(),
+                                                       platform: platform)
         
         NetworkLayer.request(router: MLCardFormApiRouter.postCardData(headers, buildAddCardBody(tokenId, addCardData: addCardData, features: CardFormFeatures(acceptThirdPartyCard: acceptThirdPartyCard, activateCard: activateCard)))) {
             (result: Result<MLCardFormAddCardData, Error>) in
@@ -65,6 +68,8 @@ extension MLCardFormAddCardService {
         case xFlowId
         case sessionId
         case accessToken
+        case productId
+        case platform
 
         var getKey: String {
             switch self {
@@ -72,6 +77,8 @@ extension MLCardFormAddCardService {
             case .xFlowId: return "x-flow-id"
             case .sessionId: return "X-Session-Id"
             case .accessToken: return "Authorization"
+            case .productId: return "X-Product-Id"
+            case .platform: return "x-platform"
             }
         }
     }
@@ -81,6 +88,8 @@ extension MLCardFormAddCardService {
         let xFlowId: String
         let sessionId: String
         let accessToken: String
+        var productId: String?
+        var platform: String?
     }
 
     struct TokenizationBody {
