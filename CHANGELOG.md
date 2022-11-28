@@ -1,6 +1,14 @@
 # Unreleased
 - Integration with Real Arts
 
+# v0.14.1
+🚀 Release 0.14.1 🚀
+- Added default method to get Platform field for postCardData requisition
+
+# v0.14.0
+🚀 Release 0.14.0 🚀
+- Two optional fieds added to the header of the postCardData requisition
+
 # v0.13.0
 🚀 Release 0.13.0 🚀
 - Fix mask issue

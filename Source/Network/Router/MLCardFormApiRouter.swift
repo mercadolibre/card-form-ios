@@ -55,10 +55,18 @@ enum MLCardFormApiRouter {
                     MLCardFormBinService.HeadersKeys.accessToken.getKey: headers.accessToken]
         case .postCardTokenData(let headers, _),
              .postCardData(let headers, _):
+            guard let productId = headers.productId, let platform = headers.platform else {
+                return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
+                        MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
+                        MLCardFormAddCardService.HeadersKeys.sessionId.getKey: headers.sessionId,
+                        MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken]
+            }
             return [MLCardFormAddCardService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormBinService.HeadersKeys.xFlowId.getKey: headers.xFlowId,
                     MLCardFormAddCardService.HeadersKeys.sessionId.getKey: headers.sessionId,
-                    MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken]
+                    MLCardFormAddCardService.HeadersKeys.accessToken.getKey: headers.accessToken,
+                    MLCardFormAddCardService.HeadersKeys.productId.getKey: productId,
+                    MLCardFormAddCardService.HeadersKeys.platform.getKey: platform]
         case .getWebPayInitInscription(let headers):
             return [MLCardFormWebPayService.HeadersKeys.contentType.getKey: headers.contentType,
                     MLCardFormWebPayService.HeadersKeys.xpublic.getKey: headers.xpublic,
