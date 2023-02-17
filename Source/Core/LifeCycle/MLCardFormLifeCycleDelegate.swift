@@ -30,12 +30,12 @@ import Foundation
     /**
      Begin Edition of a cardFormField
      */
-    @objc func didBeginEditing(cardFormField: String)
+    @objc optional func didBeginEditing(cardFormField: String)
     
     /**
      End Edition of a cardFormField
      */
-    @objc func didEndEditing(cardFormField: String)
+    @objc optional func didEndEditing(cardFormField: String)
 }
 
 extension MLCardFormLifeCycleDelegate {
