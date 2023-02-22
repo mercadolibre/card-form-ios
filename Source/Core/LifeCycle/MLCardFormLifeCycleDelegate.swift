@@ -44,11 +44,4 @@ extension MLCardFormLifeCycleDelegate {
         //this is a empty implementation to allow this method to be optional
     }
     
-    func didBeginEditing(cardFormField: String) {
-        
-    }
-    
-    func didEndEditing(cardFormField: String) {
-        
-    }
 }
