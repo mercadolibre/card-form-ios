@@ -494,7 +494,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             updateProgressFromField(from)
         }
         
-        self.lifeCycleDelegate?.didBeginEditing(cardFormField: fieldId.rawValue)
+        self.lifeCycleDelegate?.didBeginEditing?(cardFormField: fieldId.rawValue)
     }
     
     public func didEndEditing(from: MLCardFormField) {
@@ -503,7 +503,7 @@ extension MLCardFormViewController: MLCardFormFieldNotifierProtocol {
             viewModel.cardDataHandler.name = from.getValue() ?? ""
         }
         
-        self.lifeCycleDelegate?.didEndEditing(cardFormField: fieldId.rawValue)
+        self.lifeCycleDelegate?.didEndEditing?(cardFormField: fieldId.rawValue)
     }
     
     public func shouldNext(from: MLCardFormField) {
