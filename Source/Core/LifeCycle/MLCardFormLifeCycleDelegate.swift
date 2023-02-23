@@ -26,11 +26,22 @@ import Foundation
      There was an error adding a new credit card.
      */
     @objc func didFailAddCard()
+    
+    /**
+     Begin Edition of a cardFormField
+     */
+    @objc optional func didBeginEditing(cardFormField: String)
+    
+    /**
+     End Edition of a cardFormField
+     */
+    @objc optional func didEndEditing(cardFormField: String)
 }
 
 extension MLCardFormLifeCycleDelegate {
+    
     func didFailAddCard() {
         //this is a empty implementation to allow this method to be optional
     }
-   
+    
 }
