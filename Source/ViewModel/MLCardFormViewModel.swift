@@ -534,7 +534,7 @@ extension MLCardFormViewModel {
                     guard let self = self else { return }
                     switch result {
                     case .success(let addCardData):
-                        let bin = tokenCardData.firstSixDigits ?? ""
+                        let bin = addCardData.getBin()
                         let issuer = self.binData?.issuers.first?.id ?? 0
                         let paymentMethodId = self.binData?.paymentMethod.paymentMethodId ?? ""
                         let paymentTypeId = self.binData?.paymentMethod.paymentTypeId ?? ""
