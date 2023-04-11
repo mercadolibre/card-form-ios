@@ -20,8 +20,13 @@ struct MLCardFormAddCardData: Codable {
     private let dateLastTimeUsed: String
     private let markedAsValidCard: Bool
     private let issuer: MLCardFormAddCardIssuer
+    private let bin: String
     
     func getId() -> String {
         return id
+    }
+
+    func getBin() -> String {
+        bin
     }
 }
